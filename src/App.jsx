@@ -1,15 +1,19 @@
-
+import { Routes, Route } from 'react-router-dom';
 import './App.css';
+
+import Layout from './components/Layout';
+import Home from './pages/Home';
 
 function App() {
   return (
     <div className="App">
-      <img 
-        src='/make-money.svg' 
-        alt='make money icon' 
-        width={200}
-        />
-      <h1>Expense Manager</h1>
+      <>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route path="/" element={<Home />} />
+          </Route>
+        </Routes>
+      </>
     </div>
   );
 }
