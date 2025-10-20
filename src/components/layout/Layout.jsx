@@ -1,18 +1,20 @@
+import { Box, Grid } from "@mui/material";
 import { Outlet } from "react-router-dom";
+import Header from "./Header";
+import Nav from "./Nav";
+import Footer from "./Footer";
 
 export default function Layout() {
   return (
-    <div>
-      <header>
-        <img src="/money-management.svg" alt="money management icon" width={200} />
-        <h1>Expense Manager</h1>
-      </header>
+    
+    /*Layout with header, footer and page content in between */
+    <Grid container>
+      <Header />
+      <Nav />  
+      <Box component="main">
         <Outlet /> {/* page content goes here per route */}
-      <footer>
-        <p>
-          &copy; 2025 by <a href="https://github.com/shemaryahuz">Shemaryahu Zalmanov</a>
-        </p>
-      </footer>
-    </div>
-  )
+      </Box>
+      <Footer />
+    </Grid>
+  );
 }
