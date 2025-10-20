@@ -1,2 +1,2 @@
 # Expense Manager
-A web application for expenses & income management
+Web application for expenses & income management
