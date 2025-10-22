@@ -1,13 +1,18 @@
-import { Box } from '@mui/material'
-import React from 'react'
+import { Box, Link, Typography } from "@mui/material";
 
 export default function Footer() {
   return (
-    <Box component="footer">
-      <p>
+    <Box component="footer" bgcolor="#1976d2" mt="auto">
+      <Typography align="center" sx={{ py: 2, color: "white" }}>
         &copy; 2025 by{" "}
-        <a href="https://github.com/shemaryahuz">Shemaryahu Zalmanov</a>
-      </p>
+        <Link
+          href="https://github.com/shemaryahuz"
+          target="_blank"
+          sx={{ color: "blue", fontWeight: "bold", textDecoration: "none" }}
+        >
+          Shemaryahu Zalmanov
+        </Link>
+      </Typography>
     </Box>
-  )
+  );
 }
