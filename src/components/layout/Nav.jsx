@@ -3,9 +3,8 @@ import { Link } from "react-router-dom";
 
 export default function Nav() {
   const pageLinks = [
-    { title: "Dashboard", path: "/" },
-    { title: "Expenses", path: "/expenses" },
-    { title: "Credit Cards", path: "/credit-cards" },
+    { title: "Home", path: "/" },
+    { title: "Dashboard", path: "/dashboard" },
     { title: "Budgets", path: "/budgets" },
   ];
 

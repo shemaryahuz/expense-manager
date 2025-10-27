@@ -1,10 +1,8 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import Dashboard from "./pages/Dashboard";
-import Expenses from "./pages/Expenses";
-import CreditCards from "./pages/CreditCards";
-import Budgets from "./pages/Budgets";
-
+import HomePage from "./pages/HomePage";
+import BudgetsPage from "./pages/BudgetsPage";
 
 
 function App() {
@@ -13,10 +11,9 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route path="/" element={<Dashboard />} />
-          <Route path="/expenses" element={<Expenses />} />
-          <Route path="/credit-cards" element={<CreditCards />} />
-          <Route path="/budgets" element={<Budgets />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/budgets" element={<BudgetsPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
