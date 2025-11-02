@@ -3,7 +3,7 @@ import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
 import { collapseClasses } from '@mui/material';
 
-
+const headerHeight = 80;
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -27,19 +27,11 @@ const closedMixin = (theme) => ({
     },
 });
 
-export const DrawerHeader = styled('div')(({ theme }) => ({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    padding: theme.spacing(0, 1),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar,
-}));
-
 export const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme }) => ({
+})(({ theme, open }) => ({
     zIndex: theme.zIndex.drawer + 1,
+    height: headerHeight,
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.getContrastText(theme.palette.primary.main),
     padding: theme.spacing(1),
@@ -47,7 +39,6 @@ export const AppBar = styled(MuiAppBar, {
         color: 'inherit',
     },
     '& .MuiToolbar-root': {
-        display: 'flex',
         justifyContent: 'space-between',
     },
     '& a': {
@@ -63,43 +54,54 @@ export const AppBar = styled(MuiAppBar, {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
     }),
-    variants: [
-        {
-            props: ({ open }) => open,
-            style: {
-                marginLeft: drawerWidth,
-                width: `calc(100% - ${drawerWidth}px)`,
-                transition: theme.transitions.create(['width', 'margin'], {
-                    easing: theme.transitions.easing.sharp,
-                    duration: theme.transitions.duration.enteringScreen,
-                }),
-            },
-        },
-    ],
+    ...(open && {
+        marginLeft: drawerWidth,
+        width: `calc(100% - ${drawerWidth}px)`,
+        transition: theme.transitions.create(["width", "margin"], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
+        }),
+    }),
+}));
+
+export const DrawerHeader = styled('div')(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+}));
+
+export const DrawerTop = styled("div")(({ theme }) => ({
+    height: headerHeight,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    padding: theme.spacing(0, 1),
+    ...theme.mixins.toolbar,
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.getContrastText(theme.palette.primary.main),
 }));
 
 export const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
-    ({ theme }) => ({
+    ({ theme, open }) => ({
         width: drawerWidth,
         flexShrink: 0,
         whiteSpace: 'nowrap',
         boxSizing: 'border-box',
-        variants: [
-            {
-                props: ({ open }) => open,
-                style: {
-                    ...openedMixin(theme),
-                    '& .MuiDrawer-paper': openedMixin(theme),
-                },
-            },
-            {
-                props: ({ open }) => !open,
-                style: {
-                    ...closedMixin(theme),
-                    '& .MuiDrawer-paper': closedMixin(theme),
-                },
-            },
-        ],
+        ...(open && {
+            ...openedMixin(theme),
+            '& .MuiDrawer-paper': openedMixin(theme),
+            backgroundColor: theme.palette.background.paper,
+            color: theme.palette.text.primary,
+        }),
+        ...(!open && {
+            ...closedMixin(theme),
+            '& .MuiDrawer-paper': closedMixin(theme),
+            backgroundColor: theme.palette.background.paper,
+            color: theme.palette.text.primary,
+        }),
     }),
 );
 
