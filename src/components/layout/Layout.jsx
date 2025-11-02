@@ -19,6 +19,7 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import { Outlet } from 'react-router-dom';
 import Footer from './Footer.jsx';
+import Header from './Header.jsx';
 
 
 
@@ -37,27 +38,7 @@ export default function Layout() {
   return (
     <Box sx={layoutStyle}>
       <CssBaseline />
-      <AppBar position="fixed" open={open}>
-        <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={[
-              {
-                marginRight: 5,
-              },
-              open && { display: 'none' },
-            ]}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            Mini variant drawer
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      <Header open={open} handleDrawerOpen={handleDrawerOpen} />
       <Box sx={{ display: 'flex' }}>
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>

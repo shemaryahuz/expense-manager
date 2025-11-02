@@ -1,17 +1,36 @@
-import { AppBar, Link, Toolbar } from "@mui/material";
+import { Box, IconButton, Link, Toolbar, Typography } from "@mui/material";
+import { AppBar } from "./Layout.styles";
+import MenuIcon from '@mui/icons-material/Menu';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
 
-export default function Header() {
+export default function Header({ open, handleDrawerOpen }) {
+  const mode = 'light';
+  const toggleColorMode = () => {};
   return (
-    <AppBar component="header" position="static">
+    <AppBar component="header">
       <Toolbar>
-        <Link href="/">
-          <img
-            src="/money-management.svg"
-            alt="money management icon"
-            width={50}
-          />
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          onClick={handleDrawerOpen}
+          edge="start"
+          sx={[
+            {
+              marginRight: 5,
+            },
+            open && { display: "none" },
+          ]}
+        >
+          <MenuIcon />
+        </IconButton>
+        <Link href="/" variant="contained">
+          <Box component="img" src="/money-management.svg" alt="Logo" />
+          <Typography variant="h4" component="span">Expense Manager</Typography>
         </Link>
-        <h1>Expense Manager</h1>
+        <IconButton sx={{ ml: 1 }} onClick={toggleColorMode} color="inherit" aria-label="toggle theme">
+          {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+        </IconButton>
       </Toolbar>
     </AppBar>
   );

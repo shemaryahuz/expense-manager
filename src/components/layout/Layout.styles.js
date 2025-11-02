@@ -1,6 +1,7 @@
 import { styled } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import MuiAppBar from '@mui/material/AppBar';
+import { collapseClasses } from '@mui/material';
 
 
 const drawerWidth = 240;
@@ -39,6 +40,25 @@ export const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== 'open',
 })(({ theme }) => ({
     zIndex: theme.zIndex.drawer + 1,
+    backgroundColor: theme.palette.primary.main,
+    color: theme.palette.getContrastText(theme.palette.primary.main),
+    padding: theme.spacing(1),
+    '& .MuiToolbar-root, & .MuiToolbar-root *': {
+        color: 'inherit',
+    },
+    '& .MuiToolbar-root': {
+        display: 'flex',
+        justifyContent: 'space-between',
+    },
+    '& a': {
+        textDecoration: 'none',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '5px',
+    },
+    '& img': {
+        height: '40px',
+    },
     transition: theme.transitions.create(['width', 'margin'], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen,
@@ -95,23 +115,23 @@ export const contentStyle = {
 };
 
 export const StyledFooter = styled(MuiAppBar)(({ theme }) => ({
-  position: 'fixed',
-  bottom: 0,
-  top: 'auto',
-  width: '100%',
-  height: '64px',
-  backgroundColor: theme.palette.primary.main,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  '& .MuiTypography-root': {
-    '& a': {
-      color: 'inherit',
-      textDecoration: 'none',
-      '&:hover': {
-        color: theme.palette.secondary.dark,
-      }
-    }
-  },
-  zIndex: theme.zIndex.drawer + 1,
+    position: 'fixed',
+    bottom: 0,
+    top: 'auto',
+    width: '100%',
+    height: '64px',
+    backgroundColor: theme.palette.primary.main,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    '& .MuiTypography-root': {
+        '& a': {
+            color: 'inherit',
+            textDecoration: 'none',
+            '&:hover': {
+                color: theme.palette.secondary.dark,
+            }
+        }
+    },
+    zIndex: theme.zIndex.drawer + 1,
 }));
