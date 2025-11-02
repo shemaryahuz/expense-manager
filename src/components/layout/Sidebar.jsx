@@ -14,35 +14,38 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import CategoryIcon from "@mui/icons-material/Category";
 import TransactionIcon from "@mui/icons-material/ReceiptLong";
 import ReportIcon from "@mui/icons-material/BarChart";
+import { Navigate, useNavigate } from "react-router-dom";
 
-export default function Sidebar({ open, handleDrawerClose }) {
   const pages = [
     {
       text: "Login",
-      href: "/",
+      path: "/",
       icon: <LoginIcon />,
     },
     {
       text: "Dashboard",
-      href: "/dashboard",
+      path: "/dashboard",
       icon: <DashboardIcon />,
     },
     {
       text: "Categories",
-      href: "/categories",
+      path: "/categories",
       icon: <CategoryIcon />,
     },
     {
       text: "Transactions",
-      href: "/transactions",
+      path: "/transactions",
       icon: <TransactionIcon />,
     },
     {
       text: "Reports",
-      href: "/reports",
+      path: "/reports",
       icon: <ReportIcon />,
     },
   ];
+
+export default function Sidebar({ open, handleDrawerClose }) {
+  const navigate = useNavigate();
   return (
     <Drawer variant="permanent" open={open}>
       <DrawerTop>
@@ -55,7 +58,7 @@ export default function Sidebar({ open, handleDrawerClose }) {
       <List>
         {pages.map((page) => (
           <ListItem key={page.text} disablePadding sx={{ display: "block" }}>
-            <ListItemButton component="a" href={page.href} selected={location.pathname === page.href}>
+            <ListItemButton component="a" onClick={() => navigate(page.path)} selected={location.pathname === page.path}>
               <ListItemIcon>{page.icon}</ListItemIcon>
               <ListItemText
                 primary={page.text}
