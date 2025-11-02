@@ -1,9 +1,12 @@
+import { Box, Typography } from "@mui/material";
 
 
 export default function LoginPage() {
   return (
-    <div>
-      <h1>Login</h1>
-    </div>
+    <Box>
+      <Typography variant="h4" gutterBottom>
+        Login Page
+      </Typography>
+    </Box>
   )
 }
