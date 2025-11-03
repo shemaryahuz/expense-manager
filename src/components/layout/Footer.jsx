@@ -1,5 +1,5 @@
-import { Box, Link, Typography } from "@mui/material";
-import { StyledFooter } from "./styles";
+import { Link, Typography } from "@mui/material";
+import { StyledFooter } from "./styles/Footer.styles.js";
 
 export default function Footer() {
   return (

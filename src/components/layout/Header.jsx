@@ -1,5 +1,5 @@
 import { Box, IconButton, Link, Toolbar, Typography } from "@mui/material";
-import { AppBar, DrawerHeader } from "./styles";
+import { AppBar } from "./styles/Header.styles.js";
 import MenuIcon from '@mui/icons-material/Menu';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';

@@ -8,13 +8,13 @@ import {
   ListItemText,
 } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import { Drawer, DrawerTop } from "./styles";
+import { Drawer, DrawerTop } from "./styles/Sidebar.styles.js";
 import LoginIcon from "@mui/icons-material/Login";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import CategoryIcon from "@mui/icons-material/Category";
 import TransactionIcon from "@mui/icons-material/ReceiptLong";
 import ReportIcon from "@mui/icons-material/BarChart";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
   const pages = [
     {
