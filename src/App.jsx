@@ -1,18 +1,14 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/layout/Layout";
-import LoginPage from "./pages/LoginPage";
-import DashboardPage from "./pages/DashboardPage";
-import CategoriesPage from "./pages/CategoriesPage";
-import TransactionsPage from "./pages/TransactionsPage";
-import ReportsPage from "./pages/ReportsPage";
-
-import theme from "./theme/theme";
-import { ThemeProvider } from "@mui/material";
+import LoginPage from "./pages/auth/LoginPage";
+import DashboardPage from "./pages/dashboard/DashboardPage";
+import CategoriesPage from "./pages/categories/CategoriesPage";
+import TransactionsPage from "./pages/transactions/TransactionsPage";
+import ReportsPage from "./pages/reports/ReportsPage";
 
 function App() {
 
   return (
-    <ThemeProvider theme={theme}>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
@@ -24,7 +20,6 @@ function App() {
           </Route>
         </Routes>
       </BrowserRouter>
-    </ThemeProvider>
   )
 }
 

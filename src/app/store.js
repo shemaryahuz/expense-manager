@@ -4,7 +4,7 @@ import transactionsReducer from "../features/transactions/transactionsSlice.js";
 import categoriesReducer from "../features/categories/categoriesSlice.js";
 import reportsReducer from "../features/reports/reportsSlice.js";
 
-export const store = configureStore({
+const store = configureStore({
     reducer: {
         user: userReducer,
         transactions: transactionsReducer,
@@ -12,3 +12,5 @@ export const store = configureStore({
         reports: reportsReducer,
     },
 });
+
+export default store;
