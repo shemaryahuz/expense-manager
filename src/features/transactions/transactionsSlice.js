@@ -6,6 +6,7 @@ export const transactionsSlice = createSlice({
     name: "transactions",
     initialState: {
         transactions: [],
+        searched: [],
         loading: false,
         error: "",
     },
@@ -31,7 +32,7 @@ export const transactionsSlice = createSlice({
             })
             .addCase(searchTransactions.fulfilled, (state, action) => {
                 state.loading = false;
-                state.transactions = action.payload;
+                state.searched = action.payload;
                 state.error = "";
             })
             .addCase(searchTransactions.rejected, (state, action) => {

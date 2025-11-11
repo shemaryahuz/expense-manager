@@ -20,7 +20,7 @@ import TransactionsList from "./transactionsList";
 import AddTransactionForm from "./AddTransactionForm";
 
 export default function TransactionsPage() {
-  const { loading, error, transactions } = useSelector(
+  const { loading, error, transactions, searched } = useSelector(
     (state) => state.transactions
   );
 
@@ -28,12 +28,14 @@ export default function TransactionsPage() {
 
   useEffect(() => {
     dispatch(fetchTransactions());
-  }, []);
+  }, [dispatch]);
 
-  const [search, setSearch] = useState("");
-
+  const [ search, setSearch ] = useState("");
+  const [ isSearching, setIsSearching ] = useState(false);
   const [ addOpen, setAddOpen ] = useState(false);
-  
+
+  const currentTransactions = isSearching ? searched : transactions;
+
   const handleAddOpen = () => {
     setAddOpen(true);
   }
@@ -46,11 +48,12 @@ export default function TransactionsPage() {
   };
 
   const handleSearch = () => {
+    setIsSearching(true);
     dispatch(searchTransactions(search));
   };
 
   const handleSearchClose = () => {
-    dispatch(fetchTransactions());
+    setIsSearching(false);
     setSearch("");
   };
 
@@ -80,7 +83,7 @@ export default function TransactionsPage() {
               <IconButton disabled={!search} onClick={handleSearch}>
                 <Search />
               </IconButton>
-              <IconButton onClick={handleSearchClose}>
+              <IconButton disabled={!isSearching && !search} onClick={handleSearchClose}>
                 <Close />
               </IconButton>
             </Box>
@@ -96,10 +99,12 @@ export default function TransactionsPage() {
               <AddTransactionForm open={addOpen} onClose={handleAddClose} />
             </Box>
           </Box>
-          {transactions.length > 0 ? (
-            <TransactionsList transactions={transactions} />
+          {currentTransactions.length > 0 ? (
+            <TransactionsList
+              transactions={currentTransactions}
+            />
           ) : (
-            <Typography variant="h6">No transactions found.</Typography>
+            <Typography variant="h6">No transactions found</Typography>
           )}
         </Box>
       )}
