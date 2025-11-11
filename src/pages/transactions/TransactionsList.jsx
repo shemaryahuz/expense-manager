@@ -14,11 +14,11 @@ export default function TransactionsList({ transactions }) {
     <Table>
       <TableHead>
         <TableRow>
-          <TableCell>Date</TableCell>
-          <TableCell>Title</TableCell>
-          <TableCell>Category</TableCell>
-          <TableCell>Amount</TableCell>
-          <TableCell>Delete</TableCell>
+          <TableCell sx={{fontWeight: "bold"}}>Date</TableCell>
+          <TableCell sx={{fontWeight: "bold"}}>Title</TableCell>
+          <TableCell sx={{fontWeight: "bold"}}>Category</TableCell>
+          <TableCell sx={{fontWeight: "bold"}}>Amount</TableCell>
+          <TableCell sx={{fontWeight: "bold"}}>Delete</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>

@@ -4,7 +4,7 @@ export const styles = {
   },
   heading: {
     mb: 2,
-    'font-weight' : "bold",
+    fontWeight : "bold",
   },
   mainBox: {
     display: "flex",

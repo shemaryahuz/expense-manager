@@ -17,6 +17,7 @@ import Error from "../../components/common/Error";
 import { useEffect, useState } from "react";
 import Loader from "../../components/common/Loader";
 import TransactionsList from "./transactionsList";
+import AddTransactionForm from "./AddTransactionForm";
 
 export default function TransactionsPage() {
   const { loading, error, transactions } = useSelector(
@@ -31,7 +32,14 @@ export default function TransactionsPage() {
 
   const [search, setSearch] = useState("");
 
-  const handleAdd = () => {};
+  const [ addOpen, setAddOpen ] = useState(false);
+  
+  const handleAddOpen = () => {
+    setAddOpen(true);
+  }
+  const handleAddClose = () => {
+    setAddOpen(false);
+  }
 
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
@@ -72,7 +80,7 @@ export default function TransactionsPage() {
               <IconButton disabled={!search} onClick={handleSearch}>
                 <Search />
               </IconButton>
-              <IconButton disabled={!search} onClick={handleSearchClose}>
+              <IconButton onClick={handleSearchClose}>
                 <Close />
               </IconButton>
             </Box>
@@ -80,12 +88,12 @@ export default function TransactionsPage() {
               <Button
                 variant="contained"
                 sx={styles.addButton}
-                onClick={handleAdd}
+                onClick={handleAddOpen}
               >
                 <Typography variant="h6">Add Transaction</Typography>
                 <Add sx={styles.addIcon} />
               </Button>
-              
+              <AddTransactionForm open={addOpen} onClose={handleAddClose} />
             </Box>
           </Box>
           {transactions.length > 0 ? (

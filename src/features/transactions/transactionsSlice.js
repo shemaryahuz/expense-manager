@@ -45,10 +45,12 @@ export const transactionsSlice = createSlice({
             })
             .addCase(addTransaction.fulfilled, (state, action) => {
                 state.loading = false;
-                state.transactions.push(action.payload);
+                action.payload.date = new Date(action.payload.date).toLocaleDateString();
+                state.transactions.unshift(action.payload);
                 state.error = "";
             })
             .addCase(addTransaction.rejected, (state, action) => {
+                state.loading = false;
                 state.error = action.error.message;
             })
 
@@ -62,6 +64,7 @@ export const transactionsSlice = createSlice({
                 state.error = "";
             })
             .addCase(deleteTransaction.rejected, (state, action) => {
+                state.loading = false;
                 state.error = action.error.message;
             });
     },
