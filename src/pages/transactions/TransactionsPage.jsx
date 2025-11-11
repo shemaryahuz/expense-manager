@@ -18,6 +18,7 @@ import { useEffect, useState } from "react";
 import Loader from "../../components/common/Loader";
 import TransactionsList from "./transactionsList";
 import AddTransactionForm from "./AddTransactionForm";
+import { clearSearched } from "../../features/transactions/transactionsSlice";
 
 export default function TransactionsPage() {
   const { loading, error, transactions, searched } = useSelector(
@@ -55,6 +56,7 @@ export default function TransactionsPage() {
   const handleSearchClose = () => {
     setIsSearching(false);
     setSearch("");
+    dispatch(clearSearched());
   };
 
   return (

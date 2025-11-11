@@ -10,6 +10,11 @@ export const transactionsSlice = createSlice({
         loading: false,
         error: "",
     },
+    reducers: {
+        clearSearched: (state) => {
+            state.searched = [];
+        }
+    },
     extraReducers: (builder) => {
         builder
             // fetch transactions thunk
@@ -31,6 +36,8 @@ export const transactionsSlice = createSlice({
                 state.loading = true;
             })
             .addCase(searchTransactions.fulfilled, (state, action) => {
+                console.log(action.payload);
+                
                 state.loading = false;
                 state.searched = action.payload;
                 state.error = "";
@@ -72,3 +79,5 @@ export const transactionsSlice = createSlice({
 });
 
 export default transactionsSlice.reducer;
+
+export const { clearSearched } = transactionsSlice.actions;

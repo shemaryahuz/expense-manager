@@ -38,7 +38,8 @@ export const fetchTransactionsByMonth = createAsyncThunk(
 export const searchTransactions = createAsyncThunk(
     "transactions/searchTransactions",
     async (search) => {
-        const url = `${TRANSACTION_URL}/search/u1?query=${search}` // u1 = user id
+        const encodedSearch = encodeURIComponent(search);
+        const url = `${TRANSACTION_URL}/search/u1?title=${encodedSearch}` // u1 = user id
         const res = await axios.get(url);
         const formated = res.data.map((transaction) => {
             const date = new Date(transaction.date);
