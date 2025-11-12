@@ -1,0 +1,52 @@
+[
+  {
+    "id": "c0",
+    "userId": null,
+    "name": "Income"
+  },
+  {
+    "id": "c1",
+    "userId": null,
+    "name": "Miscellaneous"
+  },
+  {
+    "id": "c2",
+    "userId": null,
+    "name": "Food"
+  },
+  {
+    "id": "c3",
+    "userId": null,
+    "name": "Transport"
+  },
+  {
+    "id": "c4",
+    "userId": null,
+    "name": "Home"
+  },
+  {
+    "id": "c5",
+    "userId": null,
+    "name": "Entertainment"
+  },
+  {
+    "id": "c8",
+    "userId": "u1",
+    "name": "Books"
+  },
+  {
+    "id": "c9",
+    "userId": "u1",
+    "name": "Coffee Shops"
+  },
+  {
+    "id": "c10",
+    "userId": "u2",
+    "name": "Pet Supplies"
+  },
+  {
+    "id": "c11",
+    "userId": "u2",
+    "name": "Online Shopping"
+  }
+]

@@ -1,0 +1,144 @@
+import { readFile, writeFile } from "fs/promises";
+const PATH = "./database/transactions.json"; // relative to server.js
+
+export async function readTransactions() {
+    const transactions = await readFile(PATH, "utf-8");
+    return JSON.parse(transactions);
+};
+
+export async function writeTransactions(transactions) {
+    await writeFile(PATH, JSON.stringify(transactions, null, 2));
+};
+
+export async function getTransactions(req, res) {
+    try {
+        const { userId } = req.params;
+        const transactions = await readTransactions();
+
+        const filtered = transactions.filter((transaction) => transaction.userId === userId);
+        filtered.sort((a, b) => {
+            const dateA = new Date(a.date);
+            const dateB = new Date(b.date);
+            return dateB - dateA;
+        });
+
+        res.send(filtered);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+}
+
+export async function getTransactionsByMonth(req, res) {
+    try {
+        const { userId, year, month } = req.params;
+
+        const transactionsJson = await readTransactions();
+
+        const filtered = transactionsJson.filter((transaction) => {
+            const date = new Date(transaction.date);
+            return transaction.userId === userId &&
+                date.getFullYear() === Number(year) &&
+                date.getMonth() + 1 === Number(month);
+        });
+
+        filtered.sort((a, b) => {
+            const dateA = new Date(a.date);
+            const dateB = new Date(b.date);
+            return dateB - dateA;
+        });
+
+        res.send(filtered);
+
+    } catch (error) {
+        res.status(500).send(error);
+    }
+}
+
+export async function getTransactionsByCategory(req, res) {
+    try {
+        const { userId, categoryId } = req.params;
+
+        const transactionsJson = await readTransactions();
+
+        const filtered = transactionsJson.filter((transaction) => 
+            transaction.userId === userId && transaction.categoryId === categoryId
+        );
+
+        filtered.sort((a, b) => {
+            const dateA = new Date(a.date);
+            const dateB = new Date(b.date);
+            return dateB - dateA;
+        });
+
+        res.send(filtered);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
+}
+
+export async function searchTransactions(req, res) {
+    try {
+        const { userId } = req.params;
+        const { title } = req.query;
+        const searchTerm = title.toLowerCase().trim() || '';
+        const transactionsJson = await readTransactions();
+        const filtered = transactionsJson.filter((transaction) =>
+            transaction.userId === userId &&
+            transaction.title.toLowerCase().includes(searchTerm)
+        );
+
+        res.send(filtered);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
+}
+
+export async function addTransaction(req, res) {
+    try {
+        const { userId, categoryId, title, type, amount, date } = req.body;
+
+        if (!userId || !title || !type || !amount || !date) {
+            return res.status(400).send("Transaction title, amount, user id and category id are required");
+        }
+
+        if (!categoryId) {
+            categoryId = null;
+        }
+
+        const newTransaction = {
+            id: Date.now().toString(),
+            userId,
+            categoryId,
+            title,
+            type,
+            amount,
+            date
+        };
+
+        const transactionsJson = await readTransactions();
+        transactionsJson.push(newTransaction);
+        await writeTransactions(transactionsJson);
+
+        res.send(newTransaction);
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
+}
+
+export async function deleteTransaction(req, res) {
+    try {
+        const id = req.params.id;
+        const transactionsJson = await readTransactions();
+        const deleted = transactionsJson.find((transaction) => transaction.id === id);
+        const updatedTransactions = transactionsJson.filter((transaction) => transaction.id !== id);
+        await writeTransactions(updatedTransactions);
+        res.send(deleted);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
+}
