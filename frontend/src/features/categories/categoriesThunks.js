@@ -28,6 +28,6 @@ export const deleteCategory = createAsyncThunk(
     "categories/deleteCategory",
     async (id) => {
         const res = await axios.delete(`${CATEGORIES_URL}/${id}`);
-        return res.data
+        return res.data;
     },
 )

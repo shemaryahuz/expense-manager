@@ -1,5 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { addTransaction, deleteTransaction, fetchTransactions, searchTransactions } from "./transactionsThunks";
+import { deleteCategory } from "../categories/categoriesThunks";
+import { MISCELLANEOUS_ID } from "../categories/categoriesSlice";
 
 
 export const transactionsSlice = createSlice({
@@ -37,7 +39,7 @@ export const transactionsSlice = createSlice({
             })
             .addCase(searchTransactions.fulfilled, (state, action) => {
                 console.log(action.payload);
-                
+
                 state.loading = false;
                 state.searched = action.payload;
                 state.error = "";
@@ -74,7 +76,18 @@ export const transactionsSlice = createSlice({
             .addCase(deleteTransaction.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error.message;
-            });
+            })
+
+            // update transactions on category delete
+            .addCase(deleteCategory.fulfilled, (state, action) => {
+
+                // updtate transactions with MISCELLANEOUS_ID
+                state.transactions.forEach((transaction) => {
+                    if (transaction.categoryId === action.payload.id) {
+                        transaction.categoryId = MISCELLANEOUS_ID;
+                    }
+                });
+            })
     },
 });
 

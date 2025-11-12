@@ -38,7 +38,7 @@
   {
     "id": "t5",
     "userId": "u1",
-    "categoryId": "c9",
+    "categoryId": "c1",
     "title": "Coffee Meeting",
     "type": "expense",
     "amount": 25,
@@ -96,6 +96,24 @@
     "title": "Part-time Job",
     "type": "income",
     "amount": 1800,
+    "date": "2025-11-02T00:00:00.000Z"
+  },
+  {
+    "id": "t12",
+    "userId": "u1",
+    "categoryId": "c8",
+    "title": "History Book",
+    "type": "expense",
+    "amount": 50,
+    "date": "2025-10-30T00:00:00.000Z"
+  },
+  {
+    "id": "t13",
+    "userId": "u1",
+    "categoryId": "c1",
+    "title": "Shoes",
+    "type": "expense",
+    "amount": 100,
     "date": "2025-11-02T00:00:00.000Z"
   }
 ]
