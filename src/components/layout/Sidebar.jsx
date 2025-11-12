@@ -16,33 +16,33 @@ import TransactionIcon from "@mui/icons-material/ReceiptLong";
 import ReportIcon from "@mui/icons-material/BarChart";
 import { useNavigate } from "react-router-dom";
 
-  const pages = [
-    {
-      text: "Login",
-      path: "/",
-      icon: <LoginIcon />,
-    },
-    {
-      text: "Dashboard",
-      path: "/dashboard",
-      icon: <DashboardIcon />,
-    },
-    {
-      text: "Categories",
-      path: "/categories",
-      icon: <CategoryIcon />,
-    },
-    {
-      text: "Transactions",
-      path: "/transactions",
-      icon: <TransactionIcon />,
-    },
-    {
-      text: "Reports",
-      path: "/reports",
-      icon: <ReportIcon />,
-    },
-  ];
+const pages = [
+  {
+    text: "Login",
+    path: "/",
+    icon: <LoginIcon />,
+  },
+  {
+    text: "Dashboard",
+    path: "/dashboard",
+    icon: <DashboardIcon />,
+  },
+  {
+    text: "Transactions",
+    path: "/transactions",
+    icon: <TransactionIcon />,
+  },
+  {
+    text: "Categories",
+    path: "/categories",
+    icon: <CategoryIcon />,
+  },
+  {
+    text: "Reports",
+    path: "/reports",
+    icon: <ReportIcon />,
+  },
+];
 
 export default function Sidebar({ open, handleDrawerClose }) {
   const navigate = useNavigate();
@@ -50,15 +50,19 @@ export default function Sidebar({ open, handleDrawerClose }) {
     <Drawer variant="permanent" open={open}>
       <DrawerTop>
         <IconButton onClick={handleDrawerClose}>
-          <ChevronLeftIcon sx={{color: '#fff'}}/>
+          <ChevronLeftIcon sx={{ color: "#fff" }} />
         </IconButton>
       </DrawerTop>
       <Divider />
-      
+
       <List>
         {pages.map((page) => (
           <ListItem key={page.text} disablePadding sx={{ display: "block" }}>
-            <ListItemButton component="a" onClick={() => navigate(page.path)} selected={location.pathname === page.path}>
+            <ListItemButton
+              component="a"
+              onClick={() => navigate(page.path)}
+              selected={location.pathname === page.path}
+            >
               <ListItemIcon>{page.icon}</ListItemIcon>
               <ListItemText
                 primary={page.text}
@@ -77,7 +81,6 @@ export default function Sidebar({ open, handleDrawerClose }) {
                 ]}
               />
             </ListItemButton>
-           
           </ListItem>
         ))}
       </List>

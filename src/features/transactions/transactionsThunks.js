@@ -68,7 +68,6 @@ export const deleteTransaction = createAsyncThunk(
     "transactions/deleteTransaction",
     async (id) => {
         const res = await axios.delete(`${TRANSACTION_URL}/${id}`);
-        console.log(res.data)
         return res.data
     },
 )

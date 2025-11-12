@@ -9,12 +9,9 @@ import {
 import { Add, Search, Close } from "@mui/icons-material";
 import { styles } from "./styles/TransactionsPage.styles";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchTransactions,
-  searchTransactions,
-} from "../../features/transactions/transactionsThunks";
+import { searchTransactions } from "../../features/transactions/transactionsThunks";
 import Error from "../../components/common/Error";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Loader from "../../components/common/Loader";
 import TransactionsList from "./transactionsList";
 import AddTransactionForm from "./AddTransactionForm";
@@ -27,22 +24,19 @@ export default function TransactionsPage() {
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(fetchTransactions());
-  }, [dispatch]);
-
-  const [ search, setSearch ] = useState("");
-  const [ isSearching, setIsSearching ] = useState(false);
-  const [ addOpen, setAddOpen ] = useState(false);
+  const [search, setSearch] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
+  const [addOpen, setAddOpen] = useState(false);
 
   const currentTransactions = isSearching ? searched : transactions;
 
   const handleAddOpen = () => {
     setAddOpen(true);
-  }
+  };
+  
   const handleAddClose = () => {
     setAddOpen(false);
-  }
+  };
 
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
@@ -70,11 +64,8 @@ export default function TransactionsPage() {
       {!loading && error && <Error error={error} />}
 
       {!loading && !error && (
-
         <Box sx={styles.mainBox}>
-          <Box
-            sx={styles.headerBox}
-          >
+          <Box sx={styles.headerBox}>
             <Box sx={styles.searchBox}>
               <TextField
                 value={search}
@@ -85,7 +76,10 @@ export default function TransactionsPage() {
               <IconButton disabled={!search} onClick={handleSearch}>
                 <Search />
               </IconButton>
-              <IconButton disabled={!isSearching && !search} onClick={handleSearchClose}>
+              <IconButton
+                disabled={!isSearching && !search}
+                onClick={handleSearchClose}
+              >
                 <Close />
               </IconButton>
             </Box>
@@ -102,9 +96,7 @@ export default function TransactionsPage() {
             </Box>
           </Box>
           {currentTransactions.length > 0 ? (
-            <TransactionsList
-              transactions={currentTransactions}
-            />
+            <TransactionsList transactions={currentTransactions} />
           ) : (
             <Typography variant="h6">No transactions found</Typography>
           )}

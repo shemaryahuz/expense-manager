@@ -14,18 +14,15 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addTransaction } from "../../features/transactions/transactionsThunks";
 import Error from "../../components/common/Error";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { INCOME_ID } from "../../features/categories/categoriesSlice";
 
 export default function AddTransactionForm({ open, onClose }) {
-  const categories = [
-    { id: "c1", name: "Food" },
-    { id: "c2", name: "Transport" },
-    { id: "c3", name: "Entertainment" },
-  ];
-
+  const { categories } = useSelector((state) => state.categories);
+  const expenseCategories = categories.filter((category) => category.id !== INCOME_ID);
   const intialTransaction = {
     userId: "u1", // u1 = user id
     title: "",
@@ -90,7 +87,7 @@ export default function AddTransactionForm({ open, onClose }) {
   };
 
   return (
-    <Dialog open={open} onClose={onClose} sx={{ padding: 2 }}>
+    <Dialog open={open} onClose={onClose} sx={{ padding: 2 }} closeAfterTransition={false}>
       <DialogTitle>Add Transaction</DialogTitle>
       <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
         <TextField
@@ -123,7 +120,7 @@ export default function AddTransactionForm({ open, onClose }) {
             <MenuItem value="expense">Expense</MenuItem>
           </Select>
         </FormControl>
-        <FormControl fullWidth required>
+        {transaction.type === "expense" && <FormControl fullWidth required>
           <InputLabel id="category-select-label">Category</InputLabel>
           <Select
             name="category"
@@ -133,13 +130,13 @@ export default function AddTransactionForm({ open, onClose }) {
             value={transaction.categoryId}
             onChange={handleChange}
           >
-            {categories.map((category) => (
+            {expenseCategories.map((category) => (
               <MenuItem key={category.id} value={category.id}>
                 {category.name}
               </MenuItem>
             ))}
           </Select>
-        </FormControl>
+        </FormControl>}
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DemoContainer components={["DatePicker"]}>
             <DatePicker

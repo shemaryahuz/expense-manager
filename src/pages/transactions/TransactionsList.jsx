@@ -18,7 +18,7 @@ export default function TransactionsList({ transactions }) {
           <TableCell sx={{fontWeight: "bold"}}>Title</TableCell>
           <TableCell sx={{fontWeight: "bold"}}>Category</TableCell>
           <TableCell sx={{fontWeight: "bold"}}>Amount</TableCell>
-          <TableCell sx={{fontWeight: "bold"}}>Delete</TableCell>
+          <TableCell sx={{fontWeight: "bold"}}>Actions</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
