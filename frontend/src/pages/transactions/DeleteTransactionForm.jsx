@@ -19,7 +19,12 @@ export default function DeleteTransactionForm({ open, onClose, onDelete }) {
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={onDelete}>Delete</Button>
+        <Button
+          onClick={onDelete}
+          sx={{ color: "error.dark", "&:hover": { bgcolor: "#fef0ecff" } }}
+        >
+          Delete
+        </Button>
       </DialogActions>
     </Dialog>
   );

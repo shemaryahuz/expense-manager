@@ -22,7 +22,9 @@ import { INCOME_ID } from "../../features/categories/categoriesSlice";
 
 export default function AddTransactionForm({ open, onClose }) {
   const { categories } = useSelector((state) => state.categories);
-  const expenseCategories = categories.filter((category) => category.id !== INCOME_ID);
+  const expenseCategories = categories.filter(
+    (category) => category.id !== INCOME_ID
+  );
   const intialTransaction = {
     userId: "u1", // u1 = user id
     title: "",
@@ -76,7 +78,10 @@ export default function AddTransactionForm({ open, onClose }) {
       setError("All fields are required");
       return;
     }
-    const transactionToSend = { ...transaction, date: transaction.date.toISOString() };
+    const transactionToSend = {
+      ...transaction,
+      date: transaction.date.toISOString(),
+    };
     dispatch(addTransaction(transactionToSend));
     setTransaction(intialTransaction);
     onClose();
@@ -88,11 +93,16 @@ export default function AddTransactionForm({ open, onClose }) {
   };
 
   return (
-    <Dialog open={open} onClose={onClose} sx={{ padding: 2 }} closeAfterTransition={false}>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      sx={{ padding: 2 }}
+      closeAfterTransition={false}
+    >
       <DialogTitle>Add Transaction</DialogTitle>
       <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
         <TextField
-          sx={{mt: 1}}
+          sx={{ mt: 1 }}
           required
           name="title"
           label="Title"
@@ -121,31 +131,34 @@ export default function AddTransactionForm({ open, onClose }) {
             <MenuItem value="expense">Expense</MenuItem>
           </Select>
         </FormControl>
-        {transaction.type === "expense" && <FormControl fullWidth required>
-          <InputLabel id="category-select-label">Category</InputLabel>
-          <Select
-            name="category"
-            label="Category"
-            labelId="category-select-label"
-            id="category-select"
-            value={transaction.categoryId}
-            onChange={handleChange}
-          >
-            {expenseCategories.map((category) => (
-              <MenuItem key={category.id} value={category.id}>
-                {category.name}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>}
+        {transaction.type === "expense" && (
+          <FormControl fullWidth required>
+            <InputLabel id="category-select-label">Category</InputLabel>
+            <Select
+              name="category"
+              label="Category"
+              labelId="category-select-label"
+              id="category-select"
+              value={transaction.categoryId}
+              onChange={handleChange}
+            >
+              {expenseCategories.map((category) => (
+                <MenuItem key={category.id} value={category.id}>
+                  {category.name}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        )}
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DemoContainer components={["DatePicker"]}>
             <DatePicker
               slotProps={{
                 textField: {
                   required: true,
-                }
+                },
               }}
+              disableFuture
               name="date"
               label="Date"
               value={transaction.date}

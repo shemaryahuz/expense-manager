@@ -106,7 +106,7 @@ export default function CategoryCard({ category }) {
                 onClick={handleDeleteOpen}
                 sx={{ display: "flex", gap: 1 }}
               >
-                <Delete />
+                <Delete sx={{ color: "error.dark" }} />
                 <Typography>Delete category</Typography>
               </MenuItem>
             </Menu>

@@ -42,7 +42,7 @@ export default function TransactionRow({ transaction }) {
           <Edit />
         </IconButton>
         <IconButton>
-          <Delete onClick={handleOpen} />
+          <Delete onClick={handleOpen} sx={{ color: "error.dark" }} />
           <DeleteTransactionForm
             open={dialogOpen}
             onClose={handleClose}
