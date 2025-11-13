@@ -38,11 +38,8 @@ export const transactionsSlice = createSlice({
                 state.loading = true;
             })
             .addCase(searchTransactions.fulfilled, (state, action) => {
-                console.log(action.payload);
-
                 state.loading = false;
                 state.searched = action.payload;
-                state.error = "";
             })
             .addCase(searchTransactions.rejected, (state, action) => {
                 state.loading = false;
@@ -56,8 +53,14 @@ export const transactionsSlice = createSlice({
             .addCase(addTransaction.fulfilled, (state, action) => {
                 state.loading = false;
                 action.payload.date = new Date(action.payload.date).toLocaleDateString();
-                state.transactions.unshift(action.payload);
-                state.error = "";
+                state.transactions.push(action.payload);
+
+                // sort transactions by date
+                state.transactions.sort((a, b) => {
+                    const dateA = new Date(a.date);
+                    const dateB = new Date(b.date);
+                    return dateB - dateA;
+                });
             })
             .addCase(addTransaction.rejected, (state, action) => {
                 state.loading = false;
@@ -71,7 +74,6 @@ export const transactionsSlice = createSlice({
             .addCase(deleteTransaction.fulfilled, (state, action) => {
                 state.loading = false;
                 state.transactions = state.transactions.filter((transaction) => transaction.id !== action.payload.id);
-                state.error = "";
             })
             .addCase(deleteTransaction.rejected, (state, action) => {
                 state.loading = false;
