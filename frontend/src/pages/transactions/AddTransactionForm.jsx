@@ -44,10 +44,11 @@ export default function AddTransactionForm({ open, onClose }) {
         setTransaction({ ...transaction, title: e.target.value });
         break;
       case "amount":
-        if (e.target.value < 0) {
+        const amountNumber = Number(e.target.value);
+        if (amountNumber < 0) {
           return setTransaction({ ...transaction, amount: 0 });
         }
-        setTransaction({ ...transaction, amount: e.target.value });
+        setTransaction({ ...transaction, amount: amountNumber });
         break;
       case "type":
         setTransaction({ ...transaction, type: e.target.value });
