@@ -1,19 +1,34 @@
 import { Container, Typography } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../components/common/Loader";
 import Error from "../../components/common/Error";
 import CategoriesContainer from "./CategoriesContainer";
+import { useEffect, useState } from "react";
+import MonthHeader from "../../components/common/MonthHeader";
+import { fetchCategories } from "../../features/categories/categoriesThunks";
+import { fetchCategoriesTransactions } from "../../features/transactions/transactionsThunks";
 
 export default function CategoriesPage() {
+
+  const dispatch = useDispatch();
   const { loading, error, categories } = useSelector(
     (state) => state.categories
   );
+
+  useEffect(() => {
+    dispatch(fetchCategories());
+    dispatch(fetchCategoriesTransactions())
+  }, [dispatch]);
+
+  const [ month, setMonth ] = useState(new Date());
 
   return (
     <Container sx={{ mt: 4 }}>
       <Typography variant="h2" gutterBottom sx={{ fontWeight: "bold" }}>
         Categories
       </Typography>
+
+      <MonthHeader month={month} hasNextMonth={true} hasPrevMonth={true}/>
 
       {loading && <Loader />}
 

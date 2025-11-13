@@ -23,7 +23,7 @@ import { deleteCategory } from "../../features/categories/categoriesThunks";
 export default function CategoryCard({ category }) {
   const dispatch = useDispatch();
 
-  const { transactions } = useSelector((state) => state.transactions);
+  const { categoriesTransactions: transactions } = useSelector((state) => state.transactions);
 
   const filteredTransactions = transactions.filter(
     (transaction) => transaction.categoryId === category.id

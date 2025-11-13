@@ -4,6 +4,7 @@ export const reportsSlice = createSlice({
     name: "reports",
     initialState: {
         reports: [],
+        current: null,
     },
     reducers: {
         addReport: (state, action) => {

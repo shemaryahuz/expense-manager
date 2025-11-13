@@ -5,8 +5,10 @@ const TRANSACTION_URL = "http://localhost:3000/api/transactions";
 
 export const fetchTransactions = createAsyncThunk(
     "transactions/fetchTransactions",
-    async () => {
-        const url = `${TRANSACTION_URL}/u1` // u1 = user id
+    async (date = new Date()) => {
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        const url = `${TRANSACTION_URL}/month/u1/${year}/${month}` // u1 = user id
         const res = await axios.get(url);
         const formated = res.data.map((transaction) => {
             const date = new Date(transaction.date);
@@ -19,10 +21,12 @@ export const fetchTransactions = createAsyncThunk(
     },
 )
 
-export const fetchTransactionsByMonth = createAsyncThunk(
-    "transactions/fetchTransactionsByMonth",
-    async () => {
-        const url = `${TRANSACTION_URL}/month/u1/${new Date().getFullYear()}/${new Date().getMonth()}` // u1 = user id
+export const fetchCategoriesTransactions = createAsyncThunk(
+    "transactions/fetchCategoriesTransactions",
+    async (date = new Date()) => {
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+        const url = `${TRANSACTION_URL}/month/u1/${year}/${month}` // u1 = user id
         const res = await axios.get(url);
         const formated = res.data.map((transaction) => {
             const date = new Date(transaction.date);

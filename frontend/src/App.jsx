@@ -7,16 +7,11 @@ import TransactionsPage from "./pages/transactions/TransactionsPage";
 import ReportsPage from "./pages/reports/ReportsPage";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { fetchTransactions } from "./features/transactions/transactionsThunks";
+import { fetchCategoriesTransactions, fetchTransactions } from "./features/transactions/transactionsThunks";
 import { fetchCategories } from "./features/categories/categoriesThunks";
 
 function App() {
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchTransactions());
-    dispatch(fetchCategories());
-  }, [dispatch]);
 
   return (
     <BrowserRouter>

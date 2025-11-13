@@ -2,16 +2,22 @@ import { TableRow, TableCell, IconButton } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteTransaction } from "../../features/transactions/transactionsThunks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DeleteTransactionForm from "./DeleteTransactionForm";
+import { fetchCategories } from "../../features/categories/categoriesThunks";
 
 export default function TransactionRow({ transaction }) {
+  const dispatch = useDispatch();
   const { categories } = useSelector((state) => state.categories);
+  useEffect(() => {
+    if (categories.length === 0) {
+      dispatch(fetchCategories());
+    }
+  }, [dispatch]);
 
   const category =
-    categories.find((category) => category.id === transaction.categoryId)
-      ?.name || "None";
-  const dispatch = useDispatch();
+    categories.find((category) => 
+      category.id === transaction.categoryId)?.name || "None";
 
   const [dialogOpen, setDialogOpen] = useState(false);
 

@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addTransaction, deleteTransaction, fetchTransactions, searchTransactions } from "./transactionsThunks";
+import { addTransaction, deleteTransaction, fetchCategoriesTransactions, fetchTransactions, searchTransactions } from "./transactionsThunks";
 import { deleteCategory } from "../categories/categoriesThunks";
 import { MISCELLANEOUS_ID } from "../categories/categoriesSlice";
 
@@ -8,6 +8,7 @@ export const transactionsSlice = createSlice({
     name: "transactions",
     initialState: {
         transactions: [],
+        categoriesTransactions: [],
         searched: [],
         loading: false,
         error: "",
@@ -29,6 +30,19 @@ export const transactionsSlice = createSlice({
                 state.error = "";
             })
             .addCase(fetchTransactions.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message;
+            })
+
+            // fetch transactions for categories page thunk
+            .addCase(fetchCategoriesTransactions.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(fetchCategoriesTransactions.fulfilled, (state, action) => {
+                state.loading = false;
+                state.categoriesTransactions = action.payload;
+            })
+            .addCase(fetchCategoriesTransactions.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error.message;
             })
@@ -85,6 +99,13 @@ export const transactionsSlice = createSlice({
 
                 // updtate transactions with MISCELLANEOUS_ID
                 state.transactions.forEach((transaction) => {
+                    if (transaction.categoryId === action.payload.id) {
+                        transaction.categoryId = MISCELLANEOUS_ID;
+                    }
+                });
+
+                // update categoriesTransactions with MISCELLANEOUS_ID
+                state.categoriesTransactions.forEach((transaction) => {
                     if (transaction.categoryId === action.payload.id) {
                         transaction.categoryId = MISCELLANEOUS_ID;
                     }

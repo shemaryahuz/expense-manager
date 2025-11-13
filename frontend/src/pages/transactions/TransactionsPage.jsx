@@ -9,13 +9,14 @@ import {
 import { Add, Search, Close } from "@mui/icons-material";
 import { styles } from "./styles/TransactionsPage.styles";
 import { useDispatch, useSelector } from "react-redux";
-import { searchTransactions } from "../../features/transactions/transactionsThunks";
+import { fetchTransactions, searchTransactions } from "../../features/transactions/transactionsThunks";
 import Error from "../../components/common/Error";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Loader from "../../components/common/Loader";
 import TransactionsList from "./transactionsList";
 import AddTransactionForm from "./AddTransactionForm";
 import { clearSearched } from "../../features/transactions/transactionsSlice";
+import MonthHeader from "../../components/common/MonthHeader";
 
 export default function TransactionsPage() {
   const { loading, error, transactions, searched } = useSelector(
@@ -29,6 +30,12 @@ export default function TransactionsPage() {
   const [addOpen, setAddOpen] = useState(false);
 
   const currentTransactions = isSearching ? searched : transactions;
+
+  const [ month, setMonth ] = useState(new Date());
+
+  useEffect(() => {
+    dispatch(fetchTransactions(month));
+  }, [dispatch]);
 
   const handleAddOpen = () => {
     setAddOpen(true);
@@ -58,6 +65,8 @@ export default function TransactionsPage() {
       <Typography variant="h2" gutterBottom sx={styles.heading}>
         Transactions
       </Typography>
+
+      <MonthHeader month={month} hasNextMonth={true} hasPrevMonth={true} />
 
       {loading && <Loader />}
 

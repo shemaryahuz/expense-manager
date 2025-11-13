@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { addCategory, deleteCategory, fetchCategories } from "./categoriesThunks";
+import { fetchTransactions } from "../transactions/transactionsThunks";
 
 export const INCOME_ID = "c0";
 export const MISCELLANEOUS_ID = "c1";
