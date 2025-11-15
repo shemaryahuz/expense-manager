@@ -22,13 +22,18 @@ export default function CategoriesPage() {
 
   const [ month, setMonth ] = useState(new Date());
 
+  const handleMonthChange = (newMonth) => {
+    setMonth(newMonth);
+    dispatch(fetchCategoriesTransactions(newMonth));
+  };
+
   return (
     <Container sx={{ mt: 4 }}>
       <Typography variant="h2" gutterBottom sx={{ fontWeight: "bold" }}>
         Categories
       </Typography>
 
-      <MonthHeader month={month} hasNextMonth={true} hasPrevMonth={true}/>
+      <MonthHeader month={month} hasNextMonth={true} hasPrevMonth={true} onMonthChange={handleMonthChange}/>
 
       {loading && <Loader />}
 

@@ -37,6 +37,11 @@ export default function TransactionsPage() {
     dispatch(fetchTransactions(month));
   }, [dispatch]);
 
+  const handleMonthChange = (newMonth) => {
+    setMonth(newMonth);
+    dispatch(fetchTransactions(newMonth));
+  };
+
   const handleAddOpen = () => {
     setAddOpen(true);
   };
@@ -66,7 +71,7 @@ export default function TransactionsPage() {
         Transactions
       </Typography>
 
-      <MonthHeader month={month} hasNextMonth={true} hasPrevMonth={true} />
+      <MonthHeader month={month} hasNextMonth={true} hasPrevMonth={true}  onMonthChange={handleMonthChange}/>
 
       {loading && <Loader />}
 
