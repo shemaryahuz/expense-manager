@@ -1,5 +1,7 @@
 import { readFile, writeFile } from "fs/promises";
+
 import { readTransactions, writeTransactions } from "./transactionsController.js";
+
 const PATH = "./database/categories.json"; // relative to server.js
 const MISCELLANEOUS_ID = "c1";
 
@@ -14,32 +16,85 @@ async function writeCategories(categories) {
 
 export async function getCategories(req, res) {
     try {
+
         const { userId } = req.params;
+
         const categoriesJson = await readCategories();
-        const categories = categoriesJson.filter((category) => category.userId === userId || category.userId === null);
+
+        const categories = categoriesJson.filter((category) =>
+            category.userId === userId || category.userId === null);
+
         if (categories.length === 0) {
             return res.status(404).send("Categories not found");
         }
-        
+
         res.send(categories);
+
     } catch (error) {
-        console.error(error);
+
+        console.error(error);        
         res.status(500).send(error);
     }
-} 
+}
 
 export async function addCategory(req, res) {
     try {
-        const newCategory = req.body;
-        if (!newCategory.name || !newCategory.userId) {
+
+        const { name, userId } = req.body;
+
+        if (!name || !userId) {
             return res.status(400).send("Category name and user id are required");
         }
+
         const categoriesJson = await readCategories();
-        newCategory.id = Date.now().toString();
+
+        const id = Date.now().toString();
+        const newCategory = { id, name, userId };
+
         categoriesJson.push(newCategory);
         await writeCategories(categoriesJson);
+
         res.send(newCategory);
+
     } catch (error) {
+
+        console.error(error);
+        res.status(500).send(error);
+    }
+}
+
+export async function updateCategory(req, res) {
+    try {
+
+        const { id } = req.params;
+        const { name } = req.body;
+        
+        if (!name) {
+            return res.status(400).send("Category name is required");
+        }
+
+        const categoriesJson = await readCategories();
+
+        const updatedCategory = categoriesJson.find((category) => category.id === id);
+
+        if (!updatedCategory) {
+            return res.status(404).send("Category not found");
+        }
+
+        const updatedCategories = categoriesJson.map((category) => {
+            if (category.id === id) {
+                category.name = name;
+            }
+            return category;
+        });
+
+        await writeCategories(updatedCategories);
+
+        res.send(updatedCategory);
+
+    } catch (error) {
+
+        console.error(error);
         res.status(500).send(error);
     }
 }
@@ -52,12 +107,14 @@ export async function deleteCategory(req, res) {
 
         // update category transactions to miscellaneous or income
         const transactionsJson = await readTransactions();
+
         const updatedTransactions = transactionsJson.map((transaction) => {
             if (transaction.categoryId === id) {
                 transaction.categoryId = MISCELLANEOUS_ID;
             }
             return transaction;
         });
+
         await writeTransactions(updatedTransactions);
 
         const deleted = categoriesJson.find((category) => category.id === id);
@@ -67,9 +124,14 @@ export async function deleteCategory(req, res) {
         }
 
         const newCategories = categoriesJson.filter((category) => category.id !== id);
+
         await writeCategories(newCategories);
+
         res.send(deleted);
+
     } catch (error) {
+
+        console.error(error);
         res.status(500).send(error);
     }
 }
