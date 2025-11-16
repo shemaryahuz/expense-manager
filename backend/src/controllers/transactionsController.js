@@ -129,6 +129,40 @@ export async function addTransaction(req, res) {
     }
 }
 
+export async function updateTransaction(req, res) {
+    try {
+        const { id } = req.params;
+        const { userId, categoryId, title, type, amount, date } = req.body;
+
+        if (!userId || !title || !type || !amount || !date) {
+            return res.status(400).send("Transaction title, amount, user id and category id are required");
+        }
+
+        const updatedTransaction = {
+            id,
+            userId,
+            categoryId,
+            title,
+            type,
+            amount,
+            date
+        };
+        
+        const transactionsJson = await readTransactions();
+        const updatedTransactions = transactionsJson.map((transaction) => {
+            if (transaction.id === id) {
+                return updatedTransaction;
+            }
+            return transaction;
+        });
+        await writeTransactions(updatedTransactions);
+        res.send(updatedTransaction);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send(error);
+    }
+}
+
 export async function deleteTransaction(req, res) {
     try {
         const id = req.params.id;
