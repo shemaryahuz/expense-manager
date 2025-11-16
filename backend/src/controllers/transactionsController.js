@@ -1,4 +1,5 @@
 import { readFile, writeFile } from "fs/promises";
+
 const PATH = "./database/transactions.json"; // relative to server.js
 
 export async function readTransactions() {
@@ -23,7 +24,10 @@ export async function getTransactions(req, res) {
         });
 
         res.send(filtered);
+
     } catch (error) {
+
+        console.error(error);
         res.status(500).send(error);
     }
 }
@@ -35,7 +39,9 @@ export async function getTransactionsByMonth(req, res) {
         const transactionsJson = await readTransactions();
 
         const filtered = transactionsJson.filter((transaction) => {
+
             const date = new Date(transaction.date);
+
             return transaction.userId === userId &&
                 date.getFullYear() === Number(year) &&
                 date.getMonth() + 1 === Number(month);
@@ -50,6 +56,8 @@ export async function getTransactionsByMonth(req, res) {
         res.send(filtered);
 
     } catch (error) {
+
+        console.error(error);
         res.status(500).send(error);
     }
 }
@@ -60,8 +68,9 @@ export async function getTransactionsByCategory(req, res) {
 
         const transactionsJson = await readTransactions();
 
-        const filtered = transactionsJson.filter((transaction) => 
-            transaction.userId === userId && transaction.categoryId === categoryId
+        const filtered = transactionsJson.filter((transaction) =>
+            transaction.userId === userId &&
+            transaction.categoryId === categoryId
         );
 
         filtered.sort((a, b) => {
@@ -71,7 +80,9 @@ export async function getTransactionsByCategory(req, res) {
         });
 
         res.send(filtered);
+
     } catch (error) {
+
         console.error(error);
         res.status(500).send(error);
     }
@@ -79,17 +90,23 @@ export async function getTransactionsByCategory(req, res) {
 
 export async function searchTransactions(req, res) {
     try {
+
         const { userId } = req.params;
         const { title } = req.query;
+
         const searchTerm = title.toLowerCase().trim() || '';
+
         const transactionsJson = await readTransactions();
+
         const filtered = transactionsJson.filter((transaction) =>
             transaction.userId === userId &&
             transaction.title.toLowerCase().includes(searchTerm)
         );
 
         res.send(filtered);
+
     } catch (error) {
+
         console.error(error);
         res.status(500).send(error);
     }
@@ -124,6 +141,7 @@ export async function addTransaction(req, res) {
         res.send(newTransaction);
 
     } catch (error) {
+
         console.error(error);
         res.status(500).send(error);
     }
@@ -147,17 +165,22 @@ export async function updateTransaction(req, res) {
             amount,
             date
         };
-        
+
         const transactionsJson = await readTransactions();
+
         const updatedTransactions = transactionsJson.map((transaction) => {
             if (transaction.id === id) {
                 return updatedTransaction;
             }
             return transaction;
         });
+
         await writeTransactions(updatedTransactions);
+
         res.send(updatedTransaction);
+
     } catch (error) {
+
         console.error(error);
         res.status(500).send(error);
     }
@@ -165,13 +188,20 @@ export async function updateTransaction(req, res) {
 
 export async function deleteTransaction(req, res) {
     try {
-        const id = req.params.id;
+        const { id } = req.params;
+
         const transactionsJson = await readTransactions();
+
         const deleted = transactionsJson.find((transaction) => transaction.id === id);
+
         const updatedTransactions = transactionsJson.filter((transaction) => transaction.id !== id);
+
         await writeTransactions(updatedTransactions);
+
         res.send(deleted);
+
     } catch (error) {
+        
         console.error(error);
         res.status(500).send(error);
     }
