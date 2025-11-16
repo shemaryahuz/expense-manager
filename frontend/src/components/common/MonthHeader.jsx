@@ -1,23 +1,18 @@
 import {
   ArrowBackIos,
   ArrowForwardIos,
-  CalendarMonth,
 } from "@mui/icons-material";
-import { Box, Button, IconButton, Typography } from "@mui/material";
+import { Box, IconButton, } from "@mui/material";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 
-export default function MonthHeader({
-  month,
-  hasNextMonth,
-  hasPrevMonth,
-  onMonthChange,
-}) {
-  const monthName = month.toLocaleString("default", { month: "long" });
-  const year = month.getFullYear();
+export default function MonthHeader({ month, onMonthChange }) {
+
+  const hasPrevMonth = dayjs(month).isAfter(dayjs("2024-01-01"), "month");
+  const hasNextMonth = dayjs(month).isBefore(dayjs(), "month");
 
   const dayjsMonth = dayjs(month);
 
@@ -25,11 +20,27 @@ export default function MonthHeader({
     onMonthChange(newMonth.toDate());
   };
 
+  const handleNextMonth = () => {
+    onMonthChange(dayjs(month).add(1, "month").toDate());
+  };
+
+  const handlePrevMonth = () => {
+    onMonthChange(dayjs(month).subtract(1, "month").toDate());
+  };
+
   return (
-    <Box sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}>
+    <Box
+      sx={{
+        width: "60%",
+        justifySelf: "center",
+        display: "flex",
+        justifyContent: "space-between",
+        mb: 2,
+      }}
+    >
       <Box>
         {hasPrevMonth && (
-          <IconButton>
+          <IconButton onClick={handlePrevMonth}>
             <ArrowBackIos />
           </IconButton>
         )}
@@ -37,14 +48,13 @@ export default function MonthHeader({
       <Box
         sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
       >
-        {/* <Typography variant="h5">
-          {monthName} {year}
-        </Typography> */}
         <LocalizationProvider dateAdapter={AdapterDayjs}>
           <DemoContainer components={["DatePicker"]}>
             <DatePicker
-              disableFuture
+              minDate={dayjs("2024-01-01")}
+              maxDate={dayjs(new Date())}
               views={["year", "month"]}
+              openTo="month"
               value={dayjsMonth}
               label="Month"
               onChange={handleMonthChange}
@@ -54,7 +64,7 @@ export default function MonthHeader({
       </Box>
       <Box>
         {hasNextMonth && (
-          <IconButton>
+          <IconButton onClick={handleNextMonth}>
             <ArrowForwardIos />
           </IconButton>
         )}
