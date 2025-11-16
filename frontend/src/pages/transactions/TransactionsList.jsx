@@ -5,28 +5,27 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+
+import { transactionsListStyles as styles } from "./styles/TransactionsList.styles";
+
 import TransactionRow from "./TransactionRow";
 
 export default function TransactionsList({ transactions }) {
-
-  
   return (
-    <Table>
+    <Table sx={styles.table}>
       <TableHead>
-        <TableRow>
-          <TableCell sx={{fontWeight: "bold"}}>Date</TableCell>
-          <TableCell sx={{fontWeight: "bold"}}>Title</TableCell>
-          <TableCell sx={{fontWeight: "bold"}}>Category</TableCell>
-          <TableCell sx={{fontWeight: "bold"}}>Amount</TableCell>
-          <TableCell sx={{fontWeight: "bold"}}>Actions</TableCell>
+        <TableRow sx={styles.tableHead}>
+          <TableCell>Date</TableCell>
+          <TableCell>Title</TableCell>
+          <TableCell>Category</TableCell>
+          <TableCell>Amount</TableCell>
+          <TableCell>Actions</TableCell>
         </TableRow>
       </TableHead>
+
       <TableBody>
         {transactions.map((transaction) => (
-          <TransactionRow 
-            transaction={transaction} 
-            key={transaction.id} 
-          />
+          <TransactionRow transaction={transaction} key={transaction.id} />
         ))}
       </TableBody>
     </Table>

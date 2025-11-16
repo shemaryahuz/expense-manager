@@ -1,6 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { addTransaction, deleteTransaction, fetchCategoriesTransactions, fetchTransactions, searchTransactions } from "./transactionsThunks";
+
+import {
+    addTransaction,
+    deleteTransaction,
+    editTransaction,
+    fetchCategoriesTransactions,
+    fetchTransactions,
+    searchTransactions
+} from "./transactionsThunks";
+
 import { deleteCategory } from "../categories/categoriesThunks";
+
 import { MISCELLANEOUS_ID } from "../categories/categoriesSlice";
 
 
@@ -81,13 +91,37 @@ export const transactionsSlice = createSlice({
                 state.error = action.error.message;
             })
 
+            // update transaction thunk
+            .addCase(editTransaction.pending, (state) => {
+                state.loading = true;
+            })
+            .addCase(editTransaction.fulfilled, (state, action) => {
+                state.loading = false;
+
+                state.transactions = state.transactions.map((transaction) => {
+                    if (transaction.id === action.payload.id) {
+
+                        const date = new Date(action.payload.date);
+                        action.payload.date = date.toLocaleDateString();
+
+                        return action.payload;
+                    }
+                    return transaction;
+                });
+            })
+            .addCase(editTransaction.rejected, (state, action) => {
+                state.loading = false;
+                state.error = action.error.message;
+            })
+
             // delete transaction thunk
             .addCase(deleteTransaction.pending, (state) => {
                 state.loading = true;
             })
             .addCase(deleteTransaction.fulfilled, (state, action) => {
                 state.loading = false;
-                state.transactions = state.transactions.filter((transaction) => transaction.id !== action.payload.id);
+                state.transactions = state.transactions.filter((transaction) =>
+                    transaction.id !== action.payload.id);
             })
             .addCase(deleteTransaction.rejected, (state, action) => {
                 state.loading = false;
@@ -97,7 +131,7 @@ export const transactionsSlice = createSlice({
             // update transactions on category delete
             .addCase(deleteCategory.fulfilled, (state, action) => {
 
-                // updtate transactions with MISCELLANEOUS_ID
+                // update transactions with MISCELLANEOUS_ID
                 state.transactions.forEach((transaction) => {
                     if (transaction.categoryId === action.payload.id) {
                         transaction.categoryId = MISCELLANEOUS_ID;

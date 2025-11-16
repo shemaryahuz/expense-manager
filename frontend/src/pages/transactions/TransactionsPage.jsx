@@ -1,3 +1,7 @@
+import { useEffect, useState } from "react";
+
+import { useDispatch, useSelector } from "react-redux";
+
 import {
   Box,
   Button,
@@ -7,16 +11,21 @@ import {
   Typography,
 } from "@mui/material";
 import { Add, Search, Close } from "@mui/icons-material";
-import { styles } from "./styles/TransactionsPage.styles";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchTransactions, searchTransactions } from "../../features/transactions/transactionsThunks";
-import Error from "../../components/common/Error";
-import { useEffect, useState } from "react";
-import Loader from "../../components/common/Loader";
-import TransactionsList from "./transactionsList";
-import AddTransactionForm from "./AddTransactionForm";
+
+import {
+  fetchTransactions,
+  searchTransactions,
+} from "../../features/transactions/transactionsThunks";
 import { clearSearched } from "../../features/transactions/transactionsSlice";
+
 import MonthHeader from "../../components/common/MonthHeader";
+import Error from "../../components/common/Error";
+import Loader from "../../components/common/Loader";
+
+import TransactionsList from "./transactionsList";
+import TransactionForm from "./TransactionForm";
+
+import { transactionsPageStyles as styles } from "./styles/TransactionsPage.styles";
 
 export default function TransactionsPage() {
   const { loading, error, transactions, searched } = useSelector(
@@ -31,7 +40,7 @@ export default function TransactionsPage() {
 
   const currentTransactions = isSearching ? searched : transactions;
 
-  const [ month, setMonth ] = useState(new Date());
+  const [month, setMonth] = useState(new Date());
 
   useEffect(() => {
     dispatch(fetchTransactions(month));
@@ -45,7 +54,7 @@ export default function TransactionsPage() {
   const handleAddOpen = () => {
     setAddOpen(true);
   };
-  
+
   const handleAddClose = () => {
     setAddOpen(false);
   };
@@ -71,7 +80,12 @@ export default function TransactionsPage() {
         Transactions
       </Typography>
 
-      <MonthHeader month={month} hasNextMonth={true} hasPrevMonth={true}  onMonthChange={handleMonthChange}/>
+      <MonthHeader
+        month={month}
+        hasNextMonth={true}
+        hasPrevMonth={true}
+        onMonthChange={handleMonthChange}
+      />
 
       {loading && <Loader />}
 
@@ -79,7 +93,9 @@ export default function TransactionsPage() {
 
       {!loading && !error && (
         <Box sx={styles.mainBox}>
+
           <Box sx={styles.headerBox}>
+
             <Box sx={styles.searchBox}>
               <TextField
                 value={search}
@@ -97,6 +113,7 @@ export default function TransactionsPage() {
                 <Close />
               </IconButton>
             </Box>
+
             <Box>
               <Button
                 variant="contained"
@@ -106,16 +123,24 @@ export default function TransactionsPage() {
                 <Typography variant="h6">Add Transaction</Typography>
                 <Add sx={styles.addIcon} />
               </Button>
-              <AddTransactionForm open={addOpen} onClose={handleAddClose} />
+              <TransactionForm
+                open={addOpen}
+                onClose={handleAddClose}
+                isExisting={false}
+              />
             </Box>
+
           </Box>
+
           {currentTransactions.length > 0 ? (
             <TransactionsList transactions={currentTransactions} />
           ) : (
             <Typography variant="h6">No transactions found</Typography>
           )}
+
         </Box>
       )}
+      
     </Container>
   );
 }

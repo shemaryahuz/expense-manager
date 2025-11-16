@@ -1,4 +1,4 @@
-export const styles = {
+export const transactionsPageStyles = {
   container: {
     mt: 4,
   },
