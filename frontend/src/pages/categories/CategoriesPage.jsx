@@ -1,16 +1,23 @@
-import { Container, Typography } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
-import Loader from "../../components/common/Loader";
-import Error from "../../components/common/Error";
-import CategoriesContainer from "./CategoriesContainer";
 import { useEffect, useState } from "react";
-import MonthHeader from "../../components/common/MonthHeader";
+
+import { useDispatch, useSelector } from "react-redux";
+
+import { Container, Typography } from "@mui/material";
+
+
 import { fetchCategories } from "../../features/categories/categoriesThunks";
 import { fetchCategoriesTransactions } from "../../features/transactions/transactionsThunks";
+
+import MonthHeader from "../../components/common/MonthHeader";
+import Loader from "../../components/common/Loader";
+import Error from "../../components/common/Error";
+
+import CategoriesContainer from "./CategoriesContainer";
 
 export default function CategoriesPage() {
 
   const dispatch = useDispatch();
+
   const { loading, error, categories } = useSelector(
     (state) => state.categories
   );
@@ -40,7 +47,7 @@ export default function CategoriesPage() {
       {!loading && error && <Error error={error} />}
 
       {!loading && !error && categories.length > 0 && (
-        <CategoriesContainer categories={categories} />
+        <CategoriesContainer />
       )}
     </Container>
   );

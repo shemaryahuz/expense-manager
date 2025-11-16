@@ -24,6 +24,14 @@ export const addCategory = createAsyncThunk(
     },
 )
 
+export const updateCategory = createAsyncThunk(
+    "categories/updateCategory",
+    async (category) => {
+        const res = await axios.put(`${CATEGORIES_URL}/${category.id}`, category);
+        return res.data
+    },
+)
+
 export const deleteCategory = createAsyncThunk(
     "categories/deleteCategory",
     async (id) => {

@@ -1,13 +1,19 @@
+import { useSelector } from "react-redux";
+
 import { Grid } from "@mui/material";
-import { INCOME_ID } from "../../features/categories/categoriesSlice";
+
 import CategoriesGroup from "./CategoriesGroup";
 
-export default function CategoriesContainer({ categories }) {
-  const income = categories.filter((category) => category.id === INCOME_ID);
-  const defaults = categories.filter(
-    (category) => category.id !== INCOME_ID && category.userId === null
-  );
-  const custom = categories.filter((category) => category.userId === "u1"); // u1 = user id
+import {
+  selectCustomCategories,
+  selectDefaultCategories,
+  selectIncomeCategories,
+} from "../../features/categories/categoriesSelectors";
+
+export default function CategoriesContainer() {
+  const income = useSelector(selectIncomeCategories);
+  const defaults = useSelector(selectDefaultCategories);
+  const custom = useSelector(selectCustomCategories);
 
   return (
     <Grid container direction="column" mb={4}>
