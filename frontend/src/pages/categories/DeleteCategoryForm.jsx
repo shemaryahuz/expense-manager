@@ -7,6 +7,8 @@ import {
   DialogTitle,
 } from "@mui/material";
 
+import { CategoryCardStyles as styles } from "./styles/CategoryCard.styles";
+
 export default function DeleteCategoryForm({ open, onClose, onDelete }) {
   return (
     <Dialog open={open} onClose={onClose} closeAfterTransition={false}>
@@ -24,7 +26,7 @@ export default function DeleteCategoryForm({ open, onClose, onDelete }) {
           <Button onClick={onClose}>Cancel</Button>
           <Button
             onClick={onDelete}
-            sx={{ color: "error.dark", "&:hover": { bgcolor: "#fef0ecff" } }}
+            sx={styles.deleteButton}
           >
             Delete
           </Button>

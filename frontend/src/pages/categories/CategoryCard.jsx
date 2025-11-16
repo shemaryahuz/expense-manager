@@ -7,24 +7,22 @@ import {
   AccordionSummary,
   AccordionDetails,
   Typography,
-  Box,
   Divider,
-  Menu,
-  MenuItem,
-  Button,
-  TextField,
-  IconButton,
 } from "@mui/material";
 
-import { Edit, Delete, ExpandMore, MoreVert } from "@mui/icons-material";
+import { ExpandMore } from "@mui/icons-material";
 
 import { selectCategoriesTransactions } from "../../features/transactions/transactionsSelectors";
 import { updateCategory } from "../../features/categories/categoriesThunks";
 import { deleteCategory } from "../../features/categories/categoriesThunks";
-import { INCOME_ID } from "../../features/categories/categoriesSlice";
 
 import CategoryTransactions from "./CategoryTransactions";
 import DeleteCategoryForm from "./DeleteCategoryForm";
+import CategoryHeader from "./CategoryHeader";
+import CategoryEditActions from "./CategoryEditActions";
+import CategoryMenu from "./CategoryMenu";
+
+import { CategoryCardStyles as styles } from "./styles/CategoryCard.styles";
 
 export default function CategoryCard({ category }) {
   const dispatch = useDispatch();
@@ -100,97 +98,41 @@ export default function CategoryCard({ category }) {
   };
 
   return (
-    <Accordion sx={{ position: "relative" }}>
+    <Accordion sx={styles.accordion}>
       <AccordionSummary
         expandIcon={<ExpandMore />}
         aria-controls="panel1a-content"
         id="panel1a-header"
       >
-        <Box
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            width: "100%",
-            justifyContent: "space-between",
-          }}
-        >
-          {isEditing ? (
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                gap: 1,
-                flexGrow: 1,
-              }}
-              onClick={(event) => event.stopPropagation()}
-            >
-              <TextField
-                variant="standard"
-                autoFocus
-                value={updatedName}
-                onChange={handleNameChange}
-                sx={{
-                  "& .MuiInputBase-input": {
-                    typography: "h5",
-                    fontWeight: "bold",
-                  },
-                }}
-              />
-            </Box>
-          ) : (
-            <Box sx={{ flexGrow: 1 }}>
-              <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-                {name}
-              </Typography>
-              {amount > 0 && (
-                <Typography
-                  variant="h6"
-                  sx={{ color: id === INCOME_ID ? "green" : "red" }}
-                >
-                  {id === INCOME_ID ? "+ " : "- "} {amount}
-                </Typography>
-              )}
-            </Box>
-          )}
-        </Box>
+        <CategoryHeader
+          isEditing={isEditing}
+          updatedName={updatedName}
+          onNameChange={handleNameChange}
+          name={name}
+          amount={amount}
+          id={id}
+        />
       </AccordionSummary>
       <Divider />
 
-      <AccordionDetails sx={{ width: "100%", maxWidth: "md" }}>
-        {isEditing && (
-          <Box sx={{ display: "flex", gap: 1, mb: 2 }}>
-            <Button onClick={handleEditSave} disabled={!updatedName}>
-              Save
-            </Button>
-            <Button onClick={handleEditCancel}>Cancel</Button>
-          </Box>
-        )}
-        {userId !== null && !isEditing && (
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-            }}
-          >
-            <IconButton onClick={handleMenuClick}>
-              <MoreVert />
-            </IconButton>
+      <AccordionDetails sx={styles.accordionDetails}>
+        <CategoryEditActions
+          isEditing={isEditing}
+          updatedName={updatedName}
+          onSave={handleEditSave}
+          onCancel={handleEditCancel}
+        />
 
-            <Menu anchorEl={anchorEl} open={menuOpen} onClose={handleMenuClose}>
-              <MenuItem onClick={handleEdit} sx={{ display: "flex", gap: 1 }}>
-                <Edit />
-                <Typography>Rename category</Typography>
-              </MenuItem>
-              <MenuItem
-                onClick={handleDeleteOpen}
-                sx={{ display: "flex", gap: 1 }}
-              >
-                <Delete sx={{ color: "error.dark" }} />
-                <Typography>Delete category</Typography>
-              </MenuItem>
-            </Menu>
-          </Box>
-        )}
+        <CategoryMenu
+          userId={userId}
+          isEditing={isEditing}
+          anchorEl={anchorEl}
+          menuOpen={menuOpen}
+          onMenuClick={handleMenuClick}
+          onMenuClose={handleMenuClose}
+          onEdit={handleEdit}
+          onDeleteOpen={handleDeleteOpen}
+        />
 
         <DeleteCategoryForm
           open={deleteOpen}
