@@ -51,8 +51,9 @@ export default function TransactionsPage() {
 
   const currentTransactions = isSearching ? searched : transactions;
 
-  const handleSearchChange = (e) => {
-    setSearch(e.target.value);
+  const handleSearchChange = (event) => {
+    const { value } = event.target;
+    setSearch(value);
   };
 
   const handleSearch = () => {
