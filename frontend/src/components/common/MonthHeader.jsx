@@ -1,8 +1,5 @@
-import { Box, IconButton, } from "@mui/material";
-import {
-  ArrowBackIos,
-  ArrowForwardIos,
-} from "@mui/icons-material";
+import { Box, IconButton } from "@mui/material";
+import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -11,11 +8,12 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import dayjs from "dayjs";
 
+import { monthHeaderStyles as styles } from "./styles/MonthHeader.styles";
+
 const minDate = dayjs("2024-01-01");
 const maxDate = dayjs(new Date());
 
 export default function MonthHeader({ month, onMonthChange }) {
-
   const hasPrevMonth = dayjs(month).isAfter(minDate, "month");
   const hasNextMonth = dayjs(month).isBefore(maxDate, "month");
 
@@ -35,13 +33,7 @@ export default function MonthHeader({ month, onMonthChange }) {
 
   return (
     <Box
-      sx={{
-        width: "60%",
-        justifySelf: "center",
-        display: "flex",
-        justifyContent: "space-between",
-        mb: 2,
-      }}
+      sx={styles.headerBox}
     >
       <Box>
         {hasPrevMonth && (
@@ -50,23 +42,19 @@ export default function MonthHeader({ month, onMonthChange }) {
           </IconButton>
         )}
       </Box>
-      <Box
-        sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-      >
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <DemoContainer components={["DatePicker"]}>
-            <DatePicker
-              minDate={minDate}
-              maxDate={maxDate}
-              views={["year", "month"]}
-              openTo="month"
-              value={dayjsMonth}
-              label="Month"
-              onChange={handleMonthChange}
-            />
-          </DemoContainer>
-        </LocalizationProvider>
-      </Box>
+      <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <DemoContainer components={["DatePicker"]}>
+          <DatePicker
+            minDate={minDate}
+            maxDate={maxDate}
+            views={["year", "month"]}
+            openTo="month"
+            value={dayjsMonth}
+            label="Month"
+            onChange={handleMonthChange}
+          />
+        </DemoContainer>
+      </LocalizationProvider>
       <Box>
         {hasNextMonth && (
           <IconButton onClick={handleNextMonth}>

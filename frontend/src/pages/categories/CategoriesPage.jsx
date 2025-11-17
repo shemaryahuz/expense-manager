@@ -33,7 +33,11 @@ export default function CategoriesPage() {
 
   return (
     <Container sx={{ mt: 4 }}>
-      <Typography variant="h2" gutterBottom sx={{ fontWeight: "bold" }}>
+      <Typography
+        variant="h2"
+        gutterBottom
+        sx={{ fontWeight: "bold", textAlign: "center", mb: 2 }}
+      >
         Categories
       </Typography>
 

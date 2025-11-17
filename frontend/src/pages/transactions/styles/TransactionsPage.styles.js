@@ -4,7 +4,8 @@ export const transactionsPageStyles = {
   },
   heading: {
     mb: 2,
-    fontWeight : "bold",
+    fontWeight: "bold",
+    textAlign: "center",
   },
   mainBox: {
     display: "flex",
