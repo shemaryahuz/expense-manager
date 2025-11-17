@@ -1,5 +1,7 @@
 import { Box, TextField, Typography } from "@mui/material";
 
+import { AttachMoney } from "@mui/icons-material";
+
 import { INCOME_ID } from "../../features/categories/categoriesSlice";
 
 import { CategoryCardStyles as styles } from "./styles/CategoryCard.styles";
@@ -13,9 +15,7 @@ export default function CategoryHeader({
   id,
 }) {
   return (
-    <Box
-      sx={styles.categoryHeader}
-    >
+    <Box sx={styles.categoryHeader}>
       {isEditing ? (
         <Box
           sx={{
@@ -43,10 +43,15 @@ export default function CategoryHeader({
           {amount > 0 && (
             <Typography
               variant="h6"
-              sx={{ color: id === INCOME_ID ? "green" : "red" }}
+              sx={{
+                color: id === INCOME_ID ? "green" : "red",
+                display: "flex",
+                alignItems: "center",
+              }}
             >
               {id === INCOME_ID ? "+ " : "- "}
               {amount}
+              <AttachMoney fontSize="inherit" />
             </Typography>
           )}
         </Box>

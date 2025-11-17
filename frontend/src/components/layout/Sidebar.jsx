@@ -12,20 +12,20 @@ import {
 
 import {
   ChevronLeft,
-  Login,
+  Home,
   Dashboard,
   Category,
   ReceiptLong,
-  Report,
+  Assessment,
 } from "@mui/icons-material";
 
 import { Drawer, DrawerTop } from "./styles/Sidebar.styles.js";
 
 const pages = [
   {
-    text: "Login",
+    text: "Home",
     path: "/",
-    icon: <Login />,
+    icon: <Home />,
   },
   {
     text: "Dashboard",
@@ -45,7 +45,7 @@ const pages = [
   {
     text: "Reports",
     path: "/reports",
-    icon: <Report />,
+    icon: <Assessment />,
   },
 ];
 

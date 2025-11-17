@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
-import { TableRow, TableCell, IconButton } from "@mui/material";
-import { Delete, Edit } from "@mui/icons-material";
+import { TableRow, TableCell, IconButton, Box } from "@mui/material";
+import { AttachMoney, Delete, Edit } from "@mui/icons-material";
 
 import { deleteTransaction } from "../../features/transactions/transactionsThunks";
 import { fetchCategories } from "../../features/categories/categoriesThunks";
@@ -56,9 +56,18 @@ export default function TransactionRow({ transaction }) {
       <TableCell>{date}</TableCell>
       <TableCell>{title}</TableCell>
       <TableCell>{categoryName}</TableCell>
-      <TableCell sx={{ color: type === "income" ? "green" : "red" }}>
-        {type === "income" ? "+ " : "- "}
-        {amount}
+      <TableCell>
+        <Box
+          sx={{
+            color: type === "income" ? "green" : "red",
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          {type === "income" ? "+ " : "- "}
+          {amount}
+          <AttachMoney fontSize="inherit" />
+        </Box>
       </TableCell>
 
       <TableCell>

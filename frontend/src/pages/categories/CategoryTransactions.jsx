@@ -1,5 +1,15 @@
-import { Box, Divider, List, ListItem, ListItemText } from "@mui/material";
 import { Fragment } from "react";
+
+import {
+  Box,
+  Divider,
+  List,
+  ListItem,
+  ListItemText,
+  Typography,
+} from "@mui/material";
+
+import { AttachMoney } from "@mui/icons-material";
 
 export default function CategoryTransactions({ transactions }) {
   return (
@@ -12,10 +22,17 @@ export default function CategoryTransactions({ transactions }) {
               secondary={transaction.date}
             />
             <Box
-              sx={{ color: transaction.type === "income" ? "green" : "red" }}
+              sx={{
+                color: transaction.type === "income" ? "green" : "red",
+                display: "flex",
+                alignItems: "center",
+              }}
             >
-              {transaction.type === "income" ? "+ " : "- "}
-              {transaction.amount}
+              <Typography variant="body1">
+                {transaction.type === "income" ? "+ " : "- "}
+                {transaction.amount}
+              </Typography>
+              <AttachMoney fontSize="inherit" />
             </Box>
           </ListItem>
           {index !== transactions.length - 1 && <Divider />}

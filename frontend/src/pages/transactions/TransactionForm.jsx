@@ -143,7 +143,7 @@ export default function TransactionForm({
         <TextField
           required
           name="amount"
-          label="Amount"
+          label="Amount (USD)"
           type="number"
           value={amount}
           onChange={handleChange}
