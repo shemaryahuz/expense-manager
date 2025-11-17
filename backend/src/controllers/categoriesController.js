@@ -17,7 +17,7 @@ async function writeCategories(categories) {
 export async function getCategories(req, res) {
     try {
 
-        const { userId } = req.params;
+        const userId = req.userId;
 
         const categoriesJson = await readCategories();
 
@@ -39,8 +39,8 @@ export async function getCategories(req, res) {
 
 export async function addCategory(req, res) {
     try {
-
-        const { name, userId } = req.body;
+        const userId = req.userId;
+        const { name } = req.body;
 
         if (!name || !userId) {
             return res.status(400).send("Category name and user id are required");

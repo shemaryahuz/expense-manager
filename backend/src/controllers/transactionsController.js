@@ -13,7 +13,7 @@ export async function writeTransactions(transactions) {
 
 export async function getTransactions(req, res) {
     try {
-        const { userId } = req.params;
+        const userId = req.userId;
         const transactions = await readTransactions();
 
         const filtered = transactions.filter((transaction) => transaction.userId === userId);
@@ -34,7 +34,8 @@ export async function getTransactions(req, res) {
 
 export async function getTransactionsByMonth(req, res) {
     try {
-        const { userId, year, month } = req.params;
+        const userId = req.userId;
+        const { year, month } = req.params;
 
         const transactionsJson = await readTransactions();
 
@@ -62,36 +63,10 @@ export async function getTransactionsByMonth(req, res) {
     }
 }
 
-export async function getTransactionsByCategory(req, res) {
-    try {
-        const { userId, categoryId } = req.params;
-
-        const transactionsJson = await readTransactions();
-
-        const filtered = transactionsJson.filter((transaction) =>
-            transaction.userId === userId &&
-            transaction.categoryId === categoryId
-        );
-
-        filtered.sort((a, b) => {
-            const dateA = new Date(a.date);
-            const dateB = new Date(b.date);
-            return dateB - dateA;
-        });
-
-        res.send(filtered);
-
-    } catch (error) {
-
-        console.error(error);
-        res.status(500).send(error);
-    }
-}
-
 export async function searchTransactions(req, res) {
     try {
 
-        const { userId } = req.params;
+        const userId = req.userId;
         const { title } = req.query;
 
         const searchTerm = title.toLowerCase().trim() || '';
@@ -114,7 +89,8 @@ export async function searchTransactions(req, res) {
 
 export async function addTransaction(req, res) {
     try {
-        const { userId, categoryId, title, type, amount, date } = req.body;
+        const userId = req.userId;
+        const { categoryId, title, type, amount, date } = req.body;
 
         if (!userId || !title || !type || !amount || !date) {
             return res.status(400).send("Transaction title, amount, user id and category id are required");
@@ -149,8 +125,10 @@ export async function addTransaction(req, res) {
 
 export async function updateTransaction(req, res) {
     try {
+
+        const userId = req.userId;
         const { id } = req.params;
-        const { userId, categoryId, title, type, amount, date } = req.body;
+        const { categoryId, title, type, amount, date } = req.body;
 
         if (!userId || !title || !type || !amount || !date) {
             return res.status(400).send("Transaction title, amount, user id and category id are required");

@@ -4,23 +4,22 @@ import {
     getTransactionsByMonth,
     addTransaction, 
     deleteTransaction,
-    getTransactionsByCategory, 
     searchTransactions, 
     getTransactions,
     updateTransaction
 } from "../controllers/transactionsController.js";
+import { authMiddleware } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/:userId", getTransactions);
-router.get("/month/:userId/:year/:month", getTransactionsByMonth);
-router.get("/category/:userId/:categoryId", getTransactionsByCategory);
-router.get("/search/:userId", searchTransactions);
+router.get("/", authMiddleware, getTransactions);
+router.get("/month/:year/:month", authMiddleware, getTransactionsByMonth);
+router.get("/search", authMiddleware, searchTransactions);
 
-router.post("/", addTransaction);
+router.post("/", authMiddleware, addTransaction);
 
-router.put("/:id", updateTransaction);
+router.put("/:id", authMiddleware, updateTransaction);
 
-router.delete("/:id", deleteTransaction);
+router.delete("/:id", authMiddleware, deleteTransaction);
 
 export default router;
