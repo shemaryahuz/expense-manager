@@ -12,7 +12,7 @@ import {
 
 import { ExpandMore } from "@mui/icons-material";
 
-import { selectCategoriesTransactions } from "../../features/transactions/transactionsSelectors";
+import { selectCategoriesTransactions, selectTransactionsByCategoryId } from "../../features/transactions/transactionsSelectors";
 import { updateCategory } from "../../features/categories/categoriesThunks";
 import { deleteCategory } from "../../features/categories/categoriesThunks";
 
@@ -28,13 +28,10 @@ export default function CategoryCard({ category }) {
   const dispatch = useDispatch();
 
   const { id, userId, name } = category;
-  const transactions = useSelector(selectCategoriesTransactions);
 
-  const filteredTransactions = transactions.filter(
-    (transaction) => transaction.categoryId === id
-  );
+  const transactions = useSelector((state) => selectTransactionsByCategoryId(state, id));
 
-  const amount = filteredTransactions.reduce(
+  const amount = transactions.reduce(
     (accumulator, transaction) => accumulator + transaction.amount,
     0
   );
@@ -139,8 +136,8 @@ export default function CategoryCard({ category }) {
           onClose={handleDeleteClose}
           onDelete={handleDelete}
         />
-        {filteredTransactions.length > 0 ? (
-          <CategoryTransactions transactions={filteredTransactions} />
+        {transactions.length > 0 ? (
+          <CategoryTransactions transactions={transactions} />
         ) : (
           <Typography>No transactions yet</Typography>
         )}
