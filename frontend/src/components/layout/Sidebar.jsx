@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import {
   Divider,
@@ -50,7 +50,8 @@ const pages = [
 ];
 
 export default function Sidebar({ open, handleDrawerClose }) {
-  const navigate = useNavigate();
+  const location = useLocation();
+
   return (
     <Drawer variant="permanent" open={open}>
       <DrawerTop>
@@ -64,8 +65,8 @@ export default function Sidebar({ open, handleDrawerClose }) {
         {pages.map((page) => (
           <ListItem key={page.text} disablePadding sx={{ display: "block" }}>
             <ListItemButton
-              component="a"
-              onClick={() => navigate(page.path)}
+              component={Link}
+              to={page.path}
               selected={location.pathname === page.path}
             >
               <ListItemIcon>{page.icon}</ListItemIcon>
