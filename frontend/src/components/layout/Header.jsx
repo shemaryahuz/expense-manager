@@ -1,8 +1,8 @@
 import { Box, IconButton, Link, Toolbar, Typography } from "@mui/material";
+
+import { Menu, Brightness4, Brightness7 } from "@mui/icons-material";
+
 import { AppBar } from "./styles/Header.styles.js";
-import MenuIcon from '@mui/icons-material/Menu';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
 
 export default function Header({ open, handleDrawerOpen }) {
   const mode = 'light';
@@ -22,14 +22,14 @@ export default function Header({ open, handleDrawerOpen }) {
             open && { display: "none" },
           ]}
         >
-          <MenuIcon />
+          <Menu />
         </IconButton>
         <Link href="/" variant="contained">
           <Box component="img" src="/money-management.svg" alt="Logo" />
           <Typography variant="h4" component="span">Expense Manager</Typography>
         </Link>
         <IconButton sx={{ ml: 1 }} onClick={toggleColorMode} color="inherit" aria-label="toggle theme">
-          {mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+          {mode === 'dark' ? <Brightness7 /> : <Brightness4 />}
         </IconButton>
       </Toolbar>
     </AppBar>

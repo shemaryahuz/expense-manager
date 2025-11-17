@@ -1,3 +1,5 @@
+import { useNavigate } from "react-router-dom";
+
 import {
   Divider,
   IconButton,
@@ -7,40 +9,43 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+
+import {
+  ChevronLeft,
+  Login,
+  Dashboard,
+  Category,
+  ReceiptLong,
+  Report,
+} from "@mui/icons-material";
+
 import { Drawer, DrawerTop } from "./styles/Sidebar.styles.js";
-import LoginIcon from "@mui/icons-material/Login";
-import DashboardIcon from "@mui/icons-material/Dashboard";
-import CategoryIcon from "@mui/icons-material/Category";
-import TransactionIcon from "@mui/icons-material/ReceiptLong";
-import ReportIcon from "@mui/icons-material/BarChart";
-import { useNavigate } from "react-router-dom";
 
 const pages = [
   {
     text: "Login",
     path: "/",
-    icon: <LoginIcon />,
+    icon: <Login />,
   },
   {
     text: "Dashboard",
     path: "/dashboard",
-    icon: <DashboardIcon />,
+    icon: <Dashboard />,
   },
   {
     text: "Transactions",
     path: "/transactions",
-    icon: <TransactionIcon />,
+    icon: <ReceiptLong />,
   },
   {
     text: "Categories",
     path: "/categories",
-    icon: <CategoryIcon />,
+    icon: <Category />,
   },
   {
     text: "Reports",
     path: "/reports",
-    icon: <ReportIcon />,
+    icon: <Report />,
   },
 ];
 
@@ -50,7 +55,7 @@ export default function Sidebar({ open, handleDrawerClose }) {
     <Drawer variant="permanent" open={open}>
       <DrawerTop>
         <IconButton onClick={handleDrawerClose}>
-          <ChevronLeftIcon sx={{ color: "#fff" }} />
+          <ChevronLeft sx={{ color: "#fff" }} />
         </IconButton>
       </DrawerTop>
       <Divider />

@@ -21,28 +21,38 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { DatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 
-import { addTransaction, editTransaction } from "../../features/transactions/transactionsThunks";
+import {
+  addTransaction,
+  editTransaction,
+} from "../../features/transactions/transactionsThunks";
+import { selectCategories } from "../../features/categories/categoriesSelectors";
 import { INCOME_ID } from "../../features/categories/categoriesSlice";
 
 import Error from "../../components/common/Error";
 
-export default function TransactionForm({ open, onClose, isExisting, initialTransaction }) {
-
+export default function TransactionForm({
+  open,
+  onClose,
+  isExisting,
+  initialTransaction,
+}) {
   const dispatch = useDispatch();
 
-  const { categories } = useSelector((state) => state.categories);
+  const categories = useSelector(selectCategories);
 
   const expenseCategories = categories.filter(
     (category) => category.id !== INCOME_ID
   );
 
-  const intialTransaction = isExisting ? initialTransaction : {
-    title: "",
-    amount: 0,
-    type: "",
-    categoryId: "",
-    date: null,
-  };
+  const intialTransaction = isExisting
+    ? initialTransaction
+    : {
+        title: "",
+        amount: 0,
+        type: "",
+        categoryId: "",
+        date: null,
+      };
 
   const [transaction, setTransaction] = useState(intialTransaction);
   const { title, amount, type, categoryId } = transaction;
@@ -191,7 +201,9 @@ export default function TransactionForm({ open, onClose, isExisting, initialTran
       {error && <Error error={error} />}
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleSubmit} sx={{ color: "success.dark" }}>{isExisting ? "Update" : "Add"}</Button>
+        <Button onClick={handleSubmit} sx={{ color: "success.dark" }}>
+          {isExisting ? "Update" : "Add"}
+        </Button>
       </DialogActions>
     </Dialog>
   );

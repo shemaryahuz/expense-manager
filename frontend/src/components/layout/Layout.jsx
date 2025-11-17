@@ -1,13 +1,12 @@
 import { useState } from "react";
-import Box from "@mui/material/Box";
-import {
-  contentStyle,
-  layoutStyle,
-  mainBoxStyle,
-} from "./styles/Layout.styles.js";
-import { DrawerHeader } from "./styles/Header.styles.js";
-import CssBaseline from "@mui/material/CssBaseline";
+
 import { Outlet } from "react-router-dom";
+
+import { Box, CssBaseline } from "@mui/material";
+
+import { layoutStyles as styles } from "./styles/Layout.styles.js";
+import { DrawerHeader } from "./styles/Header.styles.js";
+
 import Footer from "./Footer.jsx";
 import Header from "./Header.jsx";
 import Sidebar from "./Sidebar.jsx";
@@ -25,12 +24,12 @@ export default function Layout() {
   };
 
   return (
-    <Box sx={layoutStyle}>
+    <Box sx={styles.layout}>
       <CssBaseline />
       <Header open={open} handleDrawerOpen={handleDrawerOpen} />
-      <Box sx={mainBoxStyle}>
+      <Box sx={styles.mainBox}>
         <Sidebar open={open} handleDrawerClose={handleDrawerClose} />
-        <Box component="main" sx={contentStyle}>
+        <Box component="main" sx={styles.content}>
           <DrawerHeader />
           <Outlet />
         </Box>

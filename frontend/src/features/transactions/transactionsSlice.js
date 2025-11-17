@@ -76,7 +76,10 @@ export const transactionsSlice = createSlice({
             })
             .addCase(addTransaction.fulfilled, (state, action) => {
                 state.loading = false;
-                action.payload.date = new Date(action.payload.date).toLocaleDateString();
+
+                const date = new Date(action.payload.date);
+                action.payload.date = date.toLocaleDateString();
+
                 state.transactions.push(action.payload);
 
                 // sort transactions by date
@@ -120,8 +123,10 @@ export const transactionsSlice = createSlice({
             })
             .addCase(deleteTransaction.fulfilled, (state, action) => {
                 state.loading = false;
+
+                const { id } = action.payload;
                 state.transactions = state.transactions.filter((transaction) =>
-                    transaction.id !== action.payload.id);
+                    transaction.id !== id);
             })
             .addCase(deleteTransaction.rejected, (state, action) => {
                 state.loading = false;
@@ -131,16 +136,17 @@ export const transactionsSlice = createSlice({
             // update transactions on category delete
             .addCase(deleteCategory.fulfilled, (state, action) => {
 
+                const { id } = action.payload;
                 // update transactions with MISCELLANEOUS_ID
                 state.transactions.forEach((transaction) => {
-                    if (transaction.categoryId === action.payload.id) {
+                    if (transaction.categoryId === id) {
                         transaction.categoryId = MISCELLANEOUS_ID;
                     }
                 });
 
                 // update categoriesTransactions with MISCELLANEOUS_ID
                 state.categoriesTransactions.forEach((transaction) => {
-                    if (transaction.categoryId === action.payload.id) {
+                    if (transaction.categoryId === id) {
                         transaction.categoryId = MISCELLANEOUS_ID;
                     }
                 });

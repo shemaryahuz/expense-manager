@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { Container, Typography } from "@mui/material";
 
-
+import { selectCategoriesState } from "../../features/categories/categoriesSelectors";
 import { fetchCategories } from "../../features/categories/categoriesThunks";
 import { fetchCategoriesTransactions } from "../../features/transactions/transactionsThunks";
 
@@ -15,19 +15,16 @@ import Error from "../../components/common/Error";
 import CategoriesContainer from "./CategoriesContainer";
 
 export default function CategoriesPage() {
-
   const dispatch = useDispatch();
 
-  const { loading, error, categories } = useSelector(
-    (state) => state.categories
-  );
+  const { loading, error, categories } = useSelector(selectCategoriesState);
 
   useEffect(() => {
     dispatch(fetchCategories());
-    dispatch(fetchCategoriesTransactions())
+    dispatch(fetchCategoriesTransactions());
   }, [dispatch]);
 
-  const [ month, setMonth ] = useState(new Date());
+  const [month, setMonth] = useState(new Date());
 
   const handleMonthChange = (newMonth) => {
     setMonth(newMonth);
@@ -40,15 +37,18 @@ export default function CategoriesPage() {
         Categories
       </Typography>
 
-      <MonthHeader month={month} hasNextMonth={true} hasPrevMonth={true} onMonthChange={handleMonthChange}/>
+      <MonthHeader
+        month={month}
+        hasNextMonth={true}
+        hasPrevMonth={true}
+        onMonthChange={handleMonthChange}
+      />
 
       {loading && <Loader />}
 
       {!loading && error && <Error error={error} />}
 
-      {!loading && !error && categories.length > 0 && (
-        <CategoriesContainer />
-      )}
+      {!loading && !error && categories.length > 0 && <CategoriesContainer />}
     </Container>
   );
 }

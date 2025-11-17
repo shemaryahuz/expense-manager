@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 import { Add, Search, Close } from "@mui/icons-material";
 
+import { selectTransactionsState } from "../../features/transactions/transactionsSelectors";
 import {
   fetchTransactions,
   searchTransactions,
@@ -28,36 +29,27 @@ import TransactionForm from "./TransactionForm";
 import { transactionsPageStyles as styles } from "./styles/TransactionsPage.styles";
 
 export default function TransactionsPage() {
-  const { loading, error, transactions, searched } = useSelector(
-    (state) => state.transactions
-  );
-
   const dispatch = useDispatch();
 
-  const [search, setSearch] = useState("");
-  const [isSearching, setIsSearching] = useState(false);
-  const [addOpen, setAddOpen] = useState(false);
-
-  const currentTransactions = isSearching ? searched : transactions;
+  const { loading, error, transactions, searched } = useSelector(
+    selectTransactionsState
+  );
 
   const [month, setMonth] = useState(new Date());
-
-  useEffect(() => {
-    dispatch(fetchTransactions(month));
-  }, [dispatch]);
 
   const handleMonthChange = (newMonth) => {
     setMonth(newMonth);
     dispatch(fetchTransactions(newMonth));
   };
 
-  const handleAddOpen = () => {
-    setAddOpen(true);
-  };
+  useEffect(() => {
+    dispatch(fetchTransactions(month));
+  }, [dispatch]);
 
-  const handleAddClose = () => {
-    setAddOpen(false);
-  };
+  const [search, setSearch] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
+
+  const currentTransactions = isSearching ? searched : transactions;
 
   const handleSearchChange = (e) => {
     setSearch(e.target.value);
@@ -72,6 +64,16 @@ export default function TransactionsPage() {
     setIsSearching(false);
     setSearch("");
     dispatch(clearSearched());
+  };
+
+  const [addOpen, setAddOpen] = useState(false);
+
+  const handleAddOpen = () => {
+    setAddOpen(true);
+  };
+
+  const handleAddClose = () => {
+    setAddOpen(false);
   };
 
   return (
@@ -93,9 +95,7 @@ export default function TransactionsPage() {
 
       {!loading && !error && (
         <Box sx={styles.mainBox}>
-
           <Box sx={styles.headerBox}>
-
             <Box sx={styles.searchBox}>
               <TextField
                 value={search}
@@ -129,7 +129,6 @@ export default function TransactionsPage() {
                 isExisting={false}
               />
             </Box>
-
           </Box>
 
           {currentTransactions.length > 0 ? (
@@ -137,10 +136,8 @@ export default function TransactionsPage() {
           ) : (
             <Typography variant="h6">No transactions found</Typography>
           )}
-
         </Box>
       )}
-      
     </Container>
   );
 }
