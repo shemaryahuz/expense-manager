@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const CATEGORIES_URL = "http://localhost:3000/api/categories";
+const CATEGORIES_URL = "/categories";
 
 export const fetchCategories = createAsyncThunk(
     "categories/fetchCategories",
