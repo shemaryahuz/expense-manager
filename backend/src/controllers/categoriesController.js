@@ -25,7 +25,7 @@ export async function getCategories(req, res) {
             category.userId === userId || category.userId === null);
 
         if (categories.length === 0) {
-            return res.status(404).send("Categories not found");
+            return res.status(404).send({ message: "Categories not found" });
         }
 
         res.send(categories);
@@ -43,7 +43,7 @@ export async function addCategory(req, res) {
         const { name } = req.body;
 
         if (!name || !userId) {
-            return res.status(400).send("Category name and user id are required");
+            return res.status(400).send({ message: "Category name and user id are required" });
         }
 
         const categoriesJson = await readCategories();
@@ -70,7 +70,7 @@ export async function updateCategory(req, res) {
         const { name } = req.body;
         
         if (!name) {
-            return res.status(400).send("Category name is required");
+            return res.status(400).send({ message: "Category name is required" });
         }
 
         const categoriesJson = await readCategories();
@@ -78,7 +78,7 @@ export async function updateCategory(req, res) {
         const updatedCategory = categoriesJson.find((category) => category.id === id);
 
         if (!updatedCategory) {
-            return res.status(404).send("Category not found");
+            return res.status(404).send({ message: "Category not found" });
         }
 
         const updatedCategories = categoriesJson.map((category) => {
@@ -120,11 +120,11 @@ export async function deleteCategory(req, res) {
         const deleted = categoriesJson.find((category) => category.id === id);
 
         if (!deleted) {
-            return res.status(404).send("Category not found");
+            return res.status(404).send({ message: "Category not found" });
         }
 
         if (deleted.userId === null) {
-            return res.status(400).send("Cannot delete default categories");
+            return res.status(400).send({ message: "Cannot delete default categories" });
         }
 
         const newCategories = categoriesJson.filter((category) => category.id !== id);

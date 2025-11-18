@@ -93,7 +93,7 @@ export async function addTransaction(req, res) {
         const { categoryId, title, type, amount, date } = req.body;
 
         if (!userId || !title || !type || !amount || !date) {
-            return res.status(400).send("Transaction title, amount, user id and category id are required");
+            return res.status(400).send({ message: "Transaction title, amount, user id and category id are required" });
         }
 
         if (!categoryId) {
@@ -131,7 +131,7 @@ export async function updateTransaction(req, res) {
         const { categoryId, title, type, amount, date } = req.body;
 
         if (!userId || !title || !type || !amount || !date) {
-            return res.status(400).send("Transaction title, amount, user id and category id are required");
+            return res.status(400).send({ message: "Transaction title, amount, user id and category id are required" });
         }
 
         const updatedTransaction = {
@@ -172,6 +172,10 @@ export async function deleteTransaction(req, res) {
 
         const deleted = transactionsJson.find((transaction) => transaction.id === id);
 
+        if (!deleted) {
+            return res.status(404).send({ message: "Transaction not found" });
+        }
+
         const updatedTransactions = transactionsJson.filter((transaction) => transaction.id !== id);
 
         await writeTransactions(updatedTransactions);
@@ -179,7 +183,7 @@ export async function deleteTransaction(req, res) {
         res.send({ id, message: "Transaction deleted successfully" });
 
     } catch (error) {
-        
+
         console.error(error);
         res.status(500).send({ message: error.message || "Something went wrong" });
     }

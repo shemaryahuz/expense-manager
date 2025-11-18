@@ -7,7 +7,7 @@ export async function signup(req, res) {
         const { name, email, password } = req.body;
 
         if (!name || !email || !password) {
-            return res.status(400).send("Name, email and password are required");
+            return res.status(400).send({ message: "Name, email and password are required" });
         }
 
         const usersJson = await readUsers();
@@ -15,7 +15,7 @@ export async function signup(req, res) {
         const existingUser = usersJson.find((user) => user.email === email);
 
         if (existingUser) {
-            return res.status(409).send("Email already exists");
+            return res.status(409).send({ message: "Email already exists" });
         }
 
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -29,11 +29,12 @@ export async function signup(req, res) {
 
         res.cookie("token", token, { httpOnly: true, secure: false, sameSite: "lax", maxAge: 1000 * 60 * 60 }); 
 
-        res.send({ message: "You are signed up successfully" });
+        newUser.passwordHash = undefined;
+        res.send({ user: newUser, message: "You are signed up successfully" });
 
     } catch (error) {
         console.error(error);
-        res.status(500).send(error);
+        res.status(500).send({ message: error.message || "Something went wrong" });
     }
 }
 
@@ -42,7 +43,7 @@ export async function login(req, res) {
         const { email, password } = req.body;
 
         if (!email || !password) {
-            return res.status(400).send("Email and password are required");
+            return res.status(400).send({ message: "Email and password are required" });
         }
 
         const usersJson = await readUsers();
@@ -53,7 +54,7 @@ export async function login(req, res) {
         }
         const isValidPassword = await bcrypt.compare(password, user.passwordHash);
         if (!isValidPassword) {
-            return res.status(401).send("Invalid password");
+            return res.status(401).send({ message: "Invalid password" });
         }
 
         const payload = { id: user.id };
@@ -61,10 +62,21 @@ export async function login(req, res) {
 
         res.cookie("token", token, { httpOnly: true, secure: false, sameSite: "lax", maxAge: 1000 * 60 * 60 });
 
-        res.send({ message: "You are logged in successfully" });
+        user.passwordHash = undefined;
+        res.send({  user, message: "You are logged in successfully" });
 
     } catch (error) {
         console.error(error);
-        res.status(500).send(error);
+        res.status(500).send({ message: error.message || "Something went wrong" });
+    }
+}
+
+export async function logout(req, res) {
+    try {
+        res.clearCookie("token");
+        res.send({ message: "You are logged out successfully" });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: error.message || "Something went wrong" });
     }
 }

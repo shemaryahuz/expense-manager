@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 
 import axios from "axios";
 
-const TRANSACTION_URL = "/api/transactions";
+const TRANSACTION_URL = "/transactions";
 
 export const fetchTransactions = createAsyncThunk(
     "transactions/fetchTransactions",
