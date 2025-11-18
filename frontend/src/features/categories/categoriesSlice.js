@@ -9,6 +9,7 @@ export const categoriesSlice = createSlice({
     initialState: {
         categories: [],
         loading: false,
+        success: "",
         error: "",
     },
     extraReducers: (builder) => {
@@ -31,7 +32,9 @@ export const categoriesSlice = createSlice({
             })
             .addCase(addCategory.fulfilled, (state, action) => {
                 state.loading = false;
-                state.categories.push(action.payload);
+                const { message, category: newCategory } = action.payload;
+                state.success = message;
+                state.categories.push(newCategory);
             })
             .addCase(addCategory.rejected, (state, action) => {
                 state.loading = false;
@@ -44,10 +47,11 @@ export const categoriesSlice = createSlice({
             })
             .addCase(updateCategory.fulfilled, (state, action) => {
                 state.loading = false;
-                const { id } = action.payload;
+                const { message, category: updatedCategory } = action.payload;
+                state.success = message;
                 state.categories = state.categories.map((category) => {
-                    if (category.id === id) {
-                        return action.payload;
+                    if (category.id === updateCategory.id) {
+                        return updatedCategory;
                     }
                     return category;
                 });
@@ -63,7 +67,8 @@ export const categoriesSlice = createSlice({
             })
             .addCase(deleteCategory.fulfilled, (state, action) => {
                 state.loading = false;
-                const { id } = action.payload;
+                const { message, id } = action.payload;
+                state.success = message;
                 state.categories = state.categories.filter((category) => category.id !== id);
             })
             .addCase(deleteCategory.rejected, (state, action) => {

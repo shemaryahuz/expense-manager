@@ -33,7 +33,7 @@ export async function getCategories(req, res) {
     } catch (error) {
 
         console.error(error);        
-        res.status(500).send(error);
+        res.status(500).send({ message: error.message || "Something went wrong" });
     }
 }
 
@@ -54,12 +54,12 @@ export async function addCategory(req, res) {
         categoriesJson.push(newCategory);
         await writeCategories(categoriesJson);
 
-        res.send(newCategory);
+        res.send({ category: newCategory, message: "Category added successfully" });
 
     } catch (error) {
 
         console.error(error);
-        res.status(500).send(error);
+        res.status(500).send({ message: error.message || "Something went wrong" });
     }
 }
 
@@ -90,12 +90,12 @@ export async function updateCategory(req, res) {
 
         await writeCategories(updatedCategories);
 
-        res.send(updatedCategory);
+        res.send({ category: updatedCategory, message: "Category updated successfully" });
 
     } catch (error) {
 
         console.error(error);
-        res.status(500).send(error);
+        res.status(500).send({ message: error.message || "Something went wrong" });
     }
 }
 
@@ -127,11 +127,11 @@ export async function deleteCategory(req, res) {
 
         await writeCategories(newCategories);
 
-        res.send(deleted);
+        res.send({ id, message: "Category deleted successfully" });
 
     } catch (error) {
 
         console.error(error);
-        res.status(500).send(error);
+        res.status(500).send({ message: error.message || "Something went wrong" });
     }
 }

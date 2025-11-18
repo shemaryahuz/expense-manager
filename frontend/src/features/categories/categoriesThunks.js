@@ -6,7 +6,7 @@ const CATEGORIES_URL = "/categories";
 export const fetchCategories = createAsyncThunk(
     "categories/fetchCategories",
     async () => {
-        const url = `${CATEGORIES_URL}/u1` // u1 = user id
+        const url = CATEGORIES_URL
         const res = await axios.get(url);
         return res.data
     },
@@ -15,11 +15,7 @@ export const fetchCategories = createAsyncThunk(
 export const addCategory = createAsyncThunk(
     "categories/addCategory",
     async (category) => {
-        const body = {
-            ...category,
-            userId: "u1", // u1 = user id
-        }
-        const res = await axios.post(CATEGORIES_URL, body);
+        const res = await axios.post(CATEGORIES_URL, category);
         return res.data
     },
 )
