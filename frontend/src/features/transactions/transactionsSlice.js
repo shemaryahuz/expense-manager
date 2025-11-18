@@ -21,6 +21,7 @@ export const transactionsSlice = createSlice({
         categoriesTransactions: [],
         searched: [],
         loading: false,
+        success: "",
         error: "",
     },
     reducers: {
@@ -77,10 +78,14 @@ export const transactionsSlice = createSlice({
             .addCase(addTransaction.fulfilled, (state, action) => {
                 state.loading = false;
 
-                const date = new Date(action.payload.date);
-                action.payload.date = date.toLocaleDateString();
+                const { message, transaction: newTransaction } = action.payload;
 
-                state.transactions.push(action.payload);
+                state.success = message;
+
+                const date = new Date(newTransaction.date);
+                newTransaction.date = date.toLocaleDateString();
+
+                state.transactions.push(newTransaction);
 
                 // sort transactions by date
                 state.transactions.sort((a, b) => {
@@ -101,13 +106,17 @@ export const transactionsSlice = createSlice({
             .addCase(editTransaction.fulfilled, (state, action) => {
                 state.loading = false;
 
+                const { message, transaction: updatedTransaction } = action.payload;
+
+                state.success = message;
+
                 state.transactions = state.transactions.map((transaction) => {
-                    if (transaction.id === action.payload.id) {
+                    if (transaction.id === updatedTransaction.id) {
 
-                        const date = new Date(action.payload.date);
-                        action.payload.date = date.toLocaleDateString();
+                        const date = new Date(updatedTransaction.date);
+                        updatedTransaction.date = date.toLocaleDateString();
 
-                        return action.payload;
+                        return updatedTransaction;
                     }
                     return transaction;
                 });
@@ -124,7 +133,10 @@ export const transactionsSlice = createSlice({
             .addCase(deleteTransaction.fulfilled, (state, action) => {
                 state.loading = false;
 
-                const { id } = action.payload;
+                const { message, id } = action.payload;
+
+                state.success = message;
+                
                 state.transactions = state.transactions.filter((transaction) =>
                     transaction.id !== id);
             })

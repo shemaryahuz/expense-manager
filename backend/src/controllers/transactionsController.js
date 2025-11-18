@@ -28,7 +28,7 @@ export async function getTransactions(req, res) {
     } catch (error) {
 
         console.error(error);
-        res.status(500).send(error);
+        res.status(500).send({ message: error.message || "Something went wrong" });
     }
 }
 
@@ -59,7 +59,7 @@ export async function getTransactionsByMonth(req, res) {
     } catch (error) {
 
         console.error(error);
-        res.status(500).send(error);
+        res.status(500).send({ message: error.message || "Something went wrong" });
     }
 }
 
@@ -83,7 +83,7 @@ export async function searchTransactions(req, res) {
     } catch (error) {
 
         console.error(error);
-        res.status(500).send(error);
+        res.status(500).send({ message: error.message || "Something went wrong" });
     }
 }
 
@@ -114,12 +114,12 @@ export async function addTransaction(req, res) {
         transactionsJson.push(newTransaction);
         await writeTransactions(transactionsJson);
 
-        res.send(newTransaction);
+        res.send({ transaction: newTransaction, message: "Transaction added successfully" });
 
     } catch (error) {
 
         console.error(error);
-        res.status(500).send(error);
+        res.status(500).send({ message: error.message || "Something went wrong" });
     }
 }
 
@@ -155,12 +155,12 @@ export async function updateTransaction(req, res) {
 
         await writeTransactions(updatedTransactions);
 
-        res.send(updatedTransaction);
+        res.send({ transaction: updatedTransaction, message: "Transaction updated successfully" });
 
     } catch (error) {
 
         console.error(error);
-        res.status(500).send(error);
+        res.status(500).send({ message: error.message || "Something went wrong" });
     }
 }
 
@@ -176,11 +176,11 @@ export async function deleteTransaction(req, res) {
 
         await writeTransactions(updatedTransactions);
 
-        res.send(deleted);
+        res.send({ id, message: "Transaction deleted successfully" });
 
     } catch (error) {
         
         console.error(error);
-        res.status(500).send(error);
+        res.status(500).send({ message: error.message || "Something went wrong" });
     }
 }

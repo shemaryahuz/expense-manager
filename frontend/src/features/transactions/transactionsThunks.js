@@ -11,7 +11,7 @@ export const fetchTransactions = createAsyncThunk(
         const month = date.getMonth() + 1;
         const year = date.getFullYear();
 
-        const url = `${TRANSACTION_URL}/month/u1/${year}/${month}` // u1 = user id
+        const url = `${TRANSACTION_URL}/month/${year}/${month}`
         const res = await axios.get(url);
 
         const formated = res.data.map((transaction) => {
@@ -32,7 +32,7 @@ export const fetchCategoriesTransactions = createAsyncThunk(
         const month = date.getMonth() + 1;
         const year = date.getFullYear();
 
-        const url = `${TRANSACTION_URL}/month/u1/${year}/${month}` // u1 = user id
+        const url = `${TRANSACTION_URL}/month/u1/${year}/${month}`
         const res = await axios.get(url);
         
         const formated = res.data.map((transaction) => {
@@ -51,7 +51,7 @@ export const searchTransactions = createAsyncThunk(
     async (search) => {
         
         const encodedSearch = encodeURIComponent(search);
-        const url = `${TRANSACTION_URL}/search/u1?title=${encodedSearch}` // u1 = user id
+        const url = `${TRANSACTION_URL}/search?title=${encodedSearch}`
         const res = await axios.get(url);
 
         const formated = res.data.map((transaction) => {
@@ -69,12 +69,7 @@ export const addTransaction = createAsyncThunk(
     "transactions/addTransaction",
     async (transaction) => {
 
-        const body = {
-            ...transaction,
-            userId: "u1", // u1 = user id
-        }
-
-        const res = await axios.post(TRANSACTION_URL, body);
+        const res = await axios.post(TRANSACTION_URL, transaction);
         return res.data
     },
 )

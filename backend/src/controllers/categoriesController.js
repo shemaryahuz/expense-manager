@@ -119,6 +119,10 @@ export async function deleteCategory(req, res) {
 
         const deleted = categoriesJson.find((category) => category.id === id);
 
+        if (!deleted) {
+            return res.status(404).send("Category not found");
+        }
+
         if (deleted.userId === null) {
             return res.status(400).send("Cannot delete default categories");
         }
