@@ -32,7 +32,7 @@ export const fetchCategoriesTransactions = createAsyncThunk(
         const month = date.getMonth() + 1;
         const year = date.getFullYear();
 
-        const url = `${TRANSACTION_URL}/month/u1/${year}/${month}`
+        const url = `${TRANSACTION_URL}/month/${year}/${month}`
         const res = await axios.get(url);
         
         const formated = res.data.map((transaction) => {

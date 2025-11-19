@@ -9,7 +9,7 @@ import DashboardPage from "./pages/dashboard/DashboardPage";
 import CategoriesPage from "./pages/categories/CategoriesPage";
 import TransactionsPage from "./pages/transactions/TransactionsPage";
 import ReportsPage from "./pages/reports/ReportsPage";
-import { getUser } from "./features/user/userThunks";
+import { getUser, logout } from "./features/user/userThunks";
 
 function App() {
 

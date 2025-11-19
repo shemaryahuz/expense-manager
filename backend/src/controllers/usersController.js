@@ -34,7 +34,7 @@ export async function getUser(req, res) {
             return res.status(404).send({ message: "User not found" });
         }
         user.passwordHash = undefined;
-        res.send(user);
+        res.send({ user });
     } catch (error) {
         console.error(error);
         res.status(500).send({ message: error.message || "Something went wrong" });

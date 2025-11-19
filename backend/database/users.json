@@ -10,5 +10,11 @@
     "email": "example2@email.com",
     "name": "Bobe Smith",
     "passwordHash": "$2b$10$OVLVsCzA6fjj3cbx.BJOP.ihAocVO8bWBRglV3CuGEqqJrvxoWzxi"
+  },
+  {
+    "id": "1763561872352",
+    "email": "example3@email.com",
+    "name": "Alice",
+    "passwordHash": "$2b$10$.WTcVPrwOBB6JSim6xYet.6k2yFQ5HR660anIl6CseSN0KIMxOms6"
   }
 ]

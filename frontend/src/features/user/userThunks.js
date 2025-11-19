@@ -23,7 +23,7 @@ export const login = createAsyncThunk(
 export const getUser = createAsyncThunk(
     "user/getUser",
     async () => {
-        const res = await axios.get(USER_URL);
+        const res = await axios.get(`${USER_URL}/me`);
         return res.data
     },
 )
@@ -47,7 +47,7 @@ export const deleteUser = createAsyncThunk(
 export const logout = createAsyncThunk(
     "user/logout",
     async () => {
-        const res = await axios.get(`${AUTH_URL}/logout`);
+        const res = await axios.post(`${AUTH_URL}/logout`);
         return res.data
     },
 )

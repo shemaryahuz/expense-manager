@@ -11,6 +11,11 @@ export const userSlice = createSlice({
         success: "",
         error: "",
     },
+    reducers: {
+        clearError: (state) => {
+            state.error = "";
+        }
+    },
     extraReducers: (builder) => {
         builder
             // signup thunk
@@ -19,9 +24,10 @@ export const userSlice = createSlice({
             })
             .addCase(signup.fulfilled, (state, action) => {
                 state.loading = false;
+                state.isAuthenticated = true;
                 const { user, message } = action.payload;
                 state.user = user;
-                state.success = message;
+                state.success = message;                
             })
             .addCase(signup.rejected, (state, action) => {
                 state.loading = false;
@@ -35,9 +41,8 @@ export const userSlice = createSlice({
             .addCase(login.fulfilled, (state, action) => {
                 state.loading = false;                
                 state.isAuthenticated = true;
-                const { user, message } = action.payload;
+                const { user } = action.payload;
                 state.user = user;
-                state.success = message;
             })
             .addCase(login.rejected, (state, action) => {
                 state.loading = false;
@@ -109,5 +114,8 @@ export const userSlice = createSlice({
 export const selectUserState = (state) => state.user;
 export const selectUser = (state) => selectUserState(state).user;
 export const selectIsAuthenticated = (state) => selectUserState(state).isAuthenticated;
+
+// actions
+export const { clearError } = userSlice.actions;
 
 export default userSlice.reducer;
