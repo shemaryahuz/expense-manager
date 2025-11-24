@@ -1,16 +1,45 @@
-# React + Vite
+## Expense Manager
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Monorepo that bundles a cookie-based Express API and a Vite + React client for tracking personal income and expenses. The backend persists mock data in JSON files and exposes JWT-protected CRUD APIs. The frontend consumes those APIs to deliver dashboards, category management, and transaction workflows.
 
-Currently, two official plugins are available:
+### Repository Layout
+- `backend/` – Express 5 server, JSON datastore, authentication and REST APIs.
+- `frontend/` – React 19 application using Redux Toolkit, React Router, and Material UI.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### Prerequisites
+- Node.js 18+ and npm (backend uses `node --watch`)
+- Modern browser for the Vite dev server
 
-## React Compiler
+### Quick Start
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/shemaryahuz/expense-manager.git
+   cd expense-manager
+   ```
+2. **Configure environment variables**
+   - Inside `backend/.env` define `JWT_SECRET=<strong-random-string>`
+   - (Optional) add `PORT=<number>` and update the frontend Axios base URL if you do not use `3000`
+3. **Install dependencies**
+   ```bash
+   cd backend && npm install
+   cd ../frontend && npm install
+   ```
+4. **Run the API server**
+   ```bash
+   cd backend
+   npm start
+   ```
+   The server listens on `http://localhost:3000` with the REST API under `/api`.
+5. **Run the frontend**
+   ```bash
+   cd frontend
+   npm run dev
+   ```
+   Vite serves the UI at `http://localhost:5173` and proxies requests to the backend configured in `src/main.jsx`.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Additional Documentation
+- Backend details, API reference, and data model live in [`backend/README.md`](backend/README.md).
+- Frontend architecture, routing, and UI documentation live in [`frontend/README.md`](frontend/README.md).
 
-## Expanding the ESLint configuration
+Refer to those documents for troubleshooting tips, folder-by-folder breakdowns, and feature-specific instructions.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
