@@ -1,0 +1,20 @@
+[
+  {
+    "id": "u1",
+    "email": "example@email.com",
+    "name": "John Doe",
+    "passwordHash": "$2b$10$21OktbXl6raZw6K9YxKctO7KO0p66ZA/MAKEgGZdRl0OLommVE02q"
+  },
+  {
+    "id": "u2",
+    "email": "example2@email.com",
+    "name": "Bobe Smith",
+    "passwordHash": "$2b$10$OVLVsCzA6fjj3cbx.BJOP.ihAocVO8bWBRglV3CuGEqqJrvxoWzxi"
+  },
+  {
+    "id": "1763646233563",
+    "email": "example3@email.com",
+    "name": "Alice",
+    "passwordHash": "$2b$10$mPRnt.y2GYE9S3Rib4ehfeMSnGGf4PD2v5Jp69kRm2HbkM/lOPm9S"
+  }
+]
