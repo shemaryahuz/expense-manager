@@ -1,45 +1,76 @@
-## Expense Manager
+# Expense Manager (Frontend)
 
-Monorepo that bundles a cookie-based Express API and a Vite + React client for tracking personal income and expenses. The backend persists mock data in JSON files and exposes JWT-protected CRUD APIs. The frontend consumes those APIs to deliver dashboards, category management, and transaction workflows.
+React SPA that consumes the Expense Manager API to provide authentication, dashboards, and CRUD tools for categories and transactions.
 
-### Repository Layout
-- `backend/` – Express 5 server, JSON datastore, authentication and REST APIs.
-- `frontend/` – React 19 application using Redux Toolkit, React Router, and Material UI.
+## Tech Stack
+- Vite + React 19 with StrictMode
+- React Router v7 for routing guards (`PublicRoute`, `ProtectedRoute`)
+- Redux Toolkit + Redux Thunk for state management
+- Axios (base URL configured in `src/main.jsx`)
+- Material UI v7, Emotion styling, custom theme
 
-### Prerequisites
-- Node.js 18+ and npm (backend uses `node --watch`)
-- Modern browser for the Vite dev server
+## Prerequisites
+- Node.js 18+ and npm
+- Backend API running locally on `http://localhost:3000` (or update `axios.defaults.baseURL`)
 
-### Quick Start
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/shemaryahuz/expense-manager.git
-   cd expense-manager
-   ```
-2. **Configure environment variables**
-   - Inside `backend/.env` define `JWT_SECRET=<strong-random-string>`
-   - (Optional) add `PORT=<number>` and update the frontend Axios base URL if you do not use `3000`
-3. **Install dependencies**
-   ```bash
-   cd backend && npm install
-   cd ../frontend && npm install
-   ```
-4. **Run the API server**
-   ```bash
-   cd backend
-   npm start
-   ```
-   The server listens on `http://localhost:3000` with the REST API under `/api`.
-5. **Run the frontend**
-   ```bash
-   cd frontend
-   npm run dev
-   ```
-   Vite serves the UI at `http://localhost:5173` and proxies requests to the backend configured in `src/main.jsx`.
+## Installation
+```bash
+cd frontend
+npm install
+```
 
-### Additional Documentation
-- Backend details, API reference, and data model live in [`backend/README.md`](backend/README.md).
-- Frontend architecture, routing, and UI documentation live in [`frontend/README.md`](frontend/README.md).
+## Local Development
+```bash
+npm run dev    # launches Vite on http://localhost:5173
+```
+The app expects the backend at `http://localhost:3000/api` and sends credentials with each request via `axios.defaults.withCredentials = true`.
 
-Refer to those documents for troubleshooting tips, folder-by-folder breakdowns, and feature-specific instructions.
+## Additional Scripts
+- `npm run build` – production build output under `dist/`
+- `npm run preview` – preview the production build
+- `npm run lint` – run ESLint (uses `eslint.config.js`)
 
+## Environment & Configuration
+- Update `src/main.jsx` if you change the backend origin:
+  ```js
+  axios.defaults.baseURL = "http://localhost:3000/api";
+  ```
+- Vite environment variables (`.env`) are not required by default, but you can override `VITE_API_URL` and read it before setting `axios.defaults.baseURL`.
+
+## Application Structure
+```
+frontend/
+  src/
+    app/             # Redux store & reducers
+    components/      # Layout + shared UI primitives
+    features/        # Redux slices & thunks per domain (user, categories, transactions)
+    pages/           # Route-level views (home, dashboard, categories, transactions)
+    routes/          # Route guards
+    theme/           # Material UI theme
+    utiles/          # Domain helpers
+```
+
+### Routing
+- `/` – public landing page with marketing copy and login/signup entry points.
+- `/dashboard` – protected summary cards (monthly budget, top categories, latest transactions).
+- `/transactions` – protected list with filters, create/edit/delete forms.
+- `/categories` – protected category management (add/delete/update) plus transaction rollups.
+
+Route access is controlled through `PublicRoute` and `ProtectedRoute`. Every protected route dispatches `getUser()` on app mount to validate the session cookie.
+
+### State Management
+- `src/app/store.js` configures Redux Toolkit with slices for `user`, `categories`, and `transactions`.
+- Async thunks in `features/*Thunks.js` call the backend and propagate `pending/fulfilled/rejected` states for UI feedback (`Loader`, `Error`, `Success` components).
+
+### UI & Styling
+- Material UI components themed via `src/theme/theme.js`.
+- Emotion `styled` definitions live beside components (e.g., `components/layout/styles`).
+- Common feedback components (`Loader`, `Error`, `Feedback`, `Success`) ensure consistent UX.
+
+## Testing the Flow
+1. Start the backend (`npm start` in `backend/`).
+2. Run `npm run dev` here.
+3. Sign up via the Home page; a JWT cookie is stored automatically.
+4. Explore dashboards, add categories/transactions, and verify the data persists in the backend `database/` JSON files.
+
+For deeper backend/API details, see the repository root README and `backend/README.md`.
