@@ -3,11 +3,14 @@ import { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { Card, Typography, Button, Box, Divider } from "@mui/material";
-import { AttachMoney } from "@mui/icons-material";
 
 import { getTopCategories } from "../../utiles/categoriesUtils";
 
+import { ROUTE_PATHS } from "../../constants/app/routes";
+
 import { dashboardStyles as styles } from "./styles/Dashboard.styles";
+
+const { CATEGORIES } = ROUTE_PATHS;
 
 export default function TopCategoriesCard({ transactions, categories }) {
   const navigate = useNavigate();
@@ -15,7 +18,7 @@ export default function TopCategoriesCard({ transactions, categories }) {
   const topCategories = getTopCategories(categories, transactions, 3);
 
   const handleNavigate = () => {
-    navigate("/categories");
+    navigate(CATEGORIES);
   };
   return (
     <Card sx={styles.card}>

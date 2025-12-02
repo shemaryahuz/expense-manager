@@ -15,14 +15,18 @@ import {
 
 import { INCOME } from "../../features/transactions/transactionsSlice";
 
+import { ROUTE_PATHS } from "../../constants/app/routes";
+
 import { dashboardStyles as styles } from "./styles/Dashboard.styles";
+
+const { TRANSACTIONS } = ROUTE_PATHS;
 
 export default function LastTransactionsCard({ transactions }) {
   const navigate = useNavigate();
   const lastTransactions = transactions.slice(0, 3);
 
   const handleNavigate = () => {
-    navigate("/transactions");
+    navigate(TRANSACTIONS);
   };
   return (
     <Card sx={styles.card}>
@@ -33,9 +37,7 @@ export default function LastTransactionsCard({ transactions }) {
         {lastTransactions.length > 0 ? (
           lastTransactions.map((transaction, index) => (
             <Fragment key={transaction.id}>
-              <ListItem
-                sx={styles.transactionItem}
-              >
+              <ListItem sx={styles.transactionItem}>
                 <ListItemText
                   primary={transaction.title}
                   secondary={transaction.date}
@@ -48,8 +50,8 @@ export default function LastTransactionsCard({ transactions }) {
                   }}
                 >
                   <Typography variant="body1">
-                    {transaction.type === INCOME ? "+ " : "- "}
-                    ${transaction.amount}
+                    {transaction.type === INCOME ? "+ " : "- "}$
+                    {transaction.amount}
                   </Typography>
                 </Box>
               </ListItem>

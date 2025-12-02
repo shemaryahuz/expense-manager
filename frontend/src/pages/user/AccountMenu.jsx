@@ -7,6 +7,9 @@ import { selectUserState } from "../../features/user/userSlice";
 import { logout } from "../../features/user/userThunks";
 
 import { USER, GUEST } from "../../constants/ui/user";
+import { ROUTE_PATHS } from "../../constants/app/routes";
+
+const { HOME } = ROUTE_PATHS;
 
 export default function AccountMenu({ open, anchorEl, onClose }) {
   const dispatch = useDispatch();
@@ -16,13 +19,13 @@ export default function AccountMenu({ open, anchorEl, onClose }) {
   const name = user?.name || USER;
 
   const handleLogin = () => {
-    navigate("/");
+    navigate(HOME);
     onClose();
   };
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate("/");
+    navigate(HOME);
     onClose();
   };
   return (

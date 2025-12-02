@@ -7,9 +7,12 @@ import { Container } from "@mui/material";
 import { selectUserState, clearMessages } from "../../features/user/userSlice";
 
 import { USER } from "../../constants/ui/user";
+import { ROUTE_PATHS } from "../../constants/app/routes";
 
 import PublicHome from "./PublicHome";
 import PrivateHome from "./PrivateHome";
+
+const { DASHBOARD } = ROUTE_PATHS;
 
 export default function HomePage() {
   const dispatch = useDispatch();
@@ -24,7 +27,7 @@ export default function HomePage() {
     if (success) {
       setShowSuccess(true);
       setTimeout(() => {
-        navigate("/dashboard");
+        navigate(DASHBOARD);
       }, 3000);
     }
   }, [success]);
@@ -36,7 +39,7 @@ export default function HomePage() {
   };
 
   const handleNavigate = () => {
-    navigate("/dashboard");
+    navigate(DASHBOARD);
   };
 
   return (

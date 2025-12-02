@@ -6,13 +6,10 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { getUser } from "./features/user/userThunks";
 
 import Layout from "./components/layout/Layout";
-import HomePage from "./pages/home/HomePage";
-import DashboardPage from "./pages/dashboard/DashboardPage";
-import TransactionsPage from "./pages/transactions/TransactionsPage";
-import CategoriesPage from "./pages/categories/CategoriesPage";
-
 import PublicRoute from "./routes/PublicRoute";
 import ProtectedRoute from "./routes/ProtectedRoute";
+
+import { PUBLIC_PAGES, PRIVATE_PAGES } from "./constants/app/pages";
 
 function App() {
   const dispatch = useDispatch();
@@ -27,13 +24,16 @@ function App() {
         <Route path="/" element={<Layout />}>
           {/* public routes */}
           <Route element={<PublicRoute />}>
-            <Route path="/" element={<HomePage />} />
+            {PUBLIC_PAGES.map(({ route, Element }) => (
+              <Route key={route} path={route} element={<Element />} />
+            ))}
           </Route>
+
           {/* protected routes */}
           <Route element={<ProtectedRoute />}>
-            <Route path="dashboard" element={<DashboardPage />} />
-            <Route path="transactions" element={<TransactionsPage />} />
-            <Route path="categories" element={<CategoriesPage />} />
+            {PRIVATE_PAGES.map(({ route, Element }) => (
+              <Route key={route} path={route} element={<Element />} />
+            ))}
           </Route>
         </Route>
       </Routes>

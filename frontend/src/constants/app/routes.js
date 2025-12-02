@@ -1,10 +1,10 @@
 import { Home, Dashboard, Category, ReceiptLong } from "@mui/icons-material";
 
 export const ROUTE_PATHS = {
-    HOME: "",
-    DASHBOARD: "dashboard",
-    TRANSACTIONS: "transactions",
-    CATEGORIES: "categories",
+    HOME: "/",
+    DASHBOARD: "/dashboard",
+    TRANSACTIONS: "/transactions",
+    CATEGORIES: "/categories",
 }
 
 const ROUTE_NAMES = {
