@@ -12,23 +12,22 @@ import Header from "./Header.jsx";
 import Sidebar from "./Sidebar.jsx";
 
 export default function Layout() {
-
-  const [open, setOpen] = useState(true);
+  const [drawerOpen, setDrawerOpen] = useState(true);
 
   const handleDrawerOpen = () => {
-    setOpen(true);
+    setDrawerOpen(true);
   };
 
   const handleDrawerClose = () => {
-    setOpen(false);
+    setDrawerOpen(false);
   };
 
   return (
     <Box sx={styles.layout}>
       <CssBaseline />
-      <Header open={open} handleDrawerOpen={handleDrawerOpen} />
+      <Header open={drawerOpen} handleDrawerOpen={handleDrawerOpen} />
       <Box sx={styles.mainBox}>
-        <Sidebar open={open} handleDrawerClose={handleDrawerClose} />
+        <Sidebar open={drawerOpen} handleDrawerClose={handleDrawerClose} />
         <Box component="main" sx={styles.content}>
           <DrawerHeader />
           <Outlet />

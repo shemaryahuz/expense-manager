@@ -10,14 +10,12 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-
 import {
   ChevronLeft,
   Home,
   Dashboard,
   Category,
   ReceiptLong,
-  Assessment,
 } from "@mui/icons-material";
 
 import { Drawer, DrawerTop } from "./styles/Sidebar.styles.js";
@@ -47,11 +45,13 @@ const pages = [
   },
 ];
 
-export default function Sidebar({ open, handleDrawerClose }) {
+export default function Sidebar({ drawerOpen, handleDrawerClose }) {
   const location = useLocation();
+
   const { isAuthenticated } = useSelector(selectUserState);
+
   return (
-    <Drawer variant="permanent" open={open}>
+    <Drawer variant="permanent" open={drawerOpen}>
       <DrawerTop>
         <IconButton onClick={handleDrawerClose}>
           <ChevronLeft sx={{ color: "#fff" }} />
@@ -76,13 +76,9 @@ export default function Sidebar({ open, handleDrawerClose }) {
                     minWidth: 0,
                     justifyContent: "center",
                   },
-                  open
-                    ? {
-                        opacity: 1,
-                      }
-                    : {
-                        opacity: 0,
-                      },
+                  {
+                    opacity: drawerOpen ? 1 : 0,
+                  },
                 ]}
               />
             </ListItemButton>

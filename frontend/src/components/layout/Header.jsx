@@ -1,14 +1,12 @@
 import { useState } from "react";
 
 import { Box, IconButton, Link, Toolbar, Typography } from "@mui/material";
-
 import { Menu, AccountCircle } from "@mui/icons-material";
 
 import { AppBar } from "./styles/Header.styles.js";
-
 import AccountMenu from "../../pages/user/AccountMenu.jsx";
 
-export default function Header({ open, handleDrawerOpen }) {
+export default function Header({ drawerOpen, handleDrawerOpen }) {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const accountMenuOpen = Boolean(anchorEl);
@@ -22,7 +20,7 @@ export default function Header({ open, handleDrawerOpen }) {
   };
 
   return (
-    <AppBar component="header" open={open}>
+    <AppBar component="header" open={drawerOpen}>
       <Toolbar>
         <IconButton
           color="inherit"
@@ -33,7 +31,7 @@ export default function Header({ open, handleDrawerOpen }) {
             {
               marginRight: 5,
             },
-            open && { visibility: "hidden" },
+            drawerOpen && { visibility: "hidden" },
           ]}
         >
           <Menu />
