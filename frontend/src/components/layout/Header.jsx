@@ -39,7 +39,7 @@ export default function Header({ open, handleDrawerOpen }) {
           <Menu />
         </IconButton>
         <Link href="/" variant="contained">
-          <Box component="img" src="/money-management.svg" alt="Logo" />
+          <Box component="img" src="/images/money-management.svg" alt="Logo" />
           <Typography variant="h4" component="span">
             Expense Manager
           </Typography>
