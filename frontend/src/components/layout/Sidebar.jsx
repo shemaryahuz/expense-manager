@@ -10,40 +10,12 @@ import {
   ListItemIcon,
   ListItemText,
 } from "@mui/material";
-import {
-  ChevronLeft,
-  Home,
-  Dashboard,
-  Category,
-  ReceiptLong,
-} from "@mui/icons-material";
-
-import { Drawer, DrawerTop } from "./styles/Sidebar.styles.js";
+import { ChevronLeft } from "@mui/icons-material";
 
 import { selectUserState } from "../../features/user/userSlice.js";
+import { ROUTES } from "../../constants/app/routes.js";
 
-const pages = [
-  {
-    text: "Home",
-    path: "/",
-    icon: <Home />,
-  },
-  {
-    text: "Dashboard",
-    path: "/dashboard",
-    icon: <Dashboard />,
-  },
-  {
-    text: "Transactions",
-    path: "/transactions",
-    icon: <ReceiptLong />,
-  },
-  {
-    text: "Categories",
-    path: "/categories",
-    icon: <Category />,
-  },
-];
+import { Drawer, DrawerTop } from "./styles/Sidebar.styles.js";
 
 export default function Sidebar({ drawerOpen, handleDrawerClose }) {
   const location = useLocation();
@@ -60,17 +32,19 @@ export default function Sidebar({ drawerOpen, handleDrawerClose }) {
       <Divider />
 
       <List>
-        {pages.map((page) => (
-          <ListItem key={page.text} disablePadding sx={{ display: "block" }}>
+        {ROUTES.map(({ path, name, Icon }) => (
+          <ListItem key={name} disablePadding sx={{ display: "block" }}>
             <ListItemButton
               disabled={!isAuthenticated}
               component={Link}
-              to={page.path}
-              selected={location.pathname === page.path}
+              to={path}
+              selected={location.pathname === path}
             >
-              <ListItemIcon>{page.icon}</ListItemIcon>
+              <ListItemIcon>
+                <Icon />
+              </ListItemIcon>
               <ListItemText
-                primary={page.text}
+                primary={name}
                 sx={[
                   {
                     minWidth: 0,
