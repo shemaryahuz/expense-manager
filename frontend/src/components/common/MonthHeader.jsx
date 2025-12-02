@@ -8,14 +8,16 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import dayjs from "dayjs";
 
+import { INITIAL_DATE, MONTH, YEAR } from "../../constants/ui/date";
+
 import { monthHeaderStyles as styles } from "./styles/MonthHeader.styles";
 
-const minDate = dayjs("2024-01-01");
+const minDate = dayjs(INITIAL_DATE);
 const maxDate = dayjs(new Date());
 
 export default function MonthHeader({ month, onMonthChange }) {
-  const hasPrevMonth = dayjs(month).isAfter(minDate, "month");
-  const hasNextMonth = dayjs(month).isBefore(maxDate, "month");
+  const hasPrevMonth = dayjs(month).isAfter(minDate, MONTH);
+  const hasNextMonth = dayjs(month).isBefore(maxDate, MONTH);
 
   const dayjsMonth = dayjs(month);
 
@@ -24,17 +26,15 @@ export default function MonthHeader({ month, onMonthChange }) {
   };
 
   const handleNextMonth = () => {
-    onMonthChange(dayjs(month).add(1, "month").toDate());
+    onMonthChange(dayjs(month).add(1, MONTH).toDate());
   };
 
   const handlePrevMonth = () => {
-    onMonthChange(dayjs(month).subtract(1, "month").toDate());
+    onMonthChange(dayjs(month).subtract(1, MONTH).toDate());
   };
 
   return (
-    <Box
-      sx={styles.headerBox}
-    >
+    <Box sx={styles.headerBox}>
       <Box>
         {hasPrevMonth && (
           <IconButton onClick={handlePrevMonth}>
@@ -47,8 +47,8 @@ export default function MonthHeader({ month, onMonthChange }) {
           <DatePicker
             minDate={minDate}
             maxDate={maxDate}
-            views={["year", "month"]}
-            openTo="month"
+            views={[YEAR, MONTH]}
+            openTo={MONTH}
             value={dayjsMonth}
             label="Month"
             onChange={handleMonthChange}
