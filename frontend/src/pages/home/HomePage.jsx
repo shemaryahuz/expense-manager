@@ -24,13 +24,13 @@ export default function HomePage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (success) {
+    if (success && isAuthenticated) {
       setShowSuccess(true);
       setTimeout(() => {
         navigate(DASHBOARD);
       }, 3000);
     }
-  }, [success]);
+  }, [success, isAuthenticated, navigate]);
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") return;
