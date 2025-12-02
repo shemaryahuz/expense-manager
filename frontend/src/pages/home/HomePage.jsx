@@ -6,6 +6,8 @@ import { Container } from "@mui/material";
 
 import { selectUserState, clearMessages } from "../../features/user/userSlice";
 
+import { USER } from "../../constants/ui/user";
+
 import PublicHome from "./PublicHome";
 import PrivateHome from "./PrivateHome";
 
@@ -15,7 +17,7 @@ export default function HomePage() {
   const { user, success, isAuthenticated } = useSelector(selectUserState);
   const [showSuccess, setShowSuccess] = useState(false);
 
-  const name = user?.name;
+  const name = user?.name || USER;
   const navigate = useNavigate();
 
   useEffect(() => {

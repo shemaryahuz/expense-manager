@@ -8,7 +8,7 @@ export default function HomeHeader({ name }) {
       gutterBottom
       sx={{ fontWeight: "bold", textAlign: "center", mb: 2 }}
     >
-      Welcome back, {name ?? "User"}!
+      Welcome, {name}!
     </Typography>
     <Typography variant="subtitle1" sx={{ textAlign: "center", color: "text.secondary" }}>
       Track your expenses and manage your budget effectively.

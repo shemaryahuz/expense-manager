@@ -6,12 +6,14 @@ import { Box, Button, Menu, Typography } from "@mui/material";
 import { selectUserState } from "../../features/user/userSlice";
 import { logout } from "../../features/user/userThunks";
 
+import { USER, GUEST } from "../../constants/ui/user";
+
 export default function AccountMenu({ open, anchorEl, onClose }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const { user, isAuthenticated } = useSelector(selectUserState);
-  const name = user?.name || "Guest";
+  const name = user?.name || USER;
 
   const handleLogin = () => {
     navigate("/");
@@ -49,7 +51,7 @@ export default function AccountMenu({ open, anchorEl, onClose }) {
           </>
         ) : (
           <>
-            <Typography variant="h6">Hello, Guest!</Typography>
+            <Typography variant="h6">Hello, {GUEST}!</Typography>
             <Typography variant="body2" color="text.secondary">
               Please login or signup to access your account
             </Typography>
