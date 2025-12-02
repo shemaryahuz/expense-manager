@@ -11,7 +11,7 @@ import { fetchCategoriesTransactions } from "../../features/transactions/transac
 
 import MonthHeader from "../../components/common/MonthHeader";
 import Loader from "../../components/common/Loader";
-import Error from "../../components/common/Error";
+import AlertMessage from "../../components/common/AlertMessage";
 import Feedback from "../../components/common/Feedback";
 
 import CategoriesContainer from "./CategoriesContainer";
@@ -75,7 +75,7 @@ export default function CategoriesPage() {
 
       {loading && <Loader />}
 
-      {!loading && error && <Error error={error} />}
+      {!loading && error && <AlertMessage severity="error" message={error} />}
 
       {!loading && !error && categories.length > 0 && <CategoriesContainer />}
 

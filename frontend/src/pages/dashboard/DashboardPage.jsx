@@ -17,7 +17,7 @@ import {
 
 import MonthHeader from "../../components/common/MonthHeader";
 import Loader from "../../components/common/Loader";
-import Error from "../../components/common/Error";
+import AlertMessage from "../../components/common/AlertMessage";
 
 import LastTransactionsCard from "./LastTransactionsCard";
 import TopCategoriesCard from "./TopCategoriescard";
@@ -61,7 +61,10 @@ export default function DashboardPage() {
 
       {(transactionsLoading || categoriesLoading) && <Loader />}
       {(transactionsError || categoriesError) && (
-        <Error error={transactionsError || categoriesError} />
+        <AlertMessage
+          severity="error"
+          message={transactionsError || categoriesError}
+        />
       )}
 
       {!transactionsLoading &&

@@ -23,7 +23,7 @@ import {
 } from "../../features/transactions/transactionsSlice";
 
 import MonthHeader from "../../components/common/MonthHeader";
-import Error from "../../components/common/Error";
+import AlertMessage from "../../components/common/AlertMessage";
 import Loader from "../../components/common/Loader";
 import Feedback from "../../components/common/Feedback";
 
@@ -35,14 +35,8 @@ import { transactionsPageStyles as styles } from "./styles/TransactionsPage.styl
 export default function TransactionsPage() {
   const dispatch = useDispatch();
 
-  const {
-    loading,
-    error,
-    transactions,
-    searched,
-    actionError,
-    success,
-  } = useSelector(selectTransactionsState);
+  const { loading, error, transactions, searched, actionError, success } =
+    useSelector(selectTransactionsState);
 
   const [month, setMonth] = useState(new Date());
 
@@ -50,7 +44,7 @@ export default function TransactionsPage() {
     dispatch(fetchTransactions(month));
   }, [dispatch, month]);
 
-   const handleMonthChange = (newMonth) => {
+  const handleMonthChange = (newMonth) => {
     setMonth(newMonth);
   };
 
@@ -167,7 +161,7 @@ export default function TransactionsPage() {
           )}
         </Box>
       )}
-      {!loading && error && <Error error={error} />}
+      {!loading && error && <AlertMessage severity="error" message={error} />}
       {actionError && (
         <Feedback
           message={actionError}

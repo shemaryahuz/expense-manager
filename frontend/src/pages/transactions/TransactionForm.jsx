@@ -26,7 +26,11 @@ import {
   editTransaction,
 } from "../../features/transactions/transactionsThunks";
 import { selectTransactionsState } from "../../features/transactions/transactionsSelectors";
-import { clearMessages, INCOME } from "../../features/transactions/transactionsSlice";
+import {
+  clearMessages,
+  INCOME,
+  EXPENSE,
+} from "../../features/transactions/transactionsSlice";
 
 import { selectCategories } from "../../features/categories/categoriesSelectors";
 import {
@@ -34,8 +38,7 @@ import {
   MISCELLANEOUS_ID,
 } from "../../features/categories/categoriesSlice";
 
-import Error from "../../components/common/Error";
-import Success from "../../components/common/Success";
+import AlertMessage from "../../components/common/AlertMessage";
 
 export default function TransactionForm({
   open,
@@ -178,10 +181,10 @@ export default function TransactionForm({
             onChange={handleChange}
           >
             <MenuItem value={INCOME}>Income</MenuItem>
-            <MenuItem value="expense">Expense</MenuItem>
+            <MenuItem value={EXPENSE}>Expense</MenuItem>
           </Select>
         </FormControl>
-        {type === "expense" && (
+        {type === EXPENSE && (
           <FormControl fullWidth required>
             <InputLabel id="category-select-label">Category</InputLabel>
             <Select
@@ -217,8 +220,8 @@ export default function TransactionForm({
           </DemoContainer>
         </LocalizationProvider>
       </DialogContent>
-      {actionError && <Error error={actionError} />}
-      {success && <Success message={success} />}
+      {actionError && <AlertMessage severity="error" message={actionError} />}
+      {success && <AlertMessage severity="success" message={success} />}
       <DialogActions>
         <Button onClick={handleClose} disabled={actionLoading}>
           Cancel

@@ -9,11 +9,12 @@ import {
   selectDefaultCategories,
   selectIncomeCategories,
 } from "../../features/categories/categoriesSelectors";
+import { selectUser } from "../../features/user/userSlice";
 
 export default function CategoriesContainer() {
   const income = useSelector(selectIncomeCategories);
   const defaults = useSelector(selectDefaultCategories);
-  const userId = "u1"; // u1 = user id
+  const userId = useSelector(selectUser)?.id;
   const custom = useSelector((state) => selectCustomCategories(state, userId));
 
   return (

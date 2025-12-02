@@ -14,13 +14,14 @@ import { addCategory } from "../../features/categories/categoriesThunks";
 import { selectCategoriesState } from "../../features/categories/categoriesSelectors";
 import { clearMessages } from "../../features/categories/categoriesSlice";
 
-import Error from "../../components/common/Error";
-import Success from "../../components/common/Success";
+import AlertMessage from "../../components/common/AlertMessage";
 
 export default function AddCategoryForm({ open, onClose }) {
   const dispatch = useDispatch();
 
-  const { actionLoading, actionError, success } = useSelector(selectCategoriesState);
+  const { actionLoading, actionError, success } = useSelector(
+    selectCategoriesState
+  );
 
   const [categoryName, setCategoryName] = useState("");
 
@@ -52,7 +53,13 @@ export default function AddCategoryForm({ open, onClose }) {
   };
 
   return (
-    <Dialog component="form" onSubmit={handleAdd} open={open} onClose={onClose} closeAfterTransition={false}>
+    <Dialog
+      component="form"
+      onSubmit={handleAdd}
+      open={open}
+      onClose={onClose}
+      closeAfterTransition={false}
+    >
       <DialogTitle>Add Category</DialogTitle>
       <DialogContent>
         <TextField
@@ -65,8 +72,8 @@ export default function AddCategoryForm({ open, onClose }) {
           onChange={handleCategoryNameChange}
         />
       </DialogContent>
-      {actionError && <Error error={actionError} />}
-      {success && <Success message={success} />}
+      {actionError && <AlertMessage severity="error" message={actionError} />}
+      {success && <AlertMessage severity="success" message={success} />}
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
         <Button type="submit" sx={{ color: "success.dark" }}>

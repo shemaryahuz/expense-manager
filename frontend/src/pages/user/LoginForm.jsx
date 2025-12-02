@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 import { Box, Button, Container, TextField, Typography } from "@mui/material";
 
-import Error from "../../components/common/Error";
+import AlertMessage from "../../components/common/AlertMessage";
 
 import { clearMessages, selectUserState } from "../../features/user/userSlice";
 import { login, signup } from "../../features/user/userThunks";
@@ -61,15 +61,18 @@ export default function LoginForm() {
             name="name"
             value={name}
             required
+            autoComplete="name"
             onChange={handleChange}
             sx={styles.input}
           />
         )}
         <TextField
+          type="email"
           label="Email"
           name="email"
           value={email}
           required
+          autoComplete="email"
           onChange={handleChange}
           sx={styles.input}
         />
@@ -79,6 +82,7 @@ export default function LoginForm() {
           name="password"
           value={password}
           required
+          autoComplete="current-password"
           onChange={handleChange}
           sx={styles.input}
         />
@@ -91,7 +95,7 @@ export default function LoginForm() {
           {loading ? "Loading..." : mode === "login" ? "Log in" : "Sign up"}
         </Button>
       </Box>
-      {error && <Error error={error} />}
+      {error && <AlertMessage severity="error" message={error} />}
       <Typography variant="body2" sx={styles.switchText}>
         {mode === "login"
           ? "Don't have an account? "
