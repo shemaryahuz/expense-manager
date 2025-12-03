@@ -4,8 +4,6 @@ import { Delete, Edit, MoreVert } from "@mui/icons-material";
 import { CategoryCardStyles as styles } from "./styles/CategoryCard.styles";
 
 export default function CategoryMenu({
-  userId,
-  isEditing,
   anchorEl,
   menuOpen,
   onMenuClick,
@@ -13,8 +11,6 @@ export default function CategoryMenu({
   onEdit,
   onDeleteOpen,
 }) {
-  if (!userId || isEditing) return null;
-
   return (
     <Box sx={styles.categoryMenu}>
       <IconButton onClick={onMenuClick}>

@@ -1,99 +1,97 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { addCategory, deleteCategory, fetchCategories, updateCategory } from "./categoriesThunks";
+import { STATUSES } from "../../constants/features/statusConstants";
+
+const { IDLE, LOADING, SUCCEEDED, FAILED } = STATUSES;
+
+const initialState = {
+    categories: [],
+
+    fetchStatus: IDLE,
+    actionStatus: IDLE,
+
+    fetchError: null,
+    actionError: null,
+
+    successMessage: null,
+}
 
 export const categoriesSlice = createSlice({
     name: "categories",
-    initialState: {
-        categories: [],
-        loading: false,
-        error: "",
-        actionLoading: false,
-        actionError: "",
-        success: "",
-
-    },
+    initialState,
     reducers: {
         clearMessages: (state) => {
-            state.error = "";
-            state.success = "";
-            state.actionError = "";
+            state.fetchError = null;
+            state.actionError = null;
+            state.successMessage = null;
         },
     },
     extraReducers: (builder) => {
         builder
             .addCase(fetchCategories.pending, (state) => {
-                state.loading = true;
+                state.fetchStatus = LOADING;
             })
             .addCase(fetchCategories.fulfilled, (state, action) => {
-                state.loading = false;
+                state.fetchStatus = SUCCEEDED;
                 state.categories = action.payload;
             })
             .addCase(fetchCategories.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload || action.error.message;
+                state.fetchStatus = FAILED;
+                state.fetchError = action.payload || action.error.message;
             })
 
             // add category thunk
             .addCase(addCategory.pending, (state) => {
-                state.actionLoading = true;
-                state.actionError = "";
-                state.success = "";
+                state.actionStatus = LOADING;
             })
             .addCase(addCategory.fulfilled, (state, action) => {
-                state.actionLoading = false;
                 const { message, category: newCategory } = action.payload;
-                state.success = message;
-                state.actionError = "";
+
+                state.actionStatus = SUCCEEDED;
+                state.successMessage = message;
                 state.categories.push(newCategory);
             })
             .addCase(addCategory.rejected, (state, action) => {
-                state.actionLoading = false;
+                state.actionStatus = FAILED;
                 state.actionError = action.payload || action.error.message;
             })
 
             // update category thunk
             .addCase(updateCategory.pending, (state) => {
-                state.actionLoading = true;
-                state.actionError = "";
-                state.success = "";
+                state.actionStatus = LOADING;
             })
             .addCase(updateCategory.fulfilled, (state, action) => {
-                state.actionLoading = false;
                 const { message, category: updatedCategory } = action.payload;
-                state.success = message;
-                state.actionError = "";
-                state.categories = state.categories.map((category) => {
-                    if (category.id === updatedCategory.id) {
-                        return updatedCategory;
-                    }
-                    return category;
-                });
+
+                state.actionStatus = SUCCEEDED;
+                state.successMessage = message;
+                state.categories = state.categories.map((category) =>
+                    category.id === updatedCategory.id ? updatedCategory : category
+                );
             })
             .addCase(updateCategory.rejected, (state, action) => {
-                state.actionLoading = false;
+                state.actionStatus = FAILED;
                 state.actionError = action.payload || action.error.message;
             })
 
             // delete category thunk
             .addCase(deleteCategory.pending, (state) => {
-                state.actionLoading = true;
-                state.actionError = "";
-                state.success = "";
+                state.actionStatus = LOADING;
             })
             .addCase(deleteCategory.fulfilled, (state, action) => {
-                state.actionLoading = false;
                 const { message, id } = action.payload;
-                state.success = message;
-                state.actionError = "";
+
+                state.actionStatus = SUCCEEDED;
+                state.successMessage = message;
                 state.categories = state.categories.filter((category) => category.id !== id);
             })
             .addCase(deleteCategory.rejected, (state, action) => {
-                state.actionLoading = false;
+                state.actionStatus = FAILED;
                 state.actionError = action.payload || action.error.message;
             });
     },
 });
 
-
+export const selectCategoriesState = (state) => state.categories;
 export const { clearMessages } = categoriesSlice.actions;
 export default categoriesSlice.reducer;

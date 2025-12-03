@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -12,10 +12,7 @@ import {
 
 import { ExpandMore } from "@mui/icons-material";
 
-import {
-  selectCategoriesTransactions,
-  selectTransactionsByCategoryId,
-} from "../../features/transactions/transactionsSelectors";
+import { selectTransactionsByCategoryId } from "../../features/transactions/transactionsSelectors";
 import { updateCategory } from "../../features/categories/categoriesThunks";
 import { deleteCategory } from "../../features/categories/categoriesThunks";
 
@@ -28,21 +25,26 @@ import CategoryMenu from "./CategoryMenu";
 import { CategoryCardStyles as styles } from "./styles/CategoryCard.styles";
 
 export default function CategoryCard({ category }) {
-  const dispatch = useDispatch();
 
   const { id, userId, name } = category;
+
+  const dispatch = useDispatch();
+
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [updatedName, setUpdatedName] = useState(name);
+  const [deleteOpen, setDeleteOpen] = useState(false);
 
   const transactions = useSelector((state) =>
     selectTransactionsByCategoryId(state, id)
   );
 
+  const menuOpen = Boolean(anchorEl);
+
   const amount = transactions.reduce(
     (accumulator, transaction) => accumulator + transaction.amount,
     0
   );
-
-  const [anchorEl, setAnchorEl] = useState(null);
-  const menuOpen = Boolean(anchorEl);
 
   const handleMenuClick = (event) => {
     event.stopPropagation();
@@ -54,9 +56,6 @@ export default function CategoryCard({ category }) {
     setAnchorEl(null);
   };
 
-  const [isEditing, setIsEditing] = useState(false);
-  const [updatedName, setUpdatedName] = useState(name);
-
   const handleEdit = (event) => {
     event.stopPropagation();
     setIsEditing(true);
@@ -64,7 +63,7 @@ export default function CategoryCard({ category }) {
   };
 
   const handleNameChange = (event) => {
-    const { value } = event.target;
+    const { target: { value } } = event;
     setUpdatedName(value);
   };
 
@@ -79,8 +78,6 @@ export default function CategoryCard({ category }) {
     dispatch(updateCategory({ ...category, name: updatedName }));
     setIsEditing(false);
   };
-
-  const [deleteOpen, setDeleteOpen] = useState(false);
 
   const handleDeleteOpen = (event) => {
     event.stopPropagation();
@@ -118,23 +115,20 @@ export default function CategoryCard({ category }) {
       <Divider />
 
       <AccordionDetails sx={styles.accordionDetails}>
-        <CategoryEditActions
-          isEditing={isEditing}
+        {isEditing && <CategoryEditActions
           updatedName={updatedName}
           onSave={handleEditSave}
           onCancel={handleEditCancel}
-        />
+        />}
 
-        <CategoryMenu
-          userId={userId}
-          isEditing={isEditing}
+        {userId && !isEditing && <CategoryMenu
           anchorEl={anchorEl}
           menuOpen={menuOpen}
           onMenuClick={handleMenuClick}
           onMenuClose={handleMenuClose}
           onEdit={handleEdit}
           onDeleteOpen={handleDeleteOpen}
-        />
+        />}
 
         <DeleteCategoryForm
           open={deleteOpen}

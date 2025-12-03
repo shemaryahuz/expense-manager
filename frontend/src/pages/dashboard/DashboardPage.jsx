@@ -10,10 +10,8 @@ import {
   fetchTransactions,
 } from "../../features/transactions/transactionsThunks";
 import { fetchCategories } from "../../features/categories/categoriesThunks";
-import {
-  selectCategoriesState,
-  selectExpenseCategories,
-} from "../../features/categories/categoriesSelectors";
+import { selectCategoriesState } from "../../features/categories/categoriesSlice";
+import { getExpenseCategories } from "../../utiles/categoriesUtils";
 
 import MonthHeader from "../../components/common/MonthHeader";
 import Loader from "../../components/common/Loader";
@@ -34,10 +32,12 @@ export default function DashboardPage() {
     transactions,
     categoriesTransactions,
   } = useSelector(selectTransactionsState);
-  const { loading: categoriesLoading, error: categoriesError } = useSelector(
-    selectCategoriesState
-  );
-  const categories = useSelector(selectExpenseCategories);
+  const {
+    loading: categoriesLoading,
+    error: categoriesError,
+    categories: allCategories,
+  } = useSelector(selectCategoriesState);
+  const categories = getExpenseCategories(allCategories);
 
   const [month, setMonth] = useState(new Date());
 

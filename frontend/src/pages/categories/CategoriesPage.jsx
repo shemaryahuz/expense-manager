@@ -1,13 +1,16 @@
 import { useEffect, useState } from "react";
-
 import { useDispatch, useSelector } from "react-redux";
 
 import { Container, Typography } from "@mui/material";
 
-import { selectCategoriesState } from "../../features/categories/categoriesSelectors";
 import { fetchCategories } from "../../features/categories/categoriesThunks";
-import { clearMessages } from "../../features/categories/categoriesSlice";
+import {
+  selectCategoriesState,
+  clearMessages,
+} from "../../features/categories/categoriesSlice";
 import { fetchCategoriesTransactions } from "../../features/transactions/transactionsThunks";
+
+import { STATUSES } from "../../constants/features/statusConstants";
 
 import MonthHeader from "../../components/common/MonthHeader";
 import Loader from "../../components/common/Loader";
@@ -16,38 +19,48 @@ import Feedback from "../../components/common/Feedback";
 
 import CategoriesContainer from "./CategoriesContainer";
 
+const { IDLE, LOADING, SUCCEEDED } = STATUSES;
+
 export default function CategoriesPage() {
   const dispatch = useDispatch();
 
-  const { loading, error, categories, actionError, success } = useSelector(
-    selectCategoriesState
-  );
-
   const [month, setMonth] = useState(new Date());
-
-  useEffect(() => {
-    dispatch(fetchCategories());
-    dispatch(fetchCategoriesTransactions(month));
-  }, [dispatch, month]);
-
-  const handleMonthChange = (newMonth) => {
-    setMonth(newMonth);
-  };
-
   const [showSuccess, setShowSuccess] = useState(false);
   const [showActionError, setShowActionError] = useState(false);
 
+  const {
+    fetchStatus: fetchCategoriesStatus,
+    fetchError: fetchCategoriesError,
+    actionError,
+    successMessage,
+    categories,
+  } = useSelector(selectCategoriesState);
+
   useEffect(() => {
-    if (success) {
+    if (fetchCategoriesStatus === IDLE) {
+      dispatch(fetchCategories());
+    }
+  }, [dispatch, fetchCategoriesStatus]);
+
+  useEffect(() => {
+    dispatch(fetchCategoriesTransactions(month));
+  }, [dispatch, month]);
+
+  useEffect(() => {
+    if (successMessage) {
       setShowSuccess(true);
     }
-  }, [success]);
+  }, [successMessage]);
 
   useEffect(() => {
     if (actionError) {
       setShowActionError(true);
     }
   }, [actionError]);
+
+  const handleMonthChange = (newMonth) => {
+    setMonth(newMonth);
+  };
 
   const handleFeedbackClose = (event, reason) => {
     if (reason === "clickaway") return;
@@ -66,18 +79,15 @@ export default function CategoriesPage() {
         Categories
       </Typography>
 
-      <MonthHeader
-        month={month}
-        hasNextMonth={true}
-        hasPrevMonth={true}
-        onMonthChange={handleMonthChange}
-      />
+      <MonthHeader month={month} onMonthChange={handleMonthChange} />
 
-      {loading && <Loader />}
+      {fetchCategoriesStatus === LOADING && <Loader />}
 
-      {!loading && error && <AlertMessage severity="error" message={error} />}
+      {fetchCategoriesError && (
+        <AlertMessage severity="error" message={fetchCategoriesError} />
+      )}
 
-      {!loading && !error && categories.length > 0 && (
+      {!fetchCategoriesError && categories.length > 0 && (
         <CategoriesContainer categories={categories} />
       )}
 
@@ -89,9 +99,9 @@ export default function CategoriesPage() {
           onClose={handleFeedbackClose}
         />
       )}
-      {success && (
+      {successMessage && (
         <Feedback
-          message={success}
+          message={successMessage}
           severity="success"
           open={showSuccess}
           onClose={handleFeedbackClose}

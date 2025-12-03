@@ -47,8 +47,7 @@ export default function CategoryHeader({
                 alignItems: "center",
               }}
             >
-              {id === INCOME_ID ? "+ " : "- "}
-              ${amount}
+              {id === INCOME_ID ? "+ " : "- "}${amount}
             </Typography>
           )}
         </Box>

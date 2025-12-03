@@ -27,8 +27,7 @@ import {
 } from "../../features/transactions/transactionsThunks";
 import { selectTransactionsState } from "../../features/transactions/transactionsSelectors";
 import { clearMessages } from "../../features/transactions/transactionsSlice";
-
-import { selectCategories } from "../../features/categories/categoriesSelectors";
+import { selectCategoriesState } from "../../features/categories/categoriesSlice";
 
 import {
   INCOME_ID,
@@ -49,7 +48,7 @@ export default function TransactionForm({
 }) {
   const dispatch = useDispatch();
 
-  const categories = useSelector(selectCategories);
+  const { categories } = useSelector(selectCategoriesState);
   const { actionLoading, actionError, success } = useSelector(
     selectTransactionsState
   );

@@ -9,9 +9,9 @@ import {
   getCustomCategories,
 } from "../../utiles/categoriesUtils";
 
-import CategoriesGroup from "./CategoriesGroup";
-
 import { GROUP_NAMES } from "../../constants/features/categoriesConstants";
+
+import CategoriesGroup from "./CategoriesGroup";
 
 const { INCOME, DEFAULTS, CUSTOM } = GROUP_NAMES;
 

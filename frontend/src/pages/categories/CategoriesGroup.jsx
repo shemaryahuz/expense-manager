@@ -1,15 +1,16 @@
 import { useState } from "react";
 
 import { Box, Button, Container, Typography } from "@mui/material";
-
 import { Add } from "@mui/icons-material";
+
+import { GROUP_NAMES } from "../../constants/features/categoriesConstants";
 
 import CategoryCard from "./CategoryCard";
 import AddCategoryForm from "./AddCategoryForm";
 
-import { GROUP_NAMES } from "../../constants/features/categoriesConstants";
+import { CategoriesGroupStyles as styles } from "./styles/CategoriesGroup.styles";
 
-const { INCOME } = GROUP_NAMES;
+const { CUSTOM } = GROUP_NAMES;
 
 export default function CategoriesGroupe({ name, categories }) {
   const [addOpen, setAddOpen] = useState(false);
@@ -24,25 +25,15 @@ export default function CategoriesGroupe({ name, categories }) {
 
   return (
     <Container
-      sx={{
-        width: "100%",
-        maxWidth: "md",
-        p: 2,
-      }}
+      sx={styles.container}
     >
       <Box
-        sx={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          mb: 1,
-        }}
+        sx={styles.mainBox}
       >
         <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold" }}>
           {name}
         </Typography>
-        {name === INCOME && (
+        {name === CUSTOM && (
           <Button
             startIcon={<Add />}
             variant="contained"

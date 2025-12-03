@@ -11,33 +11,43 @@ import {
 } from "@mui/material";
 
 import { addCategory } from "../../features/categories/categoriesThunks";
-import { selectCategoriesState } from "../../features/categories/categoriesSelectors";
-import { clearMessages } from "../../features/categories/categoriesSlice";
+import {
+  selectCategoriesState,
+  clearMessages,
+} from "../../features/categories/categoriesSlice";
+
+import { STATUSES } from "../../constants/features/statusConstants";
 
 import AlertMessage from "../../components/common/AlertMessage";
+
+const { LOADING, SUCCEEDED } = STATUSES;
 
 export default function AddCategoryForm({ open, onClose }) {
   const dispatch = useDispatch();
 
-  const { actionLoading, actionError, success } = useSelector(
-    selectCategoriesState
-  );
-
   const [categoryName, setCategoryName] = useState("");
 
+  const {
+    actionStatus: status,
+    actionError: error,
+    successMessage,
+  } = useSelector(selectCategoriesState);
+
   useEffect(() => {
-    if (success && open) {
+    if (status === SUCCEEDED && open) {
       setCategoryName("");
       setTimeout(() => {
         dispatch(clearMessages());
         onClose();
       }, 2000);
     }
-  }, [success, open]);
+  }, [status, open]);
 
   const handleCategoryNameChange = (event) => {
     dispatch(clearMessages());
-    const { value } = event.target;
+    const {
+      target: { value },
+    } = event;
     setCategoryName(value);
   };
 
@@ -72,12 +82,14 @@ export default function AddCategoryForm({ open, onClose }) {
           onChange={handleCategoryNameChange}
         />
       </DialogContent>
-      {actionError && <AlertMessage severity="error" message={actionError} />}
-      {success && <AlertMessage severity="success" message={success} />}
+      {error && <AlertMessage severity="error" message={error} />}
+      {successMessage && (
+        <AlertMessage severity="success" message={successMessage} />
+      )}
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
         <Button type="submit" sx={{ color: "success.dark" }}>
-          {actionLoading ? "Saving..." : "Add"}
+          {status === LOADING ? "Saving..." : "Add"}
         </Button>
       </DialogActions>
     </Dialog>

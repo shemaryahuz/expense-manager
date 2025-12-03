@@ -16,7 +16,7 @@ export default function DeleteCategoryForm({ open, onClose, onDelete }) {
       <DialogContent>
         <DialogContentText>
           If you delete this category, all transactions associated with it will
-          be moved to the "Micsellanous" category.
+          be moved to the "Miscellaneous" category.
         </DialogContentText>
         <DialogContentText>
           This action cannot be undone, are you sure you want to delete this
@@ -24,10 +24,7 @@ export default function DeleteCategoryForm({ open, onClose, onDelete }) {
         </DialogContentText>
         <DialogActions>
           <Button onClick={onClose}>Cancel</Button>
-          <Button
-            onClick={onDelete}
-            sx={styles.deleteButton}
-          >
+          <Button onClick={onDelete} sx={styles.deleteButton}>
             Delete
           </Button>
         </DialogActions>

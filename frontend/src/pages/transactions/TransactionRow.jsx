@@ -7,7 +7,7 @@ import { Delete, Edit } from "@mui/icons-material";
 
 import { deleteTransaction } from "../../features/transactions/transactionsThunks";
 import { fetchCategories } from "../../features/categories/categoriesThunks";
-import { selectCategories } from "../../features/categories/categoriesSelectors";
+import { selectCategoriesState } from "../../features/categories/categoriesSlice";
 
 import { INCOME } from "../../constants/features/transactionsConstants";
 
@@ -18,7 +18,7 @@ export default function TransactionRow({ transaction }) {
   const dispatch = useDispatch();
 
   const { id, date, title, amount, type, categoryId } = transaction;
-  const categories = useSelector(selectCategories);
+  const { categories } = useSelector(selectCategoriesState);
 
   useEffect(() => {
     if (categories.length === 0) {
@@ -66,8 +66,7 @@ export default function TransactionRow({ transaction }) {
             alignItems: "center",
           }}
         >
-          {type === INCOME ? "+ " : "- "}
-          ${amount}
+          {type === INCOME ? "+ " : "- "}${amount}
         </Box>
       </TableCell>
 

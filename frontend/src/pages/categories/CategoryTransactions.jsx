@@ -29,8 +29,7 @@ export default function CategoryTransactions({ transactions }) {
               }}
             >
               <Typography variant="body1">
-                {transaction.type === INCOME ? "+ " : "- "}
-                ${transaction.amount}
+                {transaction.type === INCOME ? "+ " : "- "}${transaction.amount}
               </Typography>
             </Box>
           </ListItem>
