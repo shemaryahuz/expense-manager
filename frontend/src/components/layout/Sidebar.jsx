@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { ChevronLeft } from "@mui/icons-material";
 
-import { selectUserState } from "../../features/user/userSlice.js";
+import { selectIsAuthenticated } from "../../features/user/userSlice.js";
 import { ROUTES } from "../../constants/app/routes.js";
 
 import { Drawer, DrawerTop } from "./styles/Sidebar.styles.js";
@@ -20,7 +20,7 @@ import { Drawer, DrawerTop } from "./styles/Sidebar.styles.js";
 export default function Sidebar({ drawerOpen, handleDrawerClose }) {
   const location = useLocation();
 
-  const { isAuthenticated } = useSelector(selectUserState);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
 
   return (
     <Drawer variant="permanent" open={drawerOpen}>

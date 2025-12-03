@@ -6,7 +6,7 @@ import Feedback from "../../components/common/Feedback";
 export default function PrivateHome({
   name,
   showSuccess,
-  success,
+  successMessage,
   onClose,
   onNavigate,
 }) {
@@ -19,7 +19,7 @@ export default function PrivateHome({
         open={showSuccess}
         onClose={onClose}
         severity="success"
-        message={success}
+        message={successMessage}
       />
       <DashboardButton onClick={onNavigate} />
     </Box>

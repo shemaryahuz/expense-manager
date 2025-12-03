@@ -6,31 +6,39 @@ import { Container } from "@mui/material";
 
 import { selectUserState, clearMessages } from "../../features/user/userSlice";
 
+import { STATUSES } from "../../constants/features/statusConstants";
 import { USER } from "../../constants/ui/userConstants";
 import { ROUTE_PATHS } from "../../constants/app/routes";
 
 import PublicHome from "./PublicHome";
 import PrivateHome from "./PrivateHome";
 
+const { SUCCESS } = STATUSES;
 const { DASHBOARD } = ROUTE_PATHS;
 
 export default function HomePage() {
   const dispatch = useDispatch();
-
-  const { user, success, isAuthenticated } = useSelector(selectUserState);
-  const [showSuccess, setShowSuccess] = useState(false);
-
-  const name = user?.name || USER;
   const navigate = useNavigate();
 
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  const {
+    user,
+    isAuthenticated,
+    actionStatus: status,
+    successMessage,
+  } = useSelector(selectUserState);
+
+  const name = user?.name || USER;
+
   useEffect(() => {
-    if (success && isAuthenticated) {
+    if (status === SUCCESS && isAuthenticated) {
       setShowSuccess(true);
       setTimeout(() => {
         navigate(DASHBOARD);
       }, 3000);
     }
-  }, [success, isAuthenticated, navigate]);
+  }, [status, isAuthenticated, navigate]);
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") return;
@@ -48,7 +56,7 @@ export default function HomePage() {
         <PrivateHome
           name={name}
           showSuccess={showSuccess}
-          success={success}
+          successMessage={successMessage}
           onClose={handleClose}
           onNavigate={handleNavigate}
         />

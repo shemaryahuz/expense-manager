@@ -1,117 +1,134 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { deleteUser, getUser, login, logout, signup, updateUser } from "./userThunks";
+import { STATUSES } from "../../constants/features/statusConstants";
 
+const { IDLE, LOADING, SUCCEEDED, FAILED } = STATUSES;
+
+const initialState = {
+    user: null,
+    isAuthenticated: false,
+
+    fetchStatus: IDLE,
+    actionStatus: IDLE,
+
+    fetchError: null,
+    actionError: null,
+
+    successMessage: null,
+}
 
 export const userSlice = createSlice({
     name: "user",
-    initialState: {
-        user: null,
-        isAuthenticated: false,
-        loading: false,
-        success: "",
-        error: "",
-        // only used when user is not logged in
-        authLoading: false,
-        authError: "", 
-    },
+    initialState,
     reducers: {
         clearMessages: (state) => {
-            state.error = "";
-            state.success = "";
+            state.fetchError = null;
+            state.actionError = null;
+            state.successMessage = null;
         }
     },
     extraReducers: (builder) => {
         builder
             // signup thunk
             .addCase(signup.pending, (state) => {
-                state.loading = true;
+                state.actionStatus = LOADING;
             })
             .addCase(signup.fulfilled, (state, action) => {
-                state.loading = false;
-                state.isAuthenticated = true;
                 const { user, message } = action.payload;
+
+                state.actionStatus = SUCCEEDED;
+                state.isAuthenticated = true;
                 state.user = user;
-                state.success = message;
+                state.successMessage = message;
             })
             .addCase(signup.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload || action.error.message;
+                state.actionStatus = FAILED;
+                state.actionError = action.payload || action.error.message;
             })
 
             // login thunk
             .addCase(login.pending, (state) => {
-                state.loading = true;
+                state.actionStatus = LOADING;
             })
             .addCase(login.fulfilled, (state, action) => {
-                state.loading = false;
-                state.isAuthenticated = true;
                 const { user, message } = action.payload;
+
+                state.actionStatus = SUCCEEDED;
+                state.isAuthenticated = true;
                 state.user = user;
-                state.success = message;
+                state.successMessage = message;
             })
             .addCase(login.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload || action.error.message;
+                state.actionStatus = FAILED;
+                state.actionError = action.payload || action.error.message;
             })
 
             // get user thunk
             .addCase(getUser.pending, (state) => {
-                state.authLoading = true;
+                state.fetchStatus = LOADING;
             })
             .addCase(getUser.fulfilled, (state, action) => {
-                state.loading = false;
-                state.isAuthenticated = true;
                 const { user } = action.payload;
+
+                state.fetchStatus = SUCCEEDED;
+                state.isAuthenticated = true;
                 state.user = user;
             })
             .addCase(getUser.rejected, (state, action) => {
                 state.loading = false;
-                if (action.payload === null) return; // ignore error when user is not logged in
-                state.authError = action.payload || action.error.message;
+                // ignore error when user is not logged in
+                if (action.payload) {
+                    state.fetchStatus = FAILED;
+                    state.fetchError = action.payload || action.error.message;
+                }
             })
 
             // update user thunk
             .addCase(updateUser.pending, (state) => {
-                state.loading = true;
+                state.actionStatus = LOADING;
             })
             .addCase(updateUser.fulfilled, (state, action) => {
-                state.loading = false;
                 const { user, message } = action.payload;
+
+                state.actionStatus = SUCCEEDED;
                 state.user = user;
-                state.success = message;
+                state.successMessage = message;
             })
             .addCase(updateUser.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload || action.error.message;
+                state.actionStatus = FAILED;
+                state.actionError = action.payload || action.error.message;
             })
 
             // delete user thunk
             .addCase(deleteUser.pending, (state) => {
-                state.loading = true;
+                state.actionStatus = LOADING;
             })
             .addCase(deleteUser.fulfilled, (state, action) => {
-                state.loading = false;
                 const { message } = action.payload;
-                state.success = message;
+
+                state.actionStatus = SUCCEEDED;
+                state.successMessage = message;
             })
             .addCase(deleteUser.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload || action.error.message;
+                state.actionStatus = FAILED;
+                state.actionError = action.payload || action.error.message;
             })
 
             // logout thunk
             .addCase(logout.pending, (state) => {
-                state.loading = true;
+                state.actionStatus = LOADING;
             })
             .addCase(logout.fulfilled, (state, action) => {
-                state.loading = false;
+                const { message } = action.payload;
+
+                state.actionStatus = SUCCEEDED;
                 state.isAuthenticated = false;
                 state.user = null;
-                state.success = action.payload.message;
+                state.successMessage = message;
             })
             .addCase(logout.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload || action.error.message;
+                state.actionStatus = FAILED;
+                state.actionError = action.payload || action.error.message;
             });
     },
 });

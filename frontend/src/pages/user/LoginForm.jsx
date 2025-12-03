@@ -7,22 +7,26 @@ import AlertMessage from "../../components/common/AlertMessage";
 
 import { clearMessages, selectUserState } from "../../features/user/userSlice";
 import { login, signup } from "../../features/user/userThunks";
+
 import { LOGIN_MODE, SIGNUP_MODE } from "../../constants/ui/loginConstants";
+import { STATUSES } from "../../constants/features/statusConstants";
 
 import { loginFormStyles as styles } from "./styles/LoginForm.styles";
+
+const { LOADING } = STATUSES;
 
 export default function LoginForm() {
   const dispatch = useDispatch();
 
-  const { loading, error } = useSelector(selectUserState);
-
   const [mode, setMode] = useState(LOGIN_MODE);
-
   const [user, setUser] = useState({
     name: "",
     email: "",
     password: "",
   });
+
+  const { actionStatus: status, actionError: error } =
+    useSelector(selectUserState);
 
   const { name, email, password } = user;
 
@@ -90,10 +94,14 @@ export default function LoginForm() {
         <Button
           variant="contained"
           type="submit"
-          disabled={loading}
+          disabled={status === LOADING}
           sx={styles.submitButton}
         >
-          {loading ? "Loading..." : mode === LOGIN_MODE ? "Log in" : "Sign up"}
+          {status === LOADING
+            ? "Loading..."
+            : mode === LOGIN_MODE
+            ? "Log in"
+            : "Sign up"}
         </Button>
       </Box>
       {error && <AlertMessage severity="error" message={error} />}

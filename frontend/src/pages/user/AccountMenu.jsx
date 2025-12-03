@@ -16,6 +16,7 @@ export default function AccountMenu({ open, anchorEl, onClose }) {
   const navigate = useNavigate();
 
   const { user, isAuthenticated } = useSelector(selectUserState);
+  
   const name = user?.name || USER;
 
   const handleLogin = () => {

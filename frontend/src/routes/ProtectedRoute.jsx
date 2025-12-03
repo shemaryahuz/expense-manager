@@ -1,11 +1,10 @@
 import { useSelector } from "react-redux";
-
 import { Navigate, Outlet } from "react-router-dom";
 
-import { selectUserState } from "../features/user/userSlice";
+import { selectIsAuthenticated } from "../features/user/userSlice";
 
 export default function ProtectedRoute() {
-  const { isAuthenticated } = useSelector(selectUserState);
+  const isAuthenticated = useSelector(selectIsAuthenticated);
 
   return isAuthenticated ? <Outlet /> : <Navigate to="/" replace />;
 }
