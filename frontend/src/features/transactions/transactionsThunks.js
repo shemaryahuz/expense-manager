@@ -1,13 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-
 import axios from "axios";
 
-const TRANSACTION_URL = "/transactions";
+import { convertDatesToLocale } from "../../utiles/transactionsUtils";
+
+import { TRANSACTION_URL } from "../../constants/api/urlConstants";
 
 export const fetchTransactions = createAsyncThunk(
     "transactions/fetchTransactions",
     async (date = new Date(), { rejectWithValue }) => {
-
         try {
             const month = date.getMonth() + 1;
             const year = date.getFullYear();
@@ -15,14 +15,10 @@ export const fetchTransactions = createAsyncThunk(
             const url = `${TRANSACTION_URL}/month/${year}/${month}`
             const res = await axios.get(url);
 
-            const formated = res.data.map((transaction) => {
-                const date = new Date(transaction.date);
-                return {
-                    ...transaction,
-                    date: date.toLocaleDateString(),
-                }
-            })
-            return formated;
+            const transactionsWithDates = convertDatesToLocale(res.data);
+
+            return transactionsWithDates;
+
         } catch (error) {
             const message =
                 error.response?.data?.message ||
@@ -45,14 +41,10 @@ export const fetchCategoriesTransactions = createAsyncThunk(
             const url = `${TRANSACTION_URL}/month/${year}/${month}`
             const res = await axios.get(url);
 
-            const formated = res.data.map((transaction) => {
-                const date = new Date(transaction.date);
-                return {
-                    ...transaction,
-                    date: date.toLocaleDateString(),
-                }
-            })
-            return formated;
+            const transactionsWithDates = convertDatesToLocale(res.data);
+
+            return transactionsWithDates;
+
         } catch (error) {
             const message =
                 error.response?.data?.message ||
@@ -73,14 +65,10 @@ export const searchTransactions = createAsyncThunk(
             const url = `${TRANSACTION_URL}/search?title=${encodedSearch}`
             const res = await axios.get(url);
     
-            const formated = res.data.map((transaction) => {
-                const date = new Date(transaction.date);
-                return {
-                    ...transaction,
-                    date: date.toLocaleDateString(),
-                }
-            })
-            return formated;
+            const transactionsWithDates = convertDatesToLocale(res.data);
+    
+            return transactionsWithDates;
+
         } catch (error) {
             const message =
                 error.response?.data?.message ||
@@ -98,7 +86,9 @@ export const addTransaction = createAsyncThunk(
 
         try {
             const res = await axios.post(TRANSACTION_URL, transaction);
+
             return res.data;
+
         } catch (error) {
             const message =
                 error.response?.data?.message ||
@@ -115,7 +105,9 @@ export const editTransaction = createAsyncThunk(
     async (transaction, { rejectWithValue }) => {
         try {
             const res = await axios.put(`${TRANSACTION_URL}/${transaction.id}`, transaction);
+
             return res.data;
+
         } catch (error) {
             const message =
                 error.response?.data?.message ||
@@ -132,7 +124,9 @@ export const deleteTransaction = createAsyncThunk(
     async (id, { rejectWithValue }) => {
         try {
             const res = await axios.delete(`${TRANSACTION_URL}/${id}`);
-            return res.data
+
+            return res.data;
+
         } catch (error) {
             const message =
                 error.response?.data?.message ||

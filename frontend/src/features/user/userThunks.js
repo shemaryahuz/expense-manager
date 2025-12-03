@@ -1,17 +1,17 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-const USER_URL = "/users";
-const AUTH_URL = "/auth";
+import { AUTH_URL, USER_URL } from "../../constants/api/urlConstants";
 
 export const signup = createAsyncThunk(
     "user/signup",
     async (user, { rejectWithValue }) => {
         try {
             const res = await axios.post(`${AUTH_URL}/signup`, user);
-            return res.data;
-        } catch (error) {
 
+            return res.data;
+
+        } catch (error) {
             const message = 
                 error.response?.data?.message || 
                 error.message ||
@@ -27,7 +27,9 @@ export const login = createAsyncThunk(
     async (user, { rejectWithValue }) => {
         try {
             const res = await axios.post(`${AUTH_URL}/login`, user);
+
             return res.data;
+
         } catch (error) {
             const message = 
                 error.response?.data?.message || 
@@ -44,7 +46,9 @@ export const getUser = createAsyncThunk(
     async (_, { rejectWithValue }) => {
         try {
             const res = await axios.get(`${USER_URL}/me`);
+
             return res.data;
+
         } catch (error) {
             // ignore error whene user is not logged in
             if (error.response?.status === 401) {
@@ -65,7 +69,9 @@ export const updateUser = createAsyncThunk(
     async (user, { rejectWithValue }) => {
         try {
             const res = await axios.put(`${USER_URL}/${user.id}`, user);
+
             return res.data;
+
         } catch (error) {
             const message =
                 error.response?.data?.message ||
@@ -82,7 +88,9 @@ export const deleteUser = createAsyncThunk(
     async (id, { rejectWithValue }) => {
         try {
             const res = await axios.delete(`${USER_URL}/${id}`);
+
             return res.data;
+
         } catch (error) {
             const message =
                 error.response?.data?.message ||
@@ -99,7 +107,9 @@ export const logout = createAsyncThunk(
     async (_, { rejectWithValue }) => {
         try {
             const res = await axios.post(`${AUTH_URL}/logout`);
+
             return res.data;
+            
         } catch (error) {
             const message =
                 error.response?.data?.message ||
