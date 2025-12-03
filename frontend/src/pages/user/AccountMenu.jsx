@@ -6,7 +6,7 @@ import { Box, Button, Menu, Typography } from "@mui/material";
 import { selectUserState } from "../../features/user/userSlice";
 import { logout } from "../../features/user/userThunks";
 
-import { USER, GUEST } from "../../constants/ui/user";
+import { USER, GUEST } from "../../constants/ui/userConstants";
 import { ROUTE_PATHS } from "../../constants/app/routes";
 
 const { HOME } = ROUTE_PATHS;

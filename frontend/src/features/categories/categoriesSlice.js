@@ -1,9 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { addCategory, deleteCategory, fetchCategories, updateCategory } from "./categoriesThunks";
 
-export const INCOME_ID = "c0";
-export const MISCELLANEOUS_ID = "c1";
-
 export const categoriesSlice = createSlice({
     name: "categories",
     initialState: {

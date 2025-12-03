@@ -26,17 +26,18 @@ import {
   editTransaction,
 } from "../../features/transactions/transactionsThunks";
 import { selectTransactionsState } from "../../features/transactions/transactionsSelectors";
-import {
-  clearMessages,
-  INCOME,
-  EXPENSE,
-} from "../../features/transactions/transactionsSlice";
+import { clearMessages } from "../../features/transactions/transactionsSlice";
 
 import { selectCategories } from "../../features/categories/categoriesSelectors";
+
 import {
   INCOME_ID,
   MISCELLANEOUS_ID,
-} from "../../features/categories/categoriesSlice";
+} from "../../constants/features/categoriesConstants";
+import {
+  INCOME,
+  EXPENSE,
+} from "../../constants/features/transactionsConstants";
 
 import AlertMessage from "../../components/common/AlertMessage";
 
@@ -61,7 +62,7 @@ export default function TransactionForm({
     ? existingTransaction
     : {
         title: "",
-        amount: 0,
+        amount: 1,
         type: "",
         categoryId: "",
         date: null,
@@ -83,35 +84,18 @@ export default function TransactionForm({
 
     const { name, value } = event.target;
 
-    switch (name) {
-      case "title":
-        setTransaction({ ...transaction, title: value });
-        break;
-
-      case "amount":
-        if (value === "") {
-          return setTransaction({ ...transaction, amount: "" });
-        }
-
+    if (name === "amount") {
+      // alow empty value when the user is typing
+      if (!value) setTransaction({ ...transaction, [name]: value });
+      else {
+        // allow only positive numbers
         const amountNumber = Number(value);
-
-        if (isNaN(amountNumber) || amountNumber < 0) {
-          return setTransaction({ ...transaction, amount: 0 });
+        if (isNaN(amountNumber) || amountNumber < 1) {
+          return setTransaction({ ...transaction, [name]: 1 });
         }
-
-        setTransaction({ ...transaction, amount: amountNumber });
-        break;
-
-      case "type":
-        setTransaction({ ...transaction, type: value });
-        break;
-
-      case "categoryId":
-        setTransaction({ ...transaction, categoryId: value });
-        break;
-      default:
-        break;
+      }
     }
+    setTransaction({ ...transaction, [name]: value });
   };
 
   const handleDateChange = (newValue) => {

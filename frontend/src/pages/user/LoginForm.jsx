@@ -7,7 +7,7 @@ import AlertMessage from "../../components/common/AlertMessage";
 
 import { clearMessages, selectUserState } from "../../features/user/userSlice";
 import { login, signup } from "../../features/user/userThunks";
-import { LOGIN_MODE, SIGNUP_MODE } from "../../constants/ui/login";
+import { LOGIN_MODE, SIGNUP_MODE } from "../../constants/ui/loginConstants";
 
 import { loginFormStyles as styles } from "./styles/LoginForm.styles";
 

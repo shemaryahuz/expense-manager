@@ -6,7 +6,7 @@ import { Container } from "@mui/material";
 
 import { selectUserState, clearMessages } from "../../features/user/userSlice";
 
-import { USER } from "../../constants/ui/user";
+import { USER } from "../../constants/ui/userConstants";
 import { ROUTE_PATHS } from "../../constants/app/routes";
 
 import PublicHome from "./PublicHome";

@@ -11,10 +11,7 @@ import {
 
 import { deleteCategory } from "../categories/categoriesThunks";
 
-import { MISCELLANEOUS_ID } from "../categories/categoriesSlice";
-
-export const INCOME = "income";
-export const EXPENSE = "expense";
+import { MISCELLANEOUS_ID } from "../../constants/features/categoriesConstants";
 
 export const transactionsSlice = createSlice({
     name: "transactions",

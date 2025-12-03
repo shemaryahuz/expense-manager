@@ -1,5 +1,5 @@
 import { createSelector } from "@reduxjs/toolkit";
-import { INCOME_ID } from "./categoriesSlice";
+import { INCOME_ID } from "../../constants/features/categoriesConstants";
 
 export const selectCategoriesState = (state) => state.categories;
 

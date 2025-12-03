@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 
-import { INCOME } from "../../features/transactions/transactionsSlice";
+import { INCOME } from "../../constants/features/transactionsConstants";
 
 export default function CategoryTransactions({ transactions }) {
   return (

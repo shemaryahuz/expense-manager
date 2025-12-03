@@ -8,7 +8,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import dayjs from "dayjs";
 
-import { INITIAL_DATE, MONTH, YEAR } from "../../constants/ui/date";
+import { INITIAL_DATE, MONTH, YEAR } from "../../constants/ui/dateConstants";
 
 import { monthHeaderStyles as styles } from "./styles/MonthHeader.styles";
 

@@ -6,9 +6,10 @@ import { TableRow, TableCell, IconButton, Box } from "@mui/material";
 import { Delete, Edit } from "@mui/icons-material";
 
 import { deleteTransaction } from "../../features/transactions/transactionsThunks";
-import { INCOME } from "../../features/transactions/transactionsSlice";
 import { fetchCategories } from "../../features/categories/categoriesThunks";
 import { selectCategories } from "../../features/categories/categoriesSelectors";
+
+import { INCOME } from "../../constants/features/transactionsConstants";
 
 import DeleteTransactionDialog from "./DeleteTransactionDialog";
 import TransactionForm from "./TransactionForm";

@@ -13,7 +13,7 @@ import {
   ListItemText,
 } from "@mui/material";
 
-import { INCOME } from "../../features/transactions/transactionsSlice";
+import { INCOME } from "../../constants/features/transactionsConstants";
 
 import { ROUTE_PATHS } from "../../constants/app/routes";
 

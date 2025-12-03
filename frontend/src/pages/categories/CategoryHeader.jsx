@@ -1,6 +1,6 @@
 import { Box, TextField, Typography } from "@mui/material";
 
-import { INCOME_ID } from "../../features/categories/categoriesSlice";
+import { INCOME_ID } from "../../constants/features/categoriesConstants";
 
 import { CategoryCardStyles as styles } from "./styles/CategoryCard.styles";
 

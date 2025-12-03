@@ -1,5 +1,5 @@
 import { createSelector } from "@reduxjs/toolkit";
-import { EXPENSE, INCOME } from "./transactionsSlice";
+import { EXPENSE, INCOME } from "../../constants/features/transactionsConstants";
 
 export const selectTransactionsState = (state) => state.transactions;
 
