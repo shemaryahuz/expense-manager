@@ -7,6 +7,10 @@ import { Add } from "@mui/icons-material";
 import CategoryCard from "./CategoryCard";
 import AddCategoryForm from "./AddCategoryForm";
 
+import { GROUP_NAMES } from "../../constants/features/categoriesConstants";
+
+const { INCOME } = GROUP_NAMES;
+
 export default function CategoriesGroupe({ name, categories }) {
   const [addOpen, setAddOpen] = useState(false);
 
@@ -38,7 +42,7 @@ export default function CategoriesGroupe({ name, categories }) {
         <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold" }}>
           {name}
         </Typography>
-        {name === "Custom" && (
+        {name === INCOME && (
           <Button
             startIcon={<Add />}
             variant="contained"

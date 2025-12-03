@@ -1,3 +1,4 @@
+import { INCOME_ID } from "../constants/features/categoriesConstants";
 
 
 export const getTopCategories = (categories, transactions, n = 3) => {
@@ -35,3 +36,15 @@ export const getTopCategories = (categories, transactions, n = 3) => {
 
     return topCategories;
 }
+
+export const getIncomeCategories = (categories) =>
+    categories.filter((category) => category.id === INCOME_ID);
+
+export const getExpenseCategories = (categories) =>
+    categories.filter((category) => category.id !== INCOME_ID);
+
+export const getDefaultCategories = (categories) =>
+    categories.filter((category) => category.id !== INCOME_ID && category.userId === null);
+
+export const getCustomCategories = (categories, userId) =>
+    categories.filter((category) => category.id !== INCOME_ID && category.userId === userId);

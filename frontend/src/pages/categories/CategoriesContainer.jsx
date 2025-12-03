@@ -1,32 +1,37 @@
 import { useSelector } from "react-redux";
-
 import { Grid } from "@mui/material";
+
+import { selectUser } from "../../features/user/userSlice";
+
+import {
+  getIncomeCategories,
+  getDefaultCategories,
+  getCustomCategories,
+} from "../../utiles/categoriesUtils";
 
 import CategoriesGroup from "./CategoriesGroup";
 
-import {
-  selectCustomCategories,
-  selectDefaultCategories,
-  selectIncomeCategories,
-} from "../../features/categories/categoriesSelectors";
-import { selectUser } from "../../features/user/userSlice";
+import { GROUP_NAMES } from "../../constants/features/categoriesConstants";
 
-export default function CategoriesContainer() {
-  const income = useSelector(selectIncomeCategories);
-  const defaults = useSelector(selectDefaultCategories);
+const { INCOME, DEFAULTS, CUSTOM } = GROUP_NAMES;
+
+export default function CategoriesContainer({ categories }) {
   const userId = useSelector(selectUser)?.id;
-  const custom = useSelector((state) => selectCustomCategories(state, userId));
+
+  const incomeCategories = getIncomeCategories(categories);
+  const defaultCategories = getDefaultCategories(categories);
+  const customCategories = getCustomCategories(categories, userId);
 
   return (
     <Grid container direction="column" mb={4}>
-      {income.length > 0 && (
-        <CategoriesGroup name="Income" categories={income} />
+      {incomeCategories.length > 0 && (
+        <CategoriesGroup name={INCOME} categories={incomeCategories} />
       )}
-      {defaults.length > 0 && (
-        <CategoriesGroup name="Defaults" categories={defaults} />
+      {defaultCategories.length > 0 && (
+        <CategoriesGroup name={DEFAULTS} categories={defaultCategories} />
       )}
-      {custom.length > 0 && (
-        <CategoriesGroup name="Custom" categories={custom} />
+      {customCategories.length > 0 && (
+        <CategoriesGroup name={CUSTOM} categories={customCategories} />
       )}
     </Grid>
   );

@@ -77,7 +77,9 @@ export default function CategoriesPage() {
 
       {!loading && error && <AlertMessage severity="error" message={error} />}
 
-      {!loading && !error && categories.length > 0 && <CategoriesContainer />}
+      {!loading && !error && categories.length > 0 && (
+        <CategoriesContainer categories={categories} />
+      )}
 
       {actionError && (
         <Feedback
