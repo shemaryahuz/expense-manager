@@ -32,6 +32,8 @@ const { IDLE, LOADING, FAILED, SUCCEEDED } = STATUSES;
 export default function DashboardPage() {
   const dispatch = useDispatch();
 
+  const [month, setMonth] = useState(getCurrentMonth);
+
   const {
     status: transactionsStatus,
     message: transactionMessage,
@@ -42,8 +44,6 @@ export default function DashboardPage() {
     selectCategoriesState
   );
   const categories = useSelector(selectExpenseCategories);
-
-  const [month, setMonth] = useState(getCurrentMonth);
 
   const loading =
     transactionsStatus === LOADING || categoriesStatus === LOADING;

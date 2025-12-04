@@ -37,10 +37,11 @@ export default function HomePage() {
     }
   }, [status, user, message, dispatch, navigate]);
 
-  const handleClose = (event, reason) => {
-    if (reason === "clickaway") return;
-    setShowMessage(false);
-    dispatch(clearMessage());
+  const handleClose = (_, reason) => {
+    if (reason !== "clickaway") {
+      setShowMessage(false);
+      dispatch(clearMessage());
+    }
   };
 
   const handleNavigate = () => navigate(DASHBOARD);

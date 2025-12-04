@@ -9,14 +9,12 @@ export const selectCategoriesTransactions = state => selectTransactionsState(sta
 
 export const selectIncomeTransactions = createSelector(
     [selectTransactions],
-    (transactions) => transactions.filter((transaction) =>
-        transaction.type === INCOME)
+    (transactions) => transactions.filter(({ type }) => type === INCOME)
 )
 
 export const selectExpenseTransactions = createSelector(
     [selectTransactions],
-    (transactions) => transactions.filter((transaction) =>
-        transaction.type === EXPENSE)
+    (transactions) => transactions.filter(({ type }) => type === EXPENSE)
 )
 
 export const selectTransactionsByCategoryId = (categoryId) => createSelector(

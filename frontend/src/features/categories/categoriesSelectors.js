@@ -13,14 +13,13 @@ export const selectIncomeCategories = createSelector(
 
 export const selectExpenseCategories = createSelector(
     [selectCategories],
-    (categories) => categories.filter((category) =>
-        category.id !== INCOME_ID)
+    (categories) => categories.filter(({ id }) => id !== INCOME_ID)
 )
 
 export const selectDefaultCategories = createSelector(
     [selectCategories],
-    (categories) => categories.filter((category) =>
-        category.id !== INCOME_ID && category.userId === null)
+    (categories) => categories.filter(({ id, userId }) =>
+        id !== INCOME_ID && userId === null)
 )
 
 export const selectCustomCategories = (userId) => createSelector(

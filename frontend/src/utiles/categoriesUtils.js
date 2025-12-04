@@ -5,19 +5,19 @@ export const getTopCategories = (categories, transactions, limit = 3) => {
 
     const categoriesIdToName = {};
 
-    categories.forEach((category) => {
-        categoriesIdToName[category.id] = category.name;
+    categories.forEach(({ id, name }) => {
+        categoriesIdToName[id] = name;
     });
 
     const categoriesAmounts = {};
 
-    transactions.forEach((transaction) => {
-        const category = categoriesIdToName[transaction.categoryId];
+    transactions.forEach(({ categoryId, amount }) => {
+        const category = categoriesIdToName[categoryId];
 
         if (category) {
             categoriesAmounts[category] ?
-                categoriesAmounts[category] += transaction.amount :
-                categoriesAmounts[category] = transaction.amount;
+                categoriesAmounts[category] += amount :
+                categoriesAmounts[category] = amount;
         }
     });
 

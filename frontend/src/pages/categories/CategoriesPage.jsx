@@ -45,10 +45,11 @@ export default function CategoriesPage() {
 
   const handleMonthChange = (newMonth) => setMonth(newMonth);
 
-  const handleFeedbackClose = (event, reason) => {
-    if (reason === "clickaway") return;
-    setShowMessage(false);
-    dispatch(clearMessage());
+  const handleFeedbackClose = (_, reason) => {
+    if (reason !== "clickaway") {
+      setShowMessage(false);
+      dispatch(clearMessage());
+    }
   };
 
   return (
