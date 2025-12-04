@@ -13,47 +13,37 @@ import {
 import { addCategory } from "../../features/categories/categoriesThunks";
 import {
   selectCategoriesState,
-  clearMessages,
+  clearMessage,
 } from "../../features/categories/categoriesSlice";
 
 import { STATUSES } from "../../constants/features/statusConstants";
 
 import AlertMessage from "../../components/common/AlertMessage";
 
-const { LOADING, SUCCEEDED } = STATUSES;
+const { LOADING, FAILED, SUCCEEDED } = STATUSES;
 
 export default function AddCategoryForm({ open, onClose }) {
   const dispatch = useDispatch();
 
   const [categoryName, setCategoryName] = useState("");
 
-  const {
-    actionStatus: status,
-    actionError: error,
-    successMessage,
-  } = useSelector(selectCategoriesState);
+  const { status, message } = useSelector(selectCategoriesState);
 
   useEffect(() => {
-    if (status === SUCCEEDED && open) {
+    if (status === SUCCEEDED && message) {
       setCategoryName("");
-      setTimeout(() => {
-        dispatch(clearMessages());
-        onClose();
-      }, 2000);
+      onClose();
     }
-  }, [status, open]);
+  }, [status, message]);
 
-  const handleCategoryNameChange = (event) => {
-    dispatch(clearMessages());
-    const {
-      target: { value },
-    } = event;
+  const handleCategoryNameChange = ({ target: { value } }) => {
+    dispatch(clearMessage());
     setCategoryName(value);
   };
 
   const handleClose = () => {
     setCategoryName("");
-    dispatch(clearMessages());
+    dispatch(clearMessage());
     onClose();
   };
 
@@ -82,9 +72,8 @@ export default function AddCategoryForm({ open, onClose }) {
           onChange={handleCategoryNameChange}
         />
       </DialogContent>
-      {error && <AlertMessage severity="error" message={error} />}
-      {successMessage && (
-        <AlertMessage severity="success" message={successMessage} />
+      {status === FAILED && message && (
+        <AlertMessage severity="error" message={message} />
       )}
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>

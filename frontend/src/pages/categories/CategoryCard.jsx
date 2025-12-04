@@ -15,6 +15,7 @@ import { ExpandMore } from "@mui/icons-material";
 import { selectTransactionsByCategoryId } from "../../features/transactions/transactionsSelectors";
 import { updateCategory } from "../../features/categories/categoriesThunks";
 import { deleteCategory } from "../../features/categories/categoriesThunks";
+import { getTotalAmount } from "../../utiles/transactionsUtils";
 
 import CategoryTransactions from "./CategoryTransactions";
 import DeleteCategoryForm from "./DeleteCategoryForm";
@@ -25,7 +26,6 @@ import CategoryMenu from "./CategoryMenu";
 import { CategoryCardStyles as styles } from "./styles/CategoryCard.styles";
 
 export default function CategoryCard({ category }) {
-
   const { id, userId, name } = category;
 
   const dispatch = useDispatch();
@@ -41,10 +41,7 @@ export default function CategoryCard({ category }) {
 
   const menuOpen = Boolean(anchorEl);
 
-  const amount = transactions.reduce(
-    (accumulator, transaction) => accumulator + transaction.amount,
-    0
-  );
+  const amount = getTotalAmount(transactions);
 
   const handleMenuClick = (event) => {
     event.stopPropagation();
@@ -62,10 +59,7 @@ export default function CategoryCard({ category }) {
     handleMenuClose(event);
   };
 
-  const handleNameChange = (event) => {
-    const { target: { value } } = event;
-    setUpdatedName(value);
-  };
+  const handleNameChange = ({ target: { value } }) => setUpdatedName(value);
 
   const handleEditCancel = (event) => {
     event.stopPropagation();
@@ -115,20 +109,24 @@ export default function CategoryCard({ category }) {
       <Divider />
 
       <AccordionDetails sx={styles.accordionDetails}>
-        {isEditing && <CategoryEditActions
-          updatedName={updatedName}
-          onSave={handleEditSave}
-          onCancel={handleEditCancel}
-        />}
+        {isEditing && (
+          <CategoryEditActions
+            updatedName={updatedName}
+            onSave={handleEditSave}
+            onCancel={handleEditCancel}
+          />
+        )}
 
-        {userId && !isEditing && <CategoryMenu
-          anchorEl={anchorEl}
-          menuOpen={menuOpen}
-          onMenuClick={handleMenuClick}
-          onMenuClose={handleMenuClose}
-          onEdit={handleEdit}
-          onDeleteOpen={handleDeleteOpen}
-        />}
+        {userId && !isEditing && (
+          <CategoryMenu
+            anchorEl={anchorEl}
+            menuOpen={menuOpen}
+            onMenuClick={handleMenuClick}
+            onMenuClose={handleMenuClose}
+            onEdit={handleEdit}
+            onDeleteOpen={handleDeleteOpen}
+          />
+        )}
 
         <DeleteCategoryForm
           open={deleteOpen}

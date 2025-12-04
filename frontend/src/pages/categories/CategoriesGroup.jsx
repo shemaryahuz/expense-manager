@@ -15,21 +15,12 @@ const { CUSTOM } = GROUP_NAMES;
 export default function CategoriesGroupe({ name, categories }) {
   const [addOpen, setAddOpen] = useState(false);
 
-  const handleAddOpen = () => {
-    setAddOpen(true);
-  };
-
-  const handleAddClose = () => {
-    setAddOpen(false);
-  };
+  const handleAddOpen = () => setAddOpen(true);
+  const handleAddClose = () => setAddOpen(false);
 
   return (
-    <Container
-      sx={styles.container}
-    >
-      <Box
-        sx={styles.mainBox}
-      >
+    <Container sx={styles.container}>
+      <Box sx={styles.mainBox}>
         <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold" }}>
           {name}
         </Typography>

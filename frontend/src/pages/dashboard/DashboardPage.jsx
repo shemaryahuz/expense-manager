@@ -18,7 +18,7 @@ import AlertMessage from "../../components/common/AlertMessage";
 
 import MonthlyBudget from "./MonthlyBudget";
 import LastTransactionsCard from "./LastTransactionsCard";
-import TopCategoriesCard from "./TopCategoriescard";
+import TopCategoriesCard from "./TopCategoriesCard";
 
 import { STATUSES } from "../../constants/features/statusConstants";
 
@@ -36,8 +36,8 @@ export default function DashboardPage() {
     categoriesTransactions,
   } = useSelector(selectTransactionsState);
   const {
-    fetchStatus: categoriesStatus,
-    fetchError: categoriesError,
+    status: categoriesStatus,
+    message: categoriesMessage,
     categories: allCategories,
   } = useSelector(selectCategoriesState);
   const categories = getExpenseCategories(allCategories);
@@ -49,7 +49,7 @@ export default function DashboardPage() {
   const failed = transactionsStatus === FAILED || categoriesStatus === FAILED;
   const succeeded =
     transactionsStatus === SUCCEEDED && categoriesStatus === SUCCEEDED;
-  const message = transactionMessage || categoriesError;
+  const message = transactionMessage || categoriesMessage;
 
   useEffect(() => {
     if (categoriesStatus === IDLE) {

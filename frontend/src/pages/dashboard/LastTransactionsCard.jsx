@@ -25,9 +25,7 @@ export default function LastTransactionsCard({ transactions }) {
 
   const lastTransactions = transactions.slice(0, LAST_TRANSACTIONS_LIMIT);
 
-  const handleNavigate = () => {
-    navigate(TRANSACTIONS);
-  };
+  const handleNavigate = () => navigate(TRANSACTIONS);
 
   return (
     <Card sx={styles.card}>

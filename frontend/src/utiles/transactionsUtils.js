@@ -23,8 +23,8 @@ export const sortTransactionsByDate = (transactions) =>
         new Date(nextTransaction.date) - new Date(prevTransaction.date));
 
 export const updateTransactionsOnCategoryDelete = (transactions, categoryId) =>
-    transactions.map((transaction) => 
+    transactions.map((transaction) =>
         transaction.categoryId === categoryId ? { ...transaction, categoryId: MISCELLANEOUS_ID } : transaction);
 
-export const getTotal = (transactions) =>
+export const getTotalAmount = (transactions) =>
     transactions.reduce((total, transaction) => total + transaction.amount, 0);

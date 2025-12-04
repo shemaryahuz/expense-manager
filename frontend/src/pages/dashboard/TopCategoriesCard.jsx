@@ -21,9 +21,7 @@ export default function TopCategoriesCard({ transactions, categories }) {
     TOP_CATEGORIES_LIMIT
   );
 
-  const handleNavigate = () => {
-    navigate(CATEGORIES);
-  };
+  const handleNavigate = () => navigate(CATEGORIES);
 
   return (
     <Card sx={styles.card}>

@@ -6,7 +6,7 @@ import {
   selectIncomeTransactions,
   selectExpenseTransactions,
 } from "../../features/transactions/transactionsSelectors";
-import { getTotal } from "../../utiles/transactionsUtils";
+import { getTotalAmount } from "../../utiles/transactionsUtils";
 
 import { monthlyBudgetStyles as styles } from "./styles/MonthlyBudget.styles";
 
@@ -14,8 +14,8 @@ export default function MonthlyBudget() {
   const incomeTransactions = useSelector(selectIncomeTransactions);
   const expenseTransactions = useSelector(selectExpenseTransactions);
 
-  const totalIncome = getTotal(incomeTransactions);
-  const totalExpenses = getTotal(expenseTransactions);
+  const totalIncome = getTotalAmount(incomeTransactions);
+  const totalExpenses = getTotalAmount(expenseTransactions);
   const balance = totalIncome - totalExpenses;
 
   return (
