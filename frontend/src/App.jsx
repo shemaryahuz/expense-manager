@@ -1,8 +1,9 @@
-import { useEffect } from "react";
+import { useSelector, useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
+import { selectUserState } from "./features/user/userSlice";
 import { getUser } from "./features/user/userThunks";
 
 import Layout from "./components/layout/Layout";
@@ -10,13 +11,20 @@ import PublicRoute from "./routes/PublicRoute";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 import { PUBLIC_PAGES, PRIVATE_PAGES } from "./constants/app/pages";
+import { STATUSES } from "./constants/features/statusConstants";
+
+const { IDLE } = STATUSES;
 
 function App() {
   const dispatch = useDispatch();
 
+  const { fetchStatus } = useSelector(selectUserState);
+
   useEffect(() => {
-    dispatch(getUser());
-  }, [dispatch]);
+    if (fetchStatus === IDLE) {
+      dispatch(getUser());
+    }
+  }, [dispatch, fetchStatus]);
 
   return (
     <BrowserRouter>
