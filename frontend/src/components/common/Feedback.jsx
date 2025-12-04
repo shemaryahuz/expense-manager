@@ -10,7 +10,7 @@ export default function Feedback({
   return (
     <Snackbar
       open={open}
-      autoHideDuration={4000}
+      autoHideDuration={3000}
       anchorOrigin={anchorOrigin}
       onClose={onClose}
     >

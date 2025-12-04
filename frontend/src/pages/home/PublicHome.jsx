@@ -11,8 +11,13 @@ export default function PublicHome() {
       >
         Welcome to Expense Manager!
       </Typography>
-      <Typography variant="body1" gutterBottom sx={{ textAlign: "center", mb: 2, mt: 2 }}>
-        Track your expenses, manage categories, and understand your financial life.
+      <Typography
+        variant="body1"
+        gutterBottom
+        sx={{ textAlign: "center", mb: 2, mt: 2 }}
+      >
+        Track your expenses, manage categories, and understand your financial
+        life.
       </Typography>
       <LoginForm />
     </Box>

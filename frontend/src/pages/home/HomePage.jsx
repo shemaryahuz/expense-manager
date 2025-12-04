@@ -13,7 +13,7 @@ import { ROUTE_PATHS } from "../../constants/app/routes";
 import PublicHome from "./PublicHome";
 import PrivateHome from "./PrivateHome";
 
-const { SUCCESS } = STATUSES;
+const { SUCCEEDED } = STATUSES;
 const { DASHBOARD } = ROUTE_PATHS;
 
 export default function HomePage() {
@@ -32,13 +32,15 @@ export default function HomePage() {
   const name = user?.name || USER;
 
   useEffect(() => {
-    if (status === SUCCESS && isAuthenticated) {
+    if (status === SUCCEEDED && isAuthenticated && successMessage) {
       setShowSuccess(true);
+
       setTimeout(() => {
         navigate(DASHBOARD);
+        dispatch(clearMessages());
       }, 3000);
     }
-  }, [status, isAuthenticated, navigate]);
+  }, [status, isAuthenticated, successMessage, navigate]);
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") return;
