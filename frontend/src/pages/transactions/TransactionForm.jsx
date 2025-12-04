@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import { useDispatch, useSelector } from "react-redux";
 
 import {
@@ -26,8 +25,9 @@ import {
   editTransaction,
 } from "../../features/transactions/transactionsThunks";
 import { selectTransactionsState } from "../../features/transactions/transactionsSelectors";
-import { clearMessages } from "../../features/transactions/transactionsSlice";
+import { clearMessage } from "../../features/transactions/transactionsSlice";
 import { selectCategoriesState } from "../../features/categories/categoriesSlice";
+import { getExpenseCategories } from "../../utiles/categoriesUtils";
 
 import {
   INCOME_ID,
@@ -37,8 +37,11 @@ import {
   INCOME,
   EXPENSE,
 } from "../../constants/features/transactionsConstants";
+import { STATUSES } from "../../constants/features/statusConstants";
 
 import AlertMessage from "../../components/common/AlertMessage";
+
+const { LOADING, FAILED, SUCCEEDED } = STATUSES;
 
 export default function TransactionForm({
   open,
@@ -46,59 +49,41 @@ export default function TransactionForm({
   isExisting,
   existingTransaction,
 }) {
-  const dispatch = useDispatch();
-
-  const { categories } = useSelector(selectCategoriesState);
-  const { actionLoading, actionError, success } = useSelector(
-    selectTransactionsState
-  );
-
-  const expenseCategories = categories.filter(
-    (category) => category.id !== INCOME_ID
-  );
-
   const initialTransaction = isExisting
     ? existingTransaction
     : {
         title: "",
-        amount: 1,
+        amount: 0,
         type: "",
         categoryId: "",
         date: null,
       };
 
+  const dispatch = useDispatch();
+
   const [transaction, setTransaction] = useState(initialTransaction);
   const { title, amount, type, categoryId } = transaction;
+
+  const { categories } = useSelector(selectCategoriesState);
+  const { status, message } = useSelector(selectTransactionsState);
+
+  const expenseCategories = getExpenseCategories(categories);
   const date = transaction.date ? dayjs(transaction.date) : null;
 
   useEffect(() => {
-    if (success && open) {
+    if (status === SUCCEEDED && message) {
       setTransaction(initialTransaction);
-      setTimeout(() => onClose(), 2000);
+      onClose();
     }
-  }, [success, open, onClose]);
+  }, [status, message]);
 
-  const handleChange = (event) => {
-    dispatch(clearMessages());
-
-    const { name, value } = event.target;
-
-    if (name === "amount") {
-      // alow empty value when the user is typing
-      if (!value) setTransaction({ ...transaction, [name]: value });
-      else {
-        // allow only positive numbers
-        const amountNumber = Number(value);
-        if (isNaN(amountNumber) || amountNumber < 1) {
-          return setTransaction({ ...transaction, [name]: 1 });
-        }
-      }
-    }
+  const handleChange = ({ target: { name, value } }) => {
+    dispatch(clearMessage());
     setTransaction({ ...transaction, [name]: value });
   };
 
   const handleDateChange = (newValue) => {
-    dispatch(clearMessages());
+    dispatch(clearMessage());
     setTransaction({ ...transaction, date: newValue });
   };
 
@@ -114,14 +99,13 @@ export default function TransactionForm({
       date: date.toISOString(),
     };
 
-    if (isExisting) {
-      dispatch(editTransaction(transactionToSend));
-    } else {
-      dispatch(addTransaction(transactionToSend));
-    }
+    isExisting
+      ? dispatch(editTransaction(transactionToSend))
+      : dispatch(addTransaction(transactionToSend));
   };
 
   const handleClose = () => {
+    dispatch(clearMessage());
     setTransaction(initialTransaction);
     onClose();
   };
@@ -131,7 +115,7 @@ export default function TransactionForm({
       component="form"
       onSubmit={handleSubmit}
       open={open}
-      onClose={onClose}
+      onClose={handleClose}
       sx={{ padding: 2 }}
       closeAfterTransition={false}
     >
@@ -151,6 +135,7 @@ export default function TransactionForm({
           label="Amount (USD)"
           type="number"
           value={amount}
+          slotProps={{ htmlInput: { min: 0.1, step: 0.1 } }}
           onChange={handleChange}
         />
         <FormControl fullWidth required>
@@ -203,18 +188,19 @@ export default function TransactionForm({
           </DemoContainer>
         </LocalizationProvider>
       </DialogContent>
-      {actionError && <AlertMessage severity="error" message={actionError} />}
-      {success && <AlertMessage severity="success" message={success} />}
+      {status === FAILED && message && (
+        <AlertMessage severity="error" message={message} />
+      )}
       <DialogActions>
-        <Button onClick={handleClose} disabled={actionLoading}>
+        <Button onClick={handleClose} disabled={status === LOADING}>
           Cancel
         </Button>
         <Button
           type="submit"
-          disabled={actionLoading || !!actionError}
+          disabled={status === LOADING}
           sx={{ color: "success.dark" }}
         >
-          {actionLoading ? "Saving..." : isExisting ? "Update" : "Add"}
+          {status === LOADING ? "Saving..." : isExisting ? "Update" : "Add"}
         </Button>
       </DialogActions>
     </Dialog>

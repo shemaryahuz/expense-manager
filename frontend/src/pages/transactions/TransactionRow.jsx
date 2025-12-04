@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import { useDispatch, useSelector } from "react-redux";
 
 import { TableRow, TableCell, IconButton, Box } from "@mui/material";
@@ -17,39 +16,31 @@ import TransactionForm from "./TransactionForm";
 export default function TransactionRow({ transaction }) {
   const dispatch = useDispatch();
 
-  const { id, date, title, amount, type, categoryId } = transaction;
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
   const { categories } = useSelector(selectCategoriesState);
+
+  const { id, date, title, amount, type, categoryId } = transaction;
+  const categoryName =
+    categories.find((category) => category.id === categoryId)?.name || "None";
 
   useEffect(() => {
     if (categories.length === 0) {
       dispatch(fetchCategories());
     }
-  }, [dispatch]);
+  }, [dispatch, categories.length]);
 
-  const categoryName =
-    categories.find((category) => category.id === categoryId)?.name || "None";
+  const handleEditOpen = () => setEditDialogOpen(true);
 
-  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const handleEditClose = () => setEditDialogOpen(false);
 
-  const handleEditOpen = () => {
-    setEditDialogOpen(true);
-  };
+  const handleDeleteOpen = () => setDeleteDialogOpen(true);
 
-  const handleEditClose = () => {
-    setEditDialogOpen(false);
-  };
-
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-
-  const handleDeleteOpen = () => {
-    setDeleteDialogOpen(true);
-  };
-
-  const handleDeleteClose = () => {
-    setDeleteDialogOpen(false);
-  };
+  const handleDeleteClose = () => setDeleteDialogOpen(false);
 
   const handleDelete = () => {
+    handleDeleteClose();
     dispatch(deleteTransaction(id));
   };
 
@@ -80,15 +71,14 @@ export default function TransactionRow({ transaction }) {
           isExisting={true}
           existingTransaction={transaction}
         />
-
-        <IconButton>
-          <Delete onClick={handleDeleteOpen} sx={{ color: "error.dark" }} />
-          <DeleteTransactionDialog
-            open={deleteDialogOpen}
-            onClose={handleDeleteClose}
-            onDelete={handleDelete}
-          />
+        <IconButton onClick={handleDeleteOpen}>
+          <Delete sx={{ color: "error.dark" }} />
         </IconButton>
+        <DeleteTransactionDialog
+          open={deleteDialogOpen}
+          onClose={handleDeleteClose}
+          onDelete={handleDelete}
+        />
       </TableCell>
     </TableRow>
   );

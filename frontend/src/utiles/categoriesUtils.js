@@ -14,15 +14,11 @@ export const getTopCategories = (categories, transactions, limit = 3) => {
     transactions.forEach((transaction) => {
         const category = categoriesIdToName[transaction.categoryId];
 
-        if (!category) {
-            return;
+        if (category) {
+            categoriesAmounts[category] ?
+                categoriesAmounts[category] += transaction.amount :
+                categoriesAmounts[category] = transaction.amount;
         }
-
-        if (!categoriesAmounts[category]) {
-            categoriesAmounts[category] = 0;
-        }
-
-        categoriesAmounts[category] += transaction.amount;
     });
 
     const categoriesArray = Object.keys(categoriesAmounts).map((category) => ({

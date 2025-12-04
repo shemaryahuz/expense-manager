@@ -8,183 +8,139 @@ import {
     fetchTransactions,
     searchTransactions
 } from "./transactionsThunks";
-
 import { deleteCategory } from "../categories/categoriesThunks";
 
+import { convertDateById, sortTransactionsByDate, updateTransactionsOnCategoryDelete } from "../../utiles/transactionsUtils";
+
 import { MISCELLANEOUS_ID } from "../../constants/features/categoriesConstants";
+import { STATUSES } from "../../constants/features/statusConstants";
+
+const { IDLE, LOADING, SUCCEEDED, FAILED } = STATUSES;
+
+const initialState = {
+    transactions: [],
+    categoriesTransactions: [], // for categories page
+    searched: [],
+    status: IDLE,
+    message: null,
+};
 
 export const transactionsSlice = createSlice({
     name: "transactions",
-    initialState: {
-        transactions: [],
-        categoriesTransactions: [], // for categories page
-        searched: [],
-        loading: false,
-        error: "",
-        actionLoading: false,
-        actionError: "",
-        success: "",
-    },
+    initialState,
     reducers: {
         clearSearched: (state) => {
             state.searched = [];
         },
-        clearMessages: (state) => {
-            state.error = "";
-            state.success = "";
-            state.actionError = "";
+        clearMessage: (state) => {
+            state.message = null;
         },
     },
     extraReducers: (builder) => {
         builder
             // fetch transactions thunk
             .addCase(fetchTransactions.pending, (state) => {
-                state.loading = true;
+                state.status = LOADING;
             })
             .addCase(fetchTransactions.fulfilled, (state, action) => {
-                state.loading = false;
+                state.status = SUCCEEDED;
                 state.transactions = action.payload;
-                state.error = "";
             })
             .addCase(fetchTransactions.rejected, (state, action) => {
-                state.loading = false;
-                console.log(action.error)
-                state.error = action.payload || action.error.message;
+                state.status = FAILED;
+                state.message = action.payload || action.error.message;
             })
 
             // fetch transactions for categories page thunk
             .addCase(fetchCategoriesTransactions.pending, (state) => {
-                state.loading = true;
+                state.status = LOADING;
             })
             .addCase(fetchCategoriesTransactions.fulfilled, (state, action) => {
-                state.loading = false;
+                state.status = SUCCEEDED;
                 state.categoriesTransactions = action.payload;
             })
             .addCase(fetchCategoriesTransactions.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload || action.error.message;
+                state.status = FAILED;
+                state.message = action.payload || action.error.message;
             })
 
             // search transactions thunk
             .addCase(searchTransactions.pending, (state) => {
-                state.loading = true;
+                state.status = LOADING;
             })
             .addCase(searchTransactions.fulfilled, (state, action) => {
-                state.loading = false;
+                state.status = SUCCEEDED;
                 state.searched = action.payload;
             })
             .addCase(searchTransactions.rejected, (state, action) => {
-                state.loading = false;
-                state.error = action.payload || action.error.message;
+                state.status = FAILED;
+                state.message = action.payload || action.error.message;
             })
 
             // add transaction thunk
             .addCase(addTransaction.pending, (state) => {
-                state.actionLoading = true;
-                state.success = "";
-                state.actionError = "";
+                state.status = LOADING;
             })
             .addCase(addTransaction.fulfilled, (state, action) => {
-                state.loading = false;
-                
                 const { message, transaction: newTransaction } = action.payload;
-
-                state.success = message;
-                state.actionError = "";
 
                 const date = new Date(newTransaction.date);
                 newTransaction.date = date.toLocaleDateString();
 
+                state.status = SUCCEEDED;
+                state.message = message;
                 state.transactions.push(newTransaction);
-
-                // sort transactions by date
-                state.transactions.sort((a, b) => {
-                    const dateA = new Date(a.date);
-                    const dateB = new Date(b.date);
-                    return dateB - dateA;
-                });
+                state.transactions = sortTransactionsByDate(state.transactions);
             })
             .addCase(addTransaction.rejected, (state, action) => {
-                state.actionLoading = false;
-                state.actionError = action.payload || action.error.message;
-                state.success = "";
+                state.status = FAILED;
+                state.message = action.payload || action.error.message;
             })
 
             // update transaction thunk
             .addCase(editTransaction.pending, (state) => {
-                state.actionLoading = true;
-                state.success = "";
-                state.actionError = "";
+                state.status = LOADING;
             })
             .addCase(editTransaction.fulfilled, (state, action) => {
-                state.loading = false;
+                const { message, transaction: { id }  } = action.payload;
 
-                const { message, transaction: updatedTransaction } = action.payload;
-
-                state.success = message;
-                state.actionError = "";
-
-                state.transactions = state.transactions.map((transaction) => {
-                    if (transaction.id === updatedTransaction.id) {
-
-                        const date = new Date(updatedTransaction.date);
-                        updatedTransaction.date = date.toLocaleDateString();
-
-                        return updatedTransaction;
-                    }
-                    return transaction;
-                });
+                state.status = SUCCEEDED;
+                state.message = message;
+                state.transactions = convertDateById(state.transactions, id);
             })
             .addCase(editTransaction.rejected, (state, action) => {
-                state.actionLoading = false;
-                state.actionError = action.payload || action.error.message;
-                state.success = "";
+                state.status = FAILED;
+                state.message = action.payload || action.error.message;
             })
 
             // delete transaction thunk
             .addCase(deleteTransaction.pending, (state) => {
-                state.actionLoading = true;
-                state.success = "";
-                state.actionError = "";
+                state.status = LOADING;
             })
             .addCase(deleteTransaction.fulfilled, (state, action) => {
-                state.actionLoading = false;
-
                 const { message, id } = action.payload;
 
-                state.success = message;
-                state.actionError = "";
-                
+                state.status = SUCCEEDED;
+                state.message = message;
                 state.transactions = state.transactions.filter((transaction) =>
                     transaction.id !== id);
             })
             .addCase(deleteTransaction.rejected, (state, action) => {
-                state.actionLoading = false;
-                state.actionError = action.payload || action.error.message;
-                state.success = "";
+                state.status = FAILED;
+                state.message = action.payload || action.error.message;
             })
 
             // update transactions on category delete
             .addCase(deleteCategory.fulfilled, (state, action) => {
-
                 const { id } = action.payload;
-                // update transactions with MISCELLANEOUS_ID
-                state.transactions.forEach((transaction) => {
-                    if (transaction.categoryId === id) {
-                        transaction.categoryId = MISCELLANEOUS_ID;
-                    }
-                });
 
-                // update categoriesTransactions with MISCELLANEOUS_ID
-                state.categoriesTransactions.forEach((transaction) => {
-                    if (transaction.categoryId === id) {
-                        transaction.categoryId = MISCELLANEOUS_ID;
-                    }
-                });
+                state.status = SUCCEEDED;
+                state.transactions = updateTransactionsOnCategoryDelete(state.transactions, id);
+                state.categoriesTransactions = updateTransactionsOnCategoryDelete(state.categoriesTransactions, id);
             })
     },
 });
 
 export default transactionsSlice.reducer;
 
-export const { clearSearched, clearMessages } = transactionsSlice.actions;
+export const { clearSearched, clearMessage } = transactionsSlice.actions;

@@ -10,16 +10,16 @@ import { transactionsListStyles as styles } from "./styles/TransactionsList.styl
 
 import TransactionRow from "./TransactionRow";
 
+const headCells = ["Date", "Title", "Category", "Amount", "Actions"];
+
 export default function TransactionsList({ transactions }) {
   return (
     <Table sx={styles.table}>
       <TableHead>
         <TableRow sx={styles.tableHead}>
-          <TableCell>Date</TableCell>
-          <TableCell>Title</TableCell>
-          <TableCell>Category</TableCell>
-          <TableCell>Amount</TableCell>
-          <TableCell>Actions</TableCell>
+          {headCells.map((headCell) => (
+            <TableCell key={headCell}>{headCell}</TableCell>
+          ))}
         </TableRow>
       </TableHead>
 

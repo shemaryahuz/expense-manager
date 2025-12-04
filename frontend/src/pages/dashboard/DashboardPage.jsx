@@ -24,14 +24,14 @@ import { STATUSES } from "../../constants/features/statusConstants";
 
 import { dashboardStyles as styles } from "./styles/Dashboard.styles";
 
-const { IDLE, LOADING, SUCCEEDED } = STATUSES;
+const { IDLE, LOADING, FAILED, SUCCEEDED } = STATUSES;
 
 export default function DashboardPage() {
   const dispatch = useDispatch();
 
   const {
-    loading: transactionsLoading,
-    error: transactionsError,
+    status: transactionsStatus,
+    message: transactionMessage,
     transactions,
     categoriesTransactions,
   } = useSelector(selectTransactionsState);
@@ -44,6 +44,13 @@ export default function DashboardPage() {
 
   const [month, setMonth] = useState(new Date());
 
+  const loading =
+    transactionsStatus === LOADING || categoriesStatus === LOADING;
+  const failed = transactionsStatus === FAILED || categoriesStatus === FAILED;
+  const succeeded =
+    transactionsStatus === SUCCEEDED && categoriesStatus === SUCCEEDED;
+  const message = transactionMessage || categoriesError;
+
   useEffect(() => {
     if (categoriesStatus === IDLE) {
       dispatch(fetchCategories());
@@ -55,9 +62,7 @@ export default function DashboardPage() {
     dispatch(fetchCategoriesTransactions(month));
   }, [dispatch, month]);
 
-  const handleMonthChange = (newMonth) => {
-    setMonth(newMonth);
-  };
+  const handleMonthChange = (newMonth) => setMonth(newMonth);
 
   return (
     <Container sx={styles.container}>
@@ -67,29 +72,23 @@ export default function DashboardPage() {
 
       <MonthHeader month={month} onMonthChange={handleMonthChange} />
 
-      {(transactionsLoading || categoriesStatus === LOADING) && <Loader />}
-      {(transactionsError || categoriesError) && (
-        <AlertMessage
-          severity="error"
-          message={transactionsError || categoriesError}
-        />
-      )}
+      {loading && <Loader />}
 
-      {!transactionsLoading &&
-        !transactionsError &&
-        categoriesStatus === SUCCEEDED && (
-          <Box>
-            <MonthlyBudget />
+      {failed && message && <AlertMessage severity="error" message={message} />}
 
-            <Box sx={styles.cardsBox}>
-              <LastTransactionsCard transactions={transactions} />
-              <TopCategoriesCard
-                transactions={categoriesTransactions}
-                categories={categories}
-              />
-            </Box>
+      {succeeded && (
+        <Box>
+          <MonthlyBudget />
+
+          <Box sx={styles.cardsBox}>
+            <LastTransactionsCard transactions={transactions} />
+            <TopCategoriesCard
+              transactions={categoriesTransactions}
+              categories={categories}
+            />
           </Box>
-        )}
+        </Box>
+      )}
     </Container>
   );
 }
