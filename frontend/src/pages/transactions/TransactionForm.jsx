@@ -94,6 +94,7 @@ export default function TransactionForm({
     const transactionToSend = {
       ...transaction,
       categoryId: categoryIdToSend,
+      amount: Number(amount),
       date: date.toISOString(),
     };
 

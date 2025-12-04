@@ -6,129 +6,112 @@ const { IDLE, LOADING, SUCCEEDED, FAILED } = STATUSES;
 
 const initialState = {
     user: null,
-    isAuthenticated: false,
-
-    fetchStatus: IDLE,
-    actionStatus: IDLE,
-
-    fetchError: null,
-    actionError: null,
-
-    successMessage: null,
+    status: IDLE,
+    authStatus: IDLE,
+    message: null,
 }
 
 export const userSlice = createSlice({
     name: "user",
     initialState,
     reducers: {
-        clearMessages: (state) => {
-            state.fetchError = null;
-            state.actionError = null;
-            state.successMessage = null;
+        clearMessage: (state) => {
+            state.message = null;
         }
     },
     extraReducers: (builder) => {
         builder
             // signup thunk
             .addCase(signup.pending, (state) => {
-                state.actionStatus = LOADING;
+                state.status = LOADING;
             })
             .addCase(signup.fulfilled, (state, action) => {
                 const { user, message } = action.payload;
 
-                state.actionStatus = SUCCEEDED;
-                state.isAuthenticated = true;
+                state.status = SUCCEEDED;
                 state.user = user;
-                state.successMessage = message;
+                state.message = message;
             })
             .addCase(signup.rejected, (state, action) => {
-                state.actionStatus = FAILED;
-                state.actionError = action.payload || action.error.message;
+                state.status = FAILED;
+                state.message = action.payload || action.error.message;
             })
 
             // login thunk
             .addCase(login.pending, (state) => {
-                state.actionStatus = LOADING;
+                state.status = LOADING;
             })
             .addCase(login.fulfilled, (state, action) => {
                 const { user, message } = action.payload;
 
-                state.actionStatus = SUCCEEDED;
-                state.isAuthenticated = true;
+                state.status = SUCCEEDED;
                 state.user = user;
-                state.successMessage = message;
+                state.message = message;
             })
             .addCase(login.rejected, (state, action) => {
-                state.actionStatus = FAILED;
-                state.actionError = action.payload || action.error.message;
+                state.status = FAILED;
+                state.message = action.payload || action.error.message;
             })
 
             // get user thunk
             .addCase(getUser.pending, (state) => {
-                state.fetchStatus = LOADING;
+                state.authStatus = LOADING;
             })
             .addCase(getUser.fulfilled, (state, action) => {
                 const { user } = action.payload;
 
-                state.fetchStatus = SUCCEEDED;
-                state.isAuthenticated = true;
+                state.authStatus = SUCCEEDED;
                 state.user = user;
             })
-            .addCase(getUser.rejected, (state, action) => {
-                state.loading = false;
-                // ignore error when user is not logged in
-                if (action.payload) {
-                    state.fetchStatus = FAILED;
-                    state.fetchError = action.payload || action.error.message;
-                }
+            .addCase(getUser.rejected, (state) => {
+                state.authStatus = FAILED;
             })
 
             // update user thunk
             .addCase(updateUser.pending, (state) => {
-                state.actionStatus = LOADING;
+                state.status = LOADING;
             })
             .addCase(updateUser.fulfilled, (state, action) => {
                 const { user, message } = action.payload;
 
-                state.actionStatus = SUCCEEDED;
+                state.status = SUCCEEDED;
                 state.user = user;
-                state.successMessage = message;
+                state.message = message;
             })
             .addCase(updateUser.rejected, (state, action) => {
-                state.actionStatus = FAILED;
-                state.actionError = action.payload || action.error.message;
+                state.status = FAILED;
+                state.message = action.payload || action.error.message;
             })
 
             // delete user thunk
             .addCase(deleteUser.pending, (state) => {
-                state.actionStatus = LOADING;
+                state.status = LOADING;
             })
             .addCase(deleteUser.fulfilled, (state, action) => {
                 const { message } = action.payload;
 
-                state.actionStatus = SUCCEEDED;
-                state.successMessage = message;
+                state.status = SUCCEEDED;
+                state.message = message;
             })
             .addCase(deleteUser.rejected, (state, action) => {
-                state.actionStatus = FAILED;
-                state.actionError = action.payload || action.error.message;
+                state.status = FAILED;
+                state.message = action.payload || action.error.message;
             })
 
             // logout thunk
             .addCase(logout.pending, (state) => {
-                state.actionStatus = LOADING;
+                state.status = LOADING;
             })
             .addCase(logout.fulfilled, (state, action) => {
                 const { message } = action.payload;
 
-                state.actionStatus = SUCCEEDED;
-                state.isAuthenticated = false;
+                state.status = SUCCEEDED;
                 state.user = null;
-                state.successMessage = message;
+                state.message = message;
             })
             .addCase(logout.rejected, (state, action) => {
-                state.actionStatus = FAILED;
-                state.actionError = action.payload || action.error.message;
+                state.status = FAILED;
+                state.message = action.payload || action.error.message;
             });
     },
 });
@@ -136,9 +119,9 @@ export const userSlice = createSlice({
 // selectors
 export const selectUserState = (state) => state.user;
 export const selectUser = (state) => selectUserState(state).user;
-export const selectIsAuthenticated = (state) => selectUserState(state).isAuthenticated;
+export const selectUserId = (state) => selectUserState(state).user?.id;
 
 // actions
-export const { clearMessages } = userSlice.actions;
+export const { clearMessage } = userSlice.actions;
 
 export default userSlice.reducer;

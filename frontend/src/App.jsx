@@ -18,13 +18,13 @@ const { IDLE } = STATUSES;
 function App() {
   const dispatch = useDispatch();
 
-  const { fetchStatus } = useSelector(selectUserState);
+  const { authStatus } = useSelector(selectUserState);
 
   useEffect(() => {
-    if (fetchStatus === IDLE) {
+    if (authStatus === IDLE) {
       dispatch(getUser());
     }
-  }, [dispatch, fetchStatus]);
+  }, [dispatch, authStatus]);
 
   return (
     <BrowserRouter>

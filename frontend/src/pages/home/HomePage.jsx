@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 import { Container } from "@mui/material";
 
-import { selectUserState, clearMessages } from "../../features/user/userSlice";
+import { selectUserState, clearMessage } from "../../features/user/userSlice";
 
 import { STATUSES } from "../../constants/features/statusConstants";
 import { USER } from "../../constants/ui/userConstants";
@@ -20,45 +20,38 @@ export default function HomePage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const [showSuccess, setShowSuccess] = useState(false);
+  const [showMessage, setShowMessage] = useState(false);
 
-  const {
-    user,
-    isAuthenticated,
-    actionStatus: status,
-    successMessage,
-  } = useSelector(selectUserState);
+  const { user, status, message } = useSelector(selectUserState);
 
   const name = user?.name || USER;
 
   useEffect(() => {
-    if (status === SUCCEEDED && isAuthenticated && successMessage) {
-      setShowSuccess(true);
+    if (status === SUCCEEDED && user && message) {
+      setShowMessage(true);
 
       setTimeout(() => {
         navigate(DASHBOARD);
-        dispatch(clearMessages());
+        dispatch(clearMessage());
       }, 3000);
     }
-  }, [status, isAuthenticated, successMessage, navigate]);
+  }, [status, user, message, dispatch, navigate]);
 
   const handleClose = (event, reason) => {
     if (reason === "clickaway") return;
-    setShowSuccess(false);
-    dispatch(clearMessages());
+    setShowMessage(false);
+    dispatch(clearMessage());
   };
 
-  const handleNavigate = () => {
-    navigate(DASHBOARD);
-  };
+  const handleNavigate = () => navigate(DASHBOARD);
 
   return (
     <Container sx={{ mt: 4 }}>
-      {isAuthenticated ? (
+      {user ? (
         <PrivateHome
           name={name}
-          showSuccess={showSuccess}
-          successMessage={successMessage}
+          showSuccess={showMessage}
+          successMessage={message}
           onClose={handleClose}
           onNavigate={handleNavigate}
         />

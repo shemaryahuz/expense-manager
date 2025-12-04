@@ -9,14 +9,12 @@ export const convertDatesToLocale = (transactions) =>
         };
     });
 
-export const convertDateById = (transactions, id) =>
-    transactions.map((transaction) =>
-        transaction.id === id ?
-            {
-                ...transaction,
-                date: new Date(transaction.date).toLocaleDateString()
-            } :
-            transaction);
+export const updateTransaction = (transactions, updatedTransaction) => {
+    updateTransaction.date = new Date(updatedTransaction.date).toLocaleDateString();
+    return transactions.map((transaction) =>
+        transaction.id === updatedTransaction.id ? updatedTransaction : transaction);
+}
+
 
 export const sortTransactionsByDate = (transactions) =>
     transactions.sort((prevTransaction, nextTransaction) =>

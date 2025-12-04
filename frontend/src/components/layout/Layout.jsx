@@ -14,20 +14,19 @@ import Sidebar from "./Sidebar.jsx";
 export default function Layout() {
   const [drawerOpen, setDrawerOpen] = useState(true);
 
-  const handleDrawerOpen = () => {
-    setDrawerOpen(true);
-  };
+  const handleDrawerOpen = () => setDrawerOpen(true);
 
-  const handleDrawerClose = () => {
-    setDrawerOpen(false);
-  };
+  const handleDrawerClose = () => setDrawerOpen(false);
 
   return (
     <Box sx={styles.layout}>
       <CssBaseline />
-      <Header open={drawerOpen} handleDrawerOpen={handleDrawerOpen} />
+      <Header drawerOpen={drawerOpen} handleDrawerOpen={handleDrawerOpen} />
       <Box sx={styles.mainBox}>
-        <Sidebar open={drawerOpen} handleDrawerClose={handleDrawerClose} />
+        <Sidebar
+          drawerOpen={drawerOpen}
+          handleDrawerClose={handleDrawerClose}
+        />
         <Box component="main" sx={styles.content}>
           <DrawerHeader />
           <Outlet />

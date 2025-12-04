@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { ChevronLeft } from "@mui/icons-material";
 
-import { selectIsAuthenticated } from "../../features/user/userSlice.js";
+import { selectUser } from "../../features/user/userSlice.js";
 import { ROUTES } from "../../constants/app/routes.js";
 
 import { Drawer, DrawerTop } from "./styles/Sidebar.styles.js";
@@ -20,7 +20,7 @@ import { Drawer, DrawerTop } from "./styles/Sidebar.styles.js";
 export default function Sidebar({ drawerOpen, handleDrawerClose }) {
   const location = useLocation();
 
-  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const user = useSelector(selectUser);
 
   return (
     <Drawer variant="permanent" open={drawerOpen}>
@@ -35,7 +35,7 @@ export default function Sidebar({ drawerOpen, handleDrawerClose }) {
         {ROUTES.map(({ path, name, Icon }) => (
           <ListItem key={name} disablePadding sx={{ display: "block" }}>
             <ListItemButton
-              disabled={!isAuthenticated}
+              disabled={!user}
               component={Link}
               to={path}
               selected={location.pathname === path}

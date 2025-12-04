@@ -5,7 +5,7 @@ import { Box, Button, Container, TextField, Typography } from "@mui/material";
 
 import AlertMessage from "../../components/common/AlertMessage";
 
-import { clearMessages, selectUserState } from "../../features/user/userSlice";
+import { clearMessage, selectUserState } from "../../features/user/userSlice";
 import { login, signup } from "../../features/user/userThunks";
 
 import { LOGIN_MODE, SIGNUP_MODE } from "../../constants/ui/loginConstants";
@@ -13,7 +13,7 @@ import { STATUSES } from "../../constants/features/statusConstants";
 
 import { loginFormStyles as styles } from "./styles/LoginForm.styles";
 
-const { LOADING } = STATUSES;
+const { LOADING, FAILED } = STATUSES;
 
 export default function LoginForm() {
   const dispatch = useDispatch();
@@ -25,15 +25,12 @@ export default function LoginForm() {
     password: "",
   });
 
-  const { actionStatus: status, actionError: error } =
-    useSelector(selectUserState);
+  const { status, message } = useSelector(selectUserState);
 
   const { name, email, password } = user;
 
-  const handleChange = (event) => {
-    dispatch(clearMessages());
-
-    const { name, value } = event.target;
+  const handleChange = ({ target: { name, value } }) => {
+    dispatch(clearMessage());
 
     setUser({
       ...user,
@@ -47,7 +44,7 @@ export default function LoginForm() {
   };
 
   const toggleMode = () => {
-    dispatch(clearMessages());
+    dispatch(clearMessage());
     setMode((prevMode) => (prevMode === LOGIN_MODE ? SIGNUP_MODE : LOGIN_MODE));
   };
 
@@ -104,7 +101,9 @@ export default function LoginForm() {
             : "Sign up"}
         </Button>
       </Box>
-      {error && <AlertMessage severity="error" message={error} />}
+      {status === FAILED && message && (
+        <AlertMessage severity="error" message={message} />
+      )}
       <Typography variant="body2" sx={styles.switchText}>
         {mode === LOGIN_MODE
           ? "Don't have an account? "

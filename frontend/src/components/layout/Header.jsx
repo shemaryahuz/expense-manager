@@ -11,13 +11,10 @@ export default function Header({ drawerOpen, handleDrawerOpen }) {
 
   const accountMenuOpen = Boolean(anchorEl);
 
-  const handleAccountMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+  const handleAccountMenuOpen = ({ currentTarget }) =>
+    setAnchorEl(currentTarget);
 
-  const handleAccountMenuClose = () => {
-    setAnchorEl(null);
-  };
+  const handleAccountMenuClose = () => setAnchorEl(null);
 
   return (
     <AppBar component="header" open={drawerOpen}>

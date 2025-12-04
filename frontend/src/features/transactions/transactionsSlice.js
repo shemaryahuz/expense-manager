@@ -10,7 +10,7 @@ import {
 } from "./transactionsThunks";
 import { deleteCategory } from "../categories/categoriesThunks";
 
-import { convertDateById, sortTransactionsByDate, updateTransactionsOnCategoryDelete } from "../../utiles/transactionsUtils";
+import { updateTransaction, sortTransactionsByDate, updateTransactionsOnCategoryDelete } from "../../utiles/transactionsUtils";
 
 import { MISCELLANEOUS_ID } from "../../constants/features/categoriesConstants";
 import { STATUSES } from "../../constants/features/statusConstants";
@@ -102,11 +102,11 @@ export const transactionsSlice = createSlice({
                 state.status = LOADING;
             })
             .addCase(editTransaction.fulfilled, (state, action) => {
-                const { message, transaction: { id }  } = action.payload;
+                const { message, transaction: updatedTransaction } = action.payload;
 
                 state.status = SUCCEEDED;
                 state.message = message;
-                state.transactions = convertDateById(state.transactions, id);
+                state.transactions = updateTransaction(state.transactions, updatedTransaction);
             })
             .addCase(editTransaction.rejected, (state, action) => {
                 state.status = FAILED;
