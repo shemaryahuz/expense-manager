@@ -241,10 +241,6 @@ npm run preview
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## License
-
-This project is open source and available under the [MIT License](LICENSE).
-
 ## Additional Documentation
 
 - **Backend API Reference**: See [`backend/README.md`](backend/README.md) for detailed API documentation, data models, and backend architecture
