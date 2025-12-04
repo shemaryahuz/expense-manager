@@ -1,7 +1,7 @@
 import { INCOME_ID } from "../constants/features/categoriesConstants";
 
 
-export const getTopCategories = (categories, transactions, n = 3) => {
+export const getTopCategories = (categories, transactions, limit = 3) => {
 
     const categoriesIdToName = {};
 
@@ -30,9 +30,9 @@ export const getTopCategories = (categories, transactions, n = 3) => {
         amount: categoriesAmounts[category],
     }));
 
-    categoriesArray.sort((a, b) => b.amount - a.amount);
+    categoriesArray.sort((prevCategory, nextCategory) => nextCategory.amount - prevCategory.amount);
 
-    const topCategories = categoriesArray.slice(0, n);
+    const topCategories = categoriesArray.slice(0, limit);
 
     return topCategories;
 }

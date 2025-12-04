@@ -1,5 +1,4 @@
 import { Fragment } from "react";
-
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -14,8 +13,8 @@ import {
 } from "@mui/material";
 
 import { INCOME } from "../../constants/features/transactionsConstants";
-
 import { ROUTE_PATHS } from "../../constants/app/routes";
+import { LAST_TRANSACTIONS_LIMIT } from "../../constants/ui/dashboardConstants";
 
 import { dashboardStyles as styles } from "./styles/Dashboard.styles";
 
@@ -23,11 +22,13 @@ const { TRANSACTIONS } = ROUTE_PATHS;
 
 export default function LastTransactionsCard({ transactions }) {
   const navigate = useNavigate();
-  const lastTransactions = transactions.slice(0, 3);
+
+  const lastTransactions = transactions.slice(0, LAST_TRANSACTIONS_LIMIT);
 
   const handleNavigate = () => {
     navigate(TRANSACTIONS);
   };
+
   return (
     <Card sx={styles.card}>
       <Typography variant="h6" gutterBottom sx={styles.cardTitle}>

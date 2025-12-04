@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-
 import { useDispatch, useSelector } from "react-redux";
 
 import { Box, Container, Typography } from "@mui/material";
@@ -17,11 +16,15 @@ import MonthHeader from "../../components/common/MonthHeader";
 import Loader from "../../components/common/Loader";
 import AlertMessage from "../../components/common/AlertMessage";
 
+import MonthlyBudget from "./MonthlyBudget";
 import LastTransactionsCard from "./LastTransactionsCard";
 import TopCategoriesCard from "./TopCategoriescard";
 
+import { STATUSES } from "../../constants/features/statusConstants";
+
 import { dashboardStyles as styles } from "./styles/Dashboard.styles";
-import MonthlyBudget from "./MonthlyBudget";
+
+const { IDLE, LOADING, SUCCEEDED } = STATUSES;
 
 export default function DashboardPage() {
   const dispatch = useDispatch();
@@ -33,8 +36,8 @@ export default function DashboardPage() {
     categoriesTransactions,
   } = useSelector(selectTransactionsState);
   const {
-    loading: categoriesLoading,
-    error: categoriesError,
+    fetchStatus: categoriesStatus,
+    fetchError: categoriesError,
     categories: allCategories,
   } = useSelector(selectCategoriesState);
   const categories = getExpenseCategories(allCategories);
@@ -42,9 +45,14 @@ export default function DashboardPage() {
   const [month, setMonth] = useState(new Date());
 
   useEffect(() => {
+    if (categoriesStatus === IDLE) {
+      dispatch(fetchCategories());
+    }
+  }, [dispatch, categoriesStatus]);
+
+  useEffect(() => {
     dispatch(fetchTransactions(month));
     dispatch(fetchCategoriesTransactions(month));
-    dispatch(fetchCategories());
   }, [dispatch, month]);
 
   const handleMonthChange = (newMonth) => {
@@ -59,7 +67,7 @@ export default function DashboardPage() {
 
       <MonthHeader month={month} onMonthChange={handleMonthChange} />
 
-      {(transactionsLoading || categoriesLoading) && <Loader />}
+      {(transactionsLoading || categoriesStatus === LOADING) && <Loader />}
       {(transactionsError || categoriesError) && (
         <AlertMessage
           severity="error"
@@ -68,9 +76,8 @@ export default function DashboardPage() {
       )}
 
       {!transactionsLoading &&
-        !categoriesLoading &&
         !transactionsError &&
-        !categoriesError && (
+        categoriesStatus === SUCCEEDED && (
           <Box>
             <MonthlyBudget />
 

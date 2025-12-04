@@ -1,5 +1,3 @@
-import { red, green, blue } from "@mui/material/colors";
-
 export const monthlyBudgetStyles = {
     container: {
         mt: 4,

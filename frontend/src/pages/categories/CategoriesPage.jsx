@@ -19,7 +19,7 @@ import Feedback from "../../components/common/Feedback";
 
 import CategoriesContainer from "./CategoriesContainer";
 
-const { IDLE, LOADING, SUCCEEDED } = STATUSES;
+const { IDLE, LOADING, FAILED, SUCCEEDED } = STATUSES;
 
 export default function CategoriesPage() {
   const dispatch = useDispatch();
@@ -31,6 +31,7 @@ export default function CategoriesPage() {
   const {
     fetchStatus: fetchCategoriesStatus,
     fetchError: fetchCategoriesError,
+    actionStatus,
     actionError,
     successMessage,
     categories,
@@ -47,16 +48,12 @@ export default function CategoriesPage() {
   }, [dispatch, month]);
 
   useEffect(() => {
-    if (successMessage) {
+    if (actionStatus === FAILED && actionError) {
+      setShowActionError(true);
+    } else if (actionStatus === SUCCEEDED && successMessage) {
       setShowSuccess(true);
     }
-  }, [successMessage]);
-
-  useEffect(() => {
-    if (actionError) {
-      setShowActionError(true);
-    }
-  }, [actionError]);
+  }, [actionStatus, actionError, successMessage]);
 
   const handleMonthChange = (newMonth) => {
     setMonth(newMonth);
