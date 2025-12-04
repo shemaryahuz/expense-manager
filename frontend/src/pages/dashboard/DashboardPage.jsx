@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { Box, Container, Typography } from "@mui/material";
@@ -9,8 +9,10 @@ import {
   fetchTransactions,
 } from "../../features/transactions/transactionsThunks";
 import { fetchCategories } from "../../features/categories/categoriesThunks";
-import { selectCategoriesState } from "../../features/categories/categoriesSlice";
-import { getExpenseCategories } from "../../utiles/categoriesUtils";
+import {
+  selectExpenseCategories,
+  selectCategoriesState,
+} from "../../features/categories/categoriesSelectors";
 
 import MonthHeader from "../../components/common/MonthHeader";
 import Loader from "../../components/common/Loader";
@@ -35,12 +37,10 @@ export default function DashboardPage() {
     transactions,
     categoriesTransactions,
   } = useSelector(selectTransactionsState);
-  const {
-    status: categoriesStatus,
-    message: categoriesMessage,
-    categories: allCategories,
-  } = useSelector(selectCategoriesState);
-  const categories = getExpenseCategories(allCategories);
+  const { status: categoriesStatus, message: categoriesMessage } = useSelector(
+    selectCategoriesState
+  );
+  const categories = useSelector(selectExpenseCategories);
 
   const [month, setMonth] = useState(new Date());
 

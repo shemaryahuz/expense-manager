@@ -35,9 +35,7 @@ export default function CategoryCard({ category }) {
   const [updatedName, setUpdatedName] = useState(name);
   const [deleteOpen, setDeleteOpen] = useState(false);
 
-  const transactions = useSelector((state) =>
-    selectTransactionsByCategoryId(state, id)
-  );
+  const transactions = useSelector(selectTransactionsByCategoryId(id));
 
   const menuOpen = Boolean(anchorEl);
 

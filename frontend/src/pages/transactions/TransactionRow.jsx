@@ -6,7 +6,9 @@ import { Delete, Edit } from "@mui/icons-material";
 
 import { deleteTransaction } from "../../features/transactions/transactionsThunks";
 import { fetchCategories } from "../../features/categories/categoriesThunks";
-import { selectCategoriesState } from "../../features/categories/categoriesSlice";
+import { selectCategories } from "../../features/categories/categoriesSelectors";
+
+import { getCategoryName } from "../../utiles/categoriesUtils";
 
 import { INCOME } from "../../constants/features/transactionsConstants";
 
@@ -19,11 +21,10 @@ export default function TransactionRow({ transaction }) {
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
-  const { categories } = useSelector(selectCategoriesState);
+  const categories = useSelector(selectCategories);
 
   const { id, date, title, amount, type, categoryId } = transaction;
-  const categoryName =
-    categories.find((category) => category.id === categoryId)?.name || "None";
+  const categoryName = getCategoryName(categories, categoryId) || "None";
 
   useEffect(() => {
     if (categories.length === 0) {

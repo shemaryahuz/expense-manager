@@ -9,18 +9,18 @@ export const selectCategoriesTransactions = state => selectTransactionsState(sta
 
 export const selectIncomeTransactions = createSelector(
     [selectTransactions],
-    (transactions) => transactions.filter((transaction) => 
+    (transactions) => transactions.filter((transaction) =>
         transaction.type === INCOME)
 )
 
 export const selectExpenseTransactions = createSelector(
     [selectTransactions],
-    (transactions) => transactions.filter((transaction) => 
+    (transactions) => transactions.filter((transaction) =>
         transaction.type === EXPENSE)
 )
 
-export const selectTransactionsByCategoryId = createSelector(
-    [selectCategoriesTransactions, (_, categoryId) => categoryId],
-    (categoriesTransactions, categoryId) => categoriesTransactions.filter((transaction) => 
+export const selectTransactionsByCategoryId = (categoryId) => createSelector(
+    [selectCategoriesTransactions, () => categoryId],
+    (categoriesTransactions, categoryId) => categoriesTransactions.filter((transaction) =>
         transaction.categoryId === categoryId)
 )

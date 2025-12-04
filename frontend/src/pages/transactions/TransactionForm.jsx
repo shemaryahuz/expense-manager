@@ -26,8 +26,7 @@ import {
 } from "../../features/transactions/transactionsThunks";
 import { selectTransactionsState } from "../../features/transactions/transactionsSelectors";
 import { clearMessage } from "../../features/transactions/transactionsSlice";
-import { selectCategoriesState } from "../../features/categories/categoriesSlice";
-import { getExpenseCategories } from "../../utiles/categoriesUtils";
+import { selectExpenseCategories } from "../../features/categories/categoriesSelectors";
 
 import {
   INCOME_ID,
@@ -64,10 +63,9 @@ export default function TransactionForm({
   const [transaction, setTransaction] = useState(initialTransaction);
   const { title, amount, type, categoryId } = transaction;
 
-  const { categories } = useSelector(selectCategoriesState);
   const { status, message } = useSelector(selectTransactionsState);
+  const expenseCategories = useSelector(selectExpenseCategories);
 
-  const expenseCategories = getExpenseCategories(categories);
   const date = transaction.date ? dayjs(transaction.date) : null;
 
   useEffect(() => {

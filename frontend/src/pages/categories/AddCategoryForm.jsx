@@ -11,10 +11,8 @@ import {
 } from "@mui/material";
 
 import { addCategory } from "../../features/categories/categoriesThunks";
-import {
-  selectCategoriesState,
-  clearMessage,
-} from "../../features/categories/categoriesSlice";
+import { clearMessage } from "../../features/categories/categoriesSlice";
+import { selectCategoriesState } from "../../features/categories/categoriesSelectors";
 
 import { STATUSES } from "../../constants/features/statusConstants";
 

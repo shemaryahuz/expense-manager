@@ -2,12 +2,11 @@ import { useSelector } from "react-redux";
 import { Grid } from "@mui/material";
 
 import { selectUser } from "../../features/user/userSlice";
-
 import {
-  getIncomeCategories,
-  getDefaultCategories,
-  getCustomCategories,
-} from "../../utiles/categoriesUtils";
+  selectDefaultCategories,
+  selectIncomeCategories,
+  selectCustomCategories,
+} from "../../features/categories/categoriesSelectors";
 
 import { GROUP_NAMES } from "../../constants/features/categoriesConstants";
 
@@ -18,9 +17,9 @@ const { INCOME, DEFAULTS, CUSTOM } = GROUP_NAMES;
 export default function CategoriesContainer({ categories }) {
   const userId = useSelector(selectUser)?.id;
 
-  const incomeCategories = getIncomeCategories(categories);
-  const defaultCategories = getDefaultCategories(categories);
-  const customCategories = getCustomCategories(categories, userId);
+  const incomeCategories = useSelector(selectIncomeCategories);
+  const defaultCategories = useSelector(selectDefaultCategories);
+  const customCategories = useSelector(selectCustomCategories(userId));
 
   return (
     <Grid container direction="column" mb={4}>

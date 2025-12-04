@@ -4,10 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { Container, Typography } from "@mui/material";
 
 import { fetchCategories } from "../../features/categories/categoriesThunks";
-import {
-  selectCategoriesState,
-  clearMessage,
-} from "../../features/categories/categoriesSlice";
+import { clearMessage } from "../../features/categories/categoriesSlice";
+import { selectCategoriesState } from "../../features/categories/categoriesSelectors";
 import { fetchCategoriesTransactions } from "../../features/transactions/transactionsThunks";
 
 import { STATUSES } from "../../constants/features/statusConstants";

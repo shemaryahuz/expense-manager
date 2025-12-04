@@ -84,6 +84,5 @@ export const categoriesSlice = createSlice({
     },
 });
 
-export const selectCategoriesState = (state) => state.categories;
 export const { clearMessage } = categoriesSlice.actions;
 export default categoriesSlice.reducer;
