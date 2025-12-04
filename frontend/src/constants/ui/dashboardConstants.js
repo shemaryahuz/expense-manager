@@ -1,0 +1,2 @@
+export const TOP_CATEGORIES_LIMIT = 3;
+export const LAST_TRANSACTIONS_LIMIT = 3;
