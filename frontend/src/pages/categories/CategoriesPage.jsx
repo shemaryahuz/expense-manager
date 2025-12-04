@@ -9,6 +9,7 @@ import { selectCategoriesState } from "../../features/categories/categoriesSelec
 import { fetchCategoriesTransactions } from "../../features/transactions/transactionsThunks";
 
 import { STATUSES } from "../../constants/features/statusConstants";
+import { getCurrentMonth, toDate } from "../../utiles/monthUtils";
 
 import MonthHeader from "../../components/common/MonthHeader";
 import Loader from "../../components/common/Loader";
@@ -21,7 +22,7 @@ const { IDLE, LOADING, FAILED, SUCCEEDED } = STATUSES;
 export default function CategoriesPage() {
   const dispatch = useDispatch();
 
-  const [month, setMonth] = useState(new Date());
+  const [month, setMonth] = useState(getCurrentMonth);
   const [showMessage, setShowMessage] = useState(false);
 
   const { status, message, categories } = useSelector(selectCategoriesState);
@@ -33,7 +34,7 @@ export default function CategoriesPage() {
   }, [dispatch, status]);
 
   useEffect(() => {
-    dispatch(fetchCategoriesTransactions(month));
+    dispatch(fetchCategoriesTransactions(toDate(month)));
   }, [dispatch, month]);
 
   useEffect(() => {

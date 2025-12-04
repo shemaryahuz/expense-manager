@@ -21,6 +21,8 @@ import {
   clearSearched,
 } from "../../features/transactions/transactionsSlice";
 
+import { getCurrentMonth, toDate } from "../../utiles/monthUtils";
+
 import MonthHeader from "../../components/common/MonthHeader";
 import Loader from "../../components/common/Loader";
 import Feedback from "../../components/common/Feedback";
@@ -37,7 +39,7 @@ const { LOADING, FAILED, SUCCEEDED } = STATUSES;
 export default function TransactionsPage() {
   const dispatch = useDispatch();
 
-  const [month, setMonth] = useState(new Date());
+  const [month, setMonth] = useState(getCurrentMonth);
   const [search, setSearch] = useState("");
   const [isSearching, setIsSearching] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
@@ -50,7 +52,7 @@ export default function TransactionsPage() {
   const currentTransactions = isSearching ? searched : transactions;
 
   useEffect(() => {
-    dispatch(fetchTransactions(month));
+    dispatch(fetchTransactions(toDate(month)));
   }, [dispatch, month]);
 
   useEffect(() => {

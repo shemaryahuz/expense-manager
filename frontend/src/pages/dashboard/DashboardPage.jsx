@@ -23,6 +23,7 @@ import LastTransactionsCard from "./LastTransactionsCard";
 import TopCategoriesCard from "./TopCategoriesCard";
 
 import { STATUSES } from "../../constants/features/statusConstants";
+import { getCurrentMonth, toDate } from "../../utiles/monthUtils";
 
 import { dashboardStyles as styles } from "./styles/Dashboard.styles";
 
@@ -42,7 +43,7 @@ export default function DashboardPage() {
   );
   const categories = useSelector(selectExpenseCategories);
 
-  const [month, setMonth] = useState(new Date());
+  const [month, setMonth] = useState(getCurrentMonth);
 
   const loading =
     transactionsStatus === LOADING || categoriesStatus === LOADING;
@@ -58,8 +59,8 @@ export default function DashboardPage() {
   }, [dispatch, categoriesStatus]);
 
   useEffect(() => {
-    dispatch(fetchTransactions(month));
-    dispatch(fetchCategoriesTransactions(month));
+    dispatch(fetchTransactions(toDate(month)));
+    dispatch(fetchCategoriesTransactions(toDate(month)));
   }, [dispatch, month]);
 
   const handleMonthChange = (newMonth) => setMonth(newMonth);
