@@ -12,7 +12,6 @@ import { deleteCategory } from "../categories/categoriesThunks";
 
 import { updateTransaction, sortTransactionsByDate, updateTransactionsOnCategoryDelete } from "../../utiles/transactionsUtils";
 
-import { MISCELLANEOUS_ID } from "../../constants/features/categoriesConstants";
 import { STATUSES } from "../../constants/features/statusConstants";
 
 const { IDLE, LOADING, SUCCEEDED, FAILED } = STATUSES;

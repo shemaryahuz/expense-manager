@@ -162,9 +162,9 @@ export default function TransactionForm({
               value={categoryId}
               onChange={handleChange}
             >
-              {expenseCategories.map((category) => (
-                <MenuItem key={category.id} value={category.id}>
-                  {category.name}
+              {expenseCategories.map(({ id, name }) => (
+                <MenuItem key={id} value={id}>
+                  {name}
                 </MenuItem>
               ))}
             </Select>

@@ -83,7 +83,7 @@ export default function CategoryCard({ category }) {
 
   const handleDelete = (event) => {
     event.stopPropagation();
-    dispatch(deleteCategory(category.id));
+    dispatch(deleteCategory(id));
     handleDeleteClose(event);
   };
 

@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+
 import { MONTH } from "../constants/ui/dateConstants";
 
 export const getCurrentMonth = () => dayjs().startOf(MONTH);

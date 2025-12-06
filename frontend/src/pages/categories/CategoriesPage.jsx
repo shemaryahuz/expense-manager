@@ -67,7 +67,7 @@ export default function CategoriesPage() {
       {status === LOADING && <Loader />}
 
       {categories.length > 0 ? (
-        <CategoriesContainer categories={categories} />
+        <CategoriesContainer />
       ) : (
         <Typography variant="h6">No categories found</Typography>
       )}

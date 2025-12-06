@@ -14,7 +14,7 @@ import CategoriesGroup from "./CategoriesGroup";
 
 const { INCOME, DEFAULTS, CUSTOM } = GROUP_NAMES;
 
-export default function CategoriesContainer({ categories }) {
+export default function CategoriesContainer() {
   const userId = useSelector(selectUserId);
 
   const incomeCategories = useSelector(selectIncomeCategories);

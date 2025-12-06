@@ -34,23 +34,19 @@ export default function LastTransactionsCard({ transactions }) {
       </Typography>
       <List dense>
         {lastTransactions.length > 0 ? (
-          lastTransactions.map((transaction, index) => (
-            <Fragment key={transaction.id}>
+          lastTransactions.map(({ id, title, date, type, amount }, index) => (
+            <Fragment key={id}>
               <ListItem sx={styles.transactionItem}>
-                <ListItemText
-                  primary={transaction.title}
-                  secondary={transaction.date}
-                />
+                <ListItemText primary={title} secondary={date} />
                 <Box
                   sx={{
-                    color: transaction.type === INCOME ? "green" : "red",
+                    color: type === INCOME ? "green" : "red",
                     display: "flex",
                     alignItems: "center",
                   }}
                 >
                   <Typography variant="body1">
-                    {transaction.type === INCOME ? "+ " : "- "}$
-                    {transaction.amount}
+                    {type === INCOME ? "+ " : "- "}${amount}
                   </Typography>
                 </Box>
               </ListItem>

@@ -14,22 +14,19 @@ import { INCOME } from "../../constants/features/transactionsConstants";
 export default function CategoryTransactions({ transactions }) {
   return (
     <List dense>
-      {transactions.map((transaction, index) => (
-        <Fragment key={transaction.id}>
+      {transactions.map(({ id, title, date, type, amount }, index) => (
+        <Fragment key={id}>
           <ListItem sx={{ display: "flex", justifyContent: "space-between" }}>
-            <ListItemText
-              primary={transaction.title}
-              secondary={transaction.date}
-            />
+            <ListItemText primary={title} secondary={date} />
             <Box
               sx={{
-                color: transaction.type === INCOME ? "green" : "red",
+                color: type === INCOME ? "green" : "red",
                 display: "flex",
                 alignItems: "center",
               }}
             >
               <Typography variant="body1">
-                {transaction.type === INCOME ? "+ " : "- "}${transaction.amount}
+                {type === INCOME ? "+ " : "- "}${amount}
               </Typography>
             </Box>
           </ListItem>

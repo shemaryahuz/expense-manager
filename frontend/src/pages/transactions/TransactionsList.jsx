@@ -10,15 +10,15 @@ import { transactionsListStyles as styles } from "./styles/TransactionsList.styl
 
 import TransactionRow from "./TransactionRow";
 
-const headCells = ["Date", "Title", "Category", "Amount", "Actions"];
+const columnNames = ["Date", "Title", "Category", "Amount", "Actions"];
 
 export default function TransactionsList({ transactions }) {
   return (
     <Table sx={styles.table}>
       <TableHead>
         <TableRow sx={styles.tableHead}>
-          {headCells.map((headCell) => (
-            <TableCell key={headCell}>{headCell}</TableCell>
+          {columnNames.map((columnName) => (
+            <TableCell key={columnName}>{columnName}</TableCell>
           ))}
         </TableRow>
       </TableHead>

@@ -84,6 +84,7 @@ export default function LoginForm() {
           name="password"
           value={password}
           required
+          slotProps={{ htmlInput: { minLength: 4 } }}
           autoComplete="current-password"
           onChange={handleChange}
           sx={styles.input}

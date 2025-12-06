@@ -13,9 +13,9 @@ const { HOME } = ROUTE_PATHS;
 export default function ProtectedRoute() {
   const location = useLocation();
 
-  const { user, authStatus } = useSelector(selectUserState);
+  const { user, status } = useSelector(selectUserState);
 
-  const loading = authStatus === LOADING || authStatus === IDLE;
+  const loading = status === LOADING || status === IDLE;
 
   return (
     <>

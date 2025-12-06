@@ -4,7 +4,11 @@ import { useNavigate } from "react-router-dom";
 
 import { Container } from "@mui/material";
 
-import { selectUserState, clearMessage } from "../../features/user/userSlice";
+import {
+  selectUserState,
+  selectUserName,
+  clearMessage,
+} from "../../features/user/userSlice";
 
 import { STATUSES } from "../../constants/features/statusConstants";
 import { USER } from "../../constants/ui/userConstants";
@@ -24,7 +28,7 @@ export default function HomePage() {
 
   const { user, status, message } = useSelector(selectUserState);
 
-  const name = user?.name || USER;
+  const name = useSelector(selectUserName) || USER;
 
   useEffect(() => {
     if (status === SUCCEEDED && user && message) {

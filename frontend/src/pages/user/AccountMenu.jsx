@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { Box, Button, Menu, Typography } from "@mui/material";
 
-import { selectUser } from "../../features/user/userSlice";
+import { selectUser, selectUserName } from "../../features/user/userSlice";
 import { logout } from "../../features/user/userThunks";
 
 import { USER, GUEST } from "../../constants/ui/userConstants";
@@ -16,8 +16,7 @@ export default function AccountMenu({ open, anchorEl, onClose }) {
   const navigate = useNavigate();
 
   const user = useSelector(selectUser);
-
-  const name = user?.name || USER;
+  const name = useSelector(selectUserName) || USER;
 
   const handleLogin = () => {
     navigate(HOME);

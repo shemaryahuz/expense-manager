@@ -26,7 +26,6 @@ import { getCurrentMonth, toDate } from "../../utiles/monthUtils";
 import MonthHeader from "../../components/common/MonthHeader";
 import Loader from "../../components/common/Loader";
 import Feedback from "../../components/common/Feedback";
-
 import TransactionsList from "./transactionsList";
 import TransactionForm from "./TransactionForm";
 

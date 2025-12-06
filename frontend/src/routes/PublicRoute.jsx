@@ -9,8 +9,8 @@ import Loader from "../components/common/Loader";
 const { IDLE, LOADING } = STATUSES;
 
 export default function PublicRoute() {
-  const { authStatus } = useSelector(selectUserState);
+  const { status } = useSelector(selectUserState);
 
-  const loading = authStatus === LOADING || authStatus === IDLE;
+  const loading = status === LOADING || status === IDLE;
   return loading ? <Loader /> : <Outlet />;
 }

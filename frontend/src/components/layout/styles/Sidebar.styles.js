@@ -2,7 +2,6 @@ import { styled } from '@mui/material/styles';
 import { Drawer as MuiDrawer } from '@mui/material';
 import { drawerWidth, headerHeight } from './Layout.styles.js';
 
-
 const openedMixin = (theme) => ({
     width: drawerWidth,
     transition: theme.transitions.create('width', {

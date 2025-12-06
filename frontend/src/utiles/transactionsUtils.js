@@ -10,11 +10,10 @@ export const convertDatesToLocale = (transactions) =>
     });
 
 export const updateTransaction = (transactions, updatedTransaction) => {
-    updateTransaction.date = new Date(updatedTransaction.date).toLocaleDateString();
+    updatedTransaction.date = new Date(updatedTransaction.date).toLocaleDateString();
     return transactions.map((transaction) =>
         transaction.id === updatedTransaction.id ? updatedTransaction : transaction);
 }
-
 
 export const sortTransactionsByDate = (transactions) =>
     transactions.sort((prevTransaction, nextTransaction) =>

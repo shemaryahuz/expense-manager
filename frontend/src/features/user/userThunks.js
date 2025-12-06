@@ -12,8 +12,8 @@ export const signup = createAsyncThunk(
             return res.data;
 
         } catch (error) {
-            const message = 
-                error.response?.data?.message || 
+            const message =
+                error.response?.data?.message ||
                 error.message ||
                 "Signup failed";
 
@@ -31,8 +31,8 @@ export const login = createAsyncThunk(
             return res.data;
 
         } catch (error) {
-            const message = 
-                error.response?.data?.message || 
+            const message =
+                error.response?.data?.message ||
                 error.message ||
                 "Login failed";
 
@@ -50,16 +50,9 @@ export const getUser = createAsyncThunk(
             return res.data;
 
         } catch (error) {
-            // ignore error whene user is not logged in
-            if (error.response?.status === 401) {
-                return rejectWithValue(null);
-            }
-            const message = 
-                error.response?.data?.message || 
-                error.message ||
-                "Get user failed";
+            const isAuthError = error.response?.status === 401;
 
-            return rejectWithValue(message);
+            return rejectWithValue({ isAuthError });
         }
     },
 )
@@ -109,7 +102,7 @@ export const logout = createAsyncThunk(
             const res = await axios.post(`${AUTH_URL}/logout`);
 
             return res.data;
-            
+
         } catch (error) {
             const message =
                 error.response?.data?.message ||

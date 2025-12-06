@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+
 import { deleteUser, getUser, login, logout, signup, updateUser } from "./userThunks";
 import { STATUSES } from "../../constants/features/statusConstants";
 
@@ -7,7 +8,6 @@ const { IDLE, LOADING, SUCCEEDED, FAILED } = STATUSES;
 const initialState = {
     user: null,
     status: IDLE,
-    authStatus: IDLE,
     message: null,
 }
 
@@ -55,16 +55,17 @@ export const userSlice = createSlice({
 
             // get user thunk
             .addCase(getUser.pending, (state) => {
-                state.authStatus = LOADING;
+                state.status = LOADING;
             })
             .addCase(getUser.fulfilled, (state, action) => {
                 const { user } = action.payload;
 
-                state.authStatus = SUCCEEDED;
+                state.status = SUCCEEDED;
                 state.user = user;
             })
-            .addCase(getUser.rejected, (state) => {
-                state.authStatus = FAILED;
+            .addCase(getUser.rejected, (state, action) => {
+                state.status = FAILED;
+                if (action.payload?.isAuthError) state.user = null;
             })
 
             // update user thunk
@@ -120,6 +121,7 @@ export const userSlice = createSlice({
 export const selectUserState = (state) => state.user;
 export const selectUser = (state) => selectUserState(state).user;
 export const selectUserId = (state) => selectUserState(state).user?.id;
+export const selectUserName = (state) => selectUserState(state).user?.name;
 
 // actions
 export const { clearMessage } = userSlice.actions;

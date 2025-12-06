@@ -1,6 +1,3 @@
-import { INCOME_ID } from "../constants/features/categoriesConstants";
-
-
 export const getTopCategories = (categories, transactions, limit = 3) => {
 
     const categoriesIdToName = {};

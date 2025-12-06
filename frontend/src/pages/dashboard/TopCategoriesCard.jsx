@@ -30,12 +30,12 @@ export default function TopCategoriesCard({ transactions, categories }) {
       </Typography>
       <Box>
         {topCategories.length > 0 ? (
-          topCategories.map((category, index) => (
-            <Fragment key={category.name}>
+          topCategories.map(({ name, amount }, index) => (
+            <Fragment key={name}>
               <Box sx={styles.categoryItem}>
-                <Typography variant="body1">{category.name}</Typography>
+                <Typography variant="body1">{name}</Typography>
                 <Typography variant="body1" sx={styles.categoryAmount}>
-                  - ${category.amount}
+                  - ${amount}
                 </Typography>
               </Box>
               {index !== topCategories.length - 1 && <Divider />}
