@@ -1,10 +1,29 @@
 import { useSelector } from "react-redux";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 
-import { selectUser } from "../features/user/userSlice";
+import { selectUserState } from "../features/user/userSlice";
+import { STATUSES } from "../constants/features/statusConstants";
+import { ROUTE_PATHS } from "../constants/app/routes";
+
+import Loader from "../components/common/Loader";
+
+const { IDLE, LOADING } = STATUSES;
+const { HOME } = ROUTE_PATHS;
 
 export default function ProtectedRoute() {
-  const user = useSelector(selectUser);
+  const location = useLocation();
 
-  return user ? <Outlet /> : <Navigate to="/" replace />;
+  const { user, authStatus } = useSelector(selectUserState);
+
+  const loading = authStatus === LOADING || authStatus === IDLE;
+
+  return (
+    <>
+      {loading && <Loader />}
+      {!loading && user && <Outlet />}
+      {!loading && !user && (
+        <Navigate to={HOME} state={{ from: location }} replace />
+      )}
+    </>
+  );
 }
