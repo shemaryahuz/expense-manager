@@ -1,4 +1,3 @@
-
 export const transactionsListStyles = {
     table: {
         minWidth: 650,

@@ -1,4 +1,5 @@
 import { createSelector } from "@reduxjs/toolkit";
+
 import { EXPENSE, INCOME } from "../../constants/features/transactionsConstants";
 
 export const selectTransactionsState = (state) => state.transactions;
@@ -17,8 +18,8 @@ export const selectExpenseTransactions = createSelector(
     (transactions) => transactions.filter(({ type }) => type === EXPENSE)
 )
 
-export const selectTransactionsByCategoryId = (categoryId) => createSelector(
-    [selectCategoriesTransactions, () => categoryId],
+export const selectTransactionsByCategoryId = createSelector(
+    [selectCategoriesTransactions, (_, categoryId) => categoryId],
     (categoriesTransactions, categoryId) => categoriesTransactions.filter((transaction) =>
         transaction.categoryId === categoryId)
 )

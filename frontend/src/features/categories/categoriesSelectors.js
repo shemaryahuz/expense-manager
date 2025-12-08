@@ -1,6 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit";
 
 import { INCOME_ID } from "../../constants/features/categoriesConstants";
+import { selectUserId } from "../user/userSlice";
 
 export const selectCategoriesState = (state) => state.categories;
 export const selectCategories = (state) => selectCategoriesState(state).categories;
@@ -22,8 +23,8 @@ export const selectDefaultCategories = createSelector(
         id !== INCOME_ID && userId === null)
 )
 
-export const selectCustomCategories = (userId) => createSelector(
-    [selectCategories, () => userId],
+export const selectCustomCategories = createSelector(
+    [selectCategories, selectUserId],
     (categories, userId) => categories.filter((category) =>
         category.id !== INCOME_ID && category.userId === userId)
 )

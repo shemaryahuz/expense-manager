@@ -69,7 +69,7 @@ export default function TransactionRow({ transaction }) {
         <TransactionForm
           open={editDialogOpen}
           onClose={handleEditClose}
-          isExisting={true}
+          isEditMode={true}
           existingTransaction={transaction}
         />
         <IconButton onClick={handleDeleteOpen}>

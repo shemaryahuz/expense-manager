@@ -9,7 +9,7 @@ import { selectCategoriesState } from "../../features/categories/categoriesSelec
 import { fetchCategoriesTransactions } from "../../features/transactions/transactionsThunks";
 
 import { STATUSES } from "../../constants/features/statusConstants";
-import { getCurrentMonth, toDate } from "../../utiles/monthUtils";
+import { getCurrentMonth, dayjsToDate } from "../../utiles/monthUtils";
 
 import MonthHeader from "../../components/common/MonthHeader";
 import Loader from "../../components/common/Loader";
@@ -34,7 +34,7 @@ export default function CategoriesPage() {
   }, [dispatch, status]);
 
   useEffect(() => {
-    dispatch(fetchCategoriesTransactions(toDate(month)));
+    dispatch(fetchCategoriesTransactions(dayjsToDate(month)));
   }, [dispatch, month]);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export default function CategoriesPage() {
     }
   }, [status, message]);
 
-  const handleMonthChange = (newMonth) => setMonth(newMonth);
+  const handleMonthChange = (dayjsMonth) => setMonth(dayjsMonth);
 
   const handleFeedbackClose = (_, reason) => {
     if (reason !== "clickaway") {

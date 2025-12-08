@@ -9,7 +9,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import dayjs from "dayjs";
 
 import { INITIAL_DATE, MONTH, YEAR } from "../../constants/ui/dateConstants";
-import { toMonth } from "../../utiles/monthUtils";
+import { dayjsToMonthStart } from "../../utiles/monthUtils";
 
 import { monthHeaderStyles as styles } from "./styles/MonthHeader.styles";
 
@@ -20,7 +20,8 @@ export default function MonthHeader({ month, onMonthChange }) {
   const hasPrevMonth = month.isAfter(minDate, MONTH);
   const hasNextMonth = month.isBefore(maxDate, MONTH);
 
-  const handleMonthChange = (newMonth) => onMonthChange(toMonth(newMonth));
+  const handleDatePickerChange = (dayjsDate) =>
+    onMonthChange(dayjsToMonthStart(dayjsDate));
 
   const handleNextMonth = () => onMonthChange(month.add(1, MONTH));
 
@@ -44,7 +45,7 @@ export default function MonthHeader({ month, onMonthChange }) {
             openTo={MONTH}
             value={month}
             label="Month"
-            onChange={handleMonthChange}
+            onChange={handleDatePickerChange}
           />
         </DemoContainer>
       </LocalizationProvider>

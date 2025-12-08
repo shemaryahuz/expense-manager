@@ -45,22 +45,18 @@ const { LOADING, FAILED, SUCCEEDED } = STATUSES;
 export default function TransactionForm({
   open,
   onClose,
-  isExisting,
-  existingTransaction,
+  isEditMode,
+  existingTransaction = {
+    title: "",
+    amount: 0,
+    type: "",
+    categoryId: "",
+    date: null,
+  },
 }) {
-  const initialTransaction = isExisting
-    ? existingTransaction
-    : {
-        title: "",
-        amount: 0,
-        type: "",
-        categoryId: "",
-        date: null,
-      };
-
   const dispatch = useDispatch();
 
-  const [transaction, setTransaction] = useState(initialTransaction);
+  const [transaction, setTransaction] = useState(existingTransaction);
   const { title, amount, type, categoryId } = transaction;
 
   const { status, message } = useSelector(selectTransactionsState);
@@ -70,7 +66,7 @@ export default function TransactionForm({
 
   useEffect(() => {
     if (status === SUCCEEDED && message) {
-      setTransaction(initialTransaction);
+      setTransaction(existingTransaction);
       onClose();
     }
   }, [status, message]);
@@ -98,14 +94,14 @@ export default function TransactionForm({
       date: date.toISOString(),
     };
 
-    isExisting
+    isEditMode
       ? dispatch(editTransaction(transactionToSend))
       : dispatch(addTransaction(transactionToSend));
   };
 
   const handleClose = () => {
     dispatch(clearMessage());
-    setTransaction(initialTransaction);
+    setTransaction(existingTransaction);
     onClose();
   };
 
@@ -118,7 +114,7 @@ export default function TransactionForm({
       sx={{ padding: 2 }}
       closeAfterTransition={false}
     >
-      <DialogTitle>{isExisting ? "Edit" : "Add"} Transaction</DialogTitle>
+      <DialogTitle>{isEditMode ? "Edit" : "Add"} Transaction</DialogTitle>
       <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
         <TextField
           sx={{ mt: 1 }}
@@ -199,7 +195,7 @@ export default function TransactionForm({
           disabled={status === LOADING}
           sx={{ color: "success.dark" }}
         >
-          {status === LOADING ? "Saving..." : isExisting ? "Update" : "Add"}
+          {status === LOADING ? "Saving..." : isEditMode ? "Update" : "Add"}
         </Button>
       </DialogActions>
     </Dialog>

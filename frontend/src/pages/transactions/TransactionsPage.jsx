@@ -21,12 +21,12 @@ import {
   clearSearched,
 } from "../../features/transactions/transactionsSlice";
 
-import { getCurrentMonth, toDate } from "../../utiles/monthUtils";
+import { getCurrentMonth, dayjsToDate } from "../../utiles/monthUtils";
 
 import MonthHeader from "../../components/common/MonthHeader";
 import Loader from "../../components/common/Loader";
 import Feedback from "../../components/common/Feedback";
-import TransactionsList from "./transactionsList";
+import TransactionsList from "./TransactionsList";
 import TransactionForm from "./TransactionForm";
 
 import { STATUSES } from "../../constants/features/statusConstants";
@@ -51,7 +51,7 @@ export default function TransactionsPage() {
   const currentTransactions = isSearching ? searched : transactions;
 
   useEffect(() => {
-    dispatch(fetchTransactions(toDate(month)));
+    dispatch(fetchTransactions(dayjsToDate(month)));
   }, [dispatch, month]);
 
   useEffect(() => {
@@ -60,7 +60,7 @@ export default function TransactionsPage() {
     }
   }, [status, message]);
 
-  const handleMonthChange = (newMonth) => setMonth(newMonth);
+  const handleMonthChange = (dayjsMonth) => setMonth(dayjsMonth);
 
   const handleSearchChange = ({ target: { value } }) => setSearch(value);
 
@@ -125,7 +125,7 @@ export default function TransactionsPage() {
             <TransactionForm
               open={addOpen}
               onClose={handleAddClose}
-              isExisting={false}
+              isEditMode={false}
             />
           </Box>
         </Box>

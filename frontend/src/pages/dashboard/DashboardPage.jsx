@@ -23,7 +23,7 @@ import LastTransactionsCard from "./LastTransactionsCard";
 import TopCategoriesCard from "./TopCategoriesCard";
 
 import { STATUSES } from "../../constants/features/statusConstants";
-import { getCurrentMonth, toDate } from "../../utiles/monthUtils";
+import { getCurrentMonth, dayjsToDate } from "../../utiles/monthUtils";
 
 import { dashboardStyles as styles } from "./styles/Dashboard.styles";
 
@@ -59,11 +59,11 @@ export default function DashboardPage() {
   }, [dispatch, categoriesStatus]);
 
   useEffect(() => {
-    dispatch(fetchTransactions(toDate(month)));
-    dispatch(fetchCategoriesTransactions(toDate(month)));
+    dispatch(fetchTransactions(dayjsToDate(month)));
+    dispatch(fetchCategoriesTransactions(dayjsToDate(month)));
   }, [dispatch, month]);
 
-  const handleMonthChange = (newMonth) => setMonth(newMonth);
+  const handleMonthChange = (dayjsMonth) => setMonth(dayjsMonth);
 
   return (
     <Container sx={styles.container}>

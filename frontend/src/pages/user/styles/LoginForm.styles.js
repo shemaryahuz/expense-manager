@@ -1,10 +1,9 @@
-
 export const loginFormStyles = {
     container: {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        justifyContent: "center",       
+        justifyContent: "center",
         bgcolor: "background.paper",
         width: "40%",
         minWidth: "360px",

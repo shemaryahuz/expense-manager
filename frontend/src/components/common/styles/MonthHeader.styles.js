@@ -1,4 +1,3 @@
-
 export const monthHeaderStyles = {
     headerBox: {
         width: "60%",
@@ -6,7 +5,7 @@ export const monthHeaderStyles = {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        mb: 2,        
+        mb: 2,
         p: 2,
         gap: 2,
         bgcolor: "background.paper",

@@ -21,14 +21,12 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Layout />}>
-          {/* public routes */}
           <Route element={<PublicRoute />}>
             {PUBLIC_PAGES.map(({ route, Element }) => (
               <Route key={route} path={route} element={<Element />} />
             ))}
           </Route>
 
-          {/* protected routes */}
           <Route element={<ProtectedRoute />}>
             {PRIVATE_PAGES.map(({ route, Element }) => (
               <Route key={route} path={route} element={<Element />} />

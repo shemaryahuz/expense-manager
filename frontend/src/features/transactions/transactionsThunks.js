@@ -64,9 +64,9 @@ export const searchTransactions = createAsyncThunk(
             const encodedSearch = encodeURIComponent(search);
             const url = `${TRANSACTION_URL}/search?title=${encodedSearch}`
             const res = await axios.get(url);
-    
+
             const transactionsWithDates = convertDatesToLocale(res.data);
-    
+
             return transactionsWithDates;
 
         } catch (error) {

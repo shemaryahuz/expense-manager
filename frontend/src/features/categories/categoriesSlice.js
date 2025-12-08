@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+
 import { addCategory, deleteCategory, fetchCategories, updateCategory } from "./categoriesThunks";
 import { STATUSES } from "../../constants/features/statusConstants";
 

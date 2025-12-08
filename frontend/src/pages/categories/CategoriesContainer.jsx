@@ -19,7 +19,7 @@ export default function CategoriesContainer() {
 
   const incomeCategories = useSelector(selectIncomeCategories);
   const defaultCategories = useSelector(selectDefaultCategories);
-  const customCategories = useSelector(selectCustomCategories(userId));
+  const customCategories = useSelector(selectCustomCategories);
 
   return (
     <Grid container direction="column" mb={4}>
