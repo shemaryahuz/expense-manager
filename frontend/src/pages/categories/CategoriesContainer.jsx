@@ -1,7 +1,6 @@
 import { useSelector } from "react-redux";
 import { Grid } from "@mui/material";
 
-import { selectUserId } from "../../features/user/userSlice";
 import {
   selectDefaultCategories,
   selectIncomeCategories,
@@ -15,8 +14,6 @@ import CategoriesGroup from "./CategoriesGroup";
 const { INCOME, DEFAULTS, CUSTOM } = GROUP_NAMES;
 
 export default function CategoriesContainer() {
-  const userId = useSelector(selectUserId);
-
   const incomeCategories = useSelector(selectIncomeCategories);
   const defaultCategories = useSelector(selectDefaultCategories);
   const customCategories = useSelector(selectCustomCategories);
