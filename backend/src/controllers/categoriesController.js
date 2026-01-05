@@ -7,12 +7,12 @@ const PATH = "./database/categories.json"; // relative to server.js
 const INCOME_ID = "c0";
 const MISCELLANEOUS_ID = "c1";
 
-async function readCategories() {
+export async function readCategories() {
     const categories = await readFile(PATH, "utf-8");
     return JSON.parse(categories);
 };
 
-async function writeCategories(categories) {
+export async function writeCategories(categories) {
     await writeFile(PATH, JSON.stringify(categories, null, 2));
 };
 
@@ -34,7 +34,7 @@ export async function getCategories(req, res) {
 
     } catch (error) {
 
-        console.error(error);        
+        console.error(error);
         res.status(500).send({ message: error.message || "Something went wrong" });
     }
 }
@@ -69,7 +69,7 @@ export async function updateCategory(req, res) {
 
         const { id } = req.params;
         const { name } = req.body;
-        
+
         if (!name) {
             return res.status(400).send({ message: "Category name is required" });
         }

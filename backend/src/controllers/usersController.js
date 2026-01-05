@@ -1,6 +1,9 @@
 import { readFile, writeFile } from "fs/promises";
 import bcrypt from "bcrypt";
 
+import { readTransactions, writeTransactions } from "./transactionsController.js";
+import { readCategories, writeCategories } from "./categoriesController.js";
+
 const PATH = "./database/users.json"; // relative to server.js
 
 export async function readUsers() {
@@ -122,6 +125,16 @@ export async function deleteUser(req, res) {
 
         const newUsers = usersJson.filter((user) => user.id !== id);
         await writeUsers(newUsers);
+
+        // delete user from categories
+        const categoriesJson = await readCategories();
+        const newCategories = categoriesJson.filter((category) => category.userId !== id);
+        await writeCategories(newCategories);
+
+        // delete user from transactions
+        const transactionsJson = await readTransactions();
+        const newTransactions = transactionsJson.filter((transaction) => transaction.userId !== id);
+        await writeTransactions(newTransactions);
 
         res.send({ message: "User deleted successfully" });
 
