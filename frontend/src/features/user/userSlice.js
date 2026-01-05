@@ -1,6 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { deleteUser, getUser, login, logout, signup, updateUser } from "./userThunks";
+import {
+    deleteUser,
+    getUser,
+    login,
+    logout,
+    signup,
+    updateUser,
+    updateUserPassword,
+} from "./userThunks";
 import { STATUSES } from "../../constants/features/statusConstants";
 
 const { IDLE, LOADING, SUCCEEDED, FAILED } = STATUSES;

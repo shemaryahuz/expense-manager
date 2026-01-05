@@ -9,7 +9,7 @@ import { logout } from "../../features/user/userThunks";
 import { USER, GUEST } from "../../constants/ui/userConstants";
 import { ROUTE_PATHS } from "../../constants/app/routes";
 
-const { HOME } = ROUTE_PATHS;
+const { HOME, PROFILE } = ROUTE_PATHS;
 
 export default function AccountMenu({ open, anchorEl, onClose }) {
   const dispatch = useDispatch();
@@ -20,6 +20,11 @@ export default function AccountMenu({ open, anchorEl, onClose }) {
 
   const handleLogin = () => {
     navigate(HOME);
+    onClose();
+  };
+
+  const handleOpenProfile = () => {
+    navigate(PROFILE);
     onClose();
   };
 
@@ -44,6 +49,13 @@ export default function AccountMenu({ open, anchorEl, onClose }) {
             <Typography variant="body2" color="text.secondary">
               You are logged in
             </Typography>
+            <Button
+              variant="outlined"
+              onClick={handleOpenProfile}
+              sx={{ textTransform: "none" }}
+            >
+              Account settings
+            </Button>
             <Button
               variant="contained"
               onClick={handleLogout}

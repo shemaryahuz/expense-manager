@@ -5,21 +5,22 @@ export const ROUTE_PATHS = {
     DASHBOARD: "/dashboard",
     TRANSACTIONS: "/transactions",
     CATEGORIES: "/categories",
-}
+    PROFILE: "/profile",
+};
 
 const ROUTE_NAMES = {
     HOME: "Home",
     DASHBOARD: "Dashboard",
     TRANSACTIONS: "Transactions",
     CATEGORIES: "Categories",
-}
+};
 
 const ROUTE_ICONS = {
     HOME: Home,
     DASHBOARD: Dashboard,
     TRANSACTIONS: ReceiptLong,
     CATEGORIES: Category,
-}
+};
 
 export const ROUTES = [
     {
@@ -42,4 +43,4 @@ export const ROUTES = [
         name: ROUTE_NAMES.CATEGORIES,
         Icon: ROUTE_ICONS.CATEGORIES,
     },
-]
+];
