@@ -112,7 +112,13 @@ frontend/
 │   │   │   └── ...
 │   │   └── user/
 │   │       ├── LoginForm.jsx
-│   │       └── AccountMenu.jsx
+│   │       ├── AccountMenu.jsx
+│   │       ├── ProfilePage.jsx
+│   │       ├── ProfileHeader.jsx
+│   │       ├── ProfileDetailsSection.jsx
+│   │       ├── ProfilePasswordSection.jsx
+│   │       ├── ProfileDeleteSection.jsx
+│   │       └── DeleteAccountDialog.jsx
 │   │
 │   ├── routes/                 # Route guards
 │   │   ├── ProtectedRoute.jsx  # Requires authentication
@@ -162,6 +168,7 @@ The application uses **Redux Toolkit** for centralized state management:
   - `/dashboard` - Financial overview and statistics
   - `/transactions` - Transaction list and management
   - `/categories` - Category management
+  - `/profile` - Account settings (profile, password, delete account)
 
 **Route Guards**:
 - `PublicRoute` - Redirects authenticated users away from public pages
@@ -235,6 +242,20 @@ All API calls are made through Redux thunks, which:
   - Delete user-owned categories
   - View transactions per category
 - Components: `CategoriesPage`, `CategoryCard`, `AddCategoryForm`, `CategoryTransactions`
+
+### Profile / Account Settings (`/profile`)
+
+- **Protected**: Requires authentication
+- **Features**:
+  - View current account details (name, email)
+  - Update profile (name and email)
+  - Update password
+  - Delete account (with confirmation dialog)
+- Behavior:
+  - All actions use Redux thunks (`updateUser`, `updateUserPassword`, `deleteUser`, `logout`)
+  - Status and feedback are displayed using `AlertMessage` and `Feedback`
+  - After deleting the user, the app redirects to the home page where the login form is shown
+- Components: `ProfilePage`, `ProfileHeader`, `ProfileDetailsSection`, `ProfilePasswordSection`, `ProfileDeleteSection`, `DeleteAccountDialog`
 
 ## Configuration
 

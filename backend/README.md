@@ -232,7 +232,63 @@ Delete the currently authenticated user account.
 - `404` - User not found
 - `500` - Server error
 
-**Note:** The `updateUser` and `updateUserPassword` functions exist in `usersController.js` but are not currently exposed via routes.
+#### `PUT /me`
+Update the currently authenticated user's profile (name and email).
+
+**Request Body:**
+```json
+{
+  "name": "Updated Name",
+  "email": "updated-email@example.com"
+}
+```
+
+**Response (200):**
+```json
+{
+  "user": {
+    "id": "1234567890",
+    "name": "Updated Name",
+    "email": "updated-email@example.com"
+  },
+  "message": "User updated successfully"
+}
+```
+
+**Errors:**
+- `400` - Missing name or email
+- `401` - Unauthorized
+- `404` - User not found
+- `409` - Email already exists
+- `500` - Server error
+
+#### `PUT /me/password`
+Update the currently authenticated user's password.
+
+**Request Body:**
+```json
+{
+  "password": "newSecurePassword123"
+}
+```
+
+**Response (200):**
+```json
+{
+  "user": {
+    "id": "1234567890",
+    "name": "John Doe",
+    "email": "john@example.com"
+  },
+  "message": "Password updated successfully"
+}
+```
+
+**Errors:**
+- `400` - Missing password
+- `401` - Unauthorized
+- `404` - User not found
+- `500` - Server error
 
 ### Category Endpoints (`/api/categories`)
 

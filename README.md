@@ -10,6 +10,7 @@ A full-stack expense tracking application built as a monorepo with a cookie-base
 ## Features
 
 - **User Authentication**: Secure signup/login with JWT tokens stored in HTTP-only cookies
+- **Account Management**: View profile, update name/email, change password, and delete account
 - **Transaction Management**: Create, read, update, and delete income and expense transactions
 - **Category Management**: Custom categories with default system categories (Income, Miscellaneous)
 - **Dashboard**: Monthly budget overview, top spending categories, and recent transactions
@@ -143,6 +144,8 @@ All API endpoints are prefixed with `/api`. Authentication is required for most 
 ### Users (`/api/users`)
 - `GET /` - Get all users (requires auth)
 - `GET /me` - Get current authenticated user
+- `PUT /me` - Update current user's name and email
+- `PUT /me/password` - Update current user's password
 - `DELETE /me` - Delete current user account
 
 ### Categories (`/api/categories`)
@@ -167,6 +170,7 @@ For detailed API documentation, see [`backend/README.md`](backend/README.md).
 - `/dashboard` - Protected dashboard with monthly overview
 - `/transactions` - Protected transaction list and management
 - `/categories` - Protected category management
+- `/profile` - Protected account settings (profile, password, delete account)
 
 For detailed frontend documentation, see [`frontend/README.md`](frontend/README.md).
 
