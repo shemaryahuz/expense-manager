@@ -61,7 +61,7 @@ export const updateUser = createAsyncThunk(
     "user/updateUser",
     async (user, { rejectWithValue }) => {
         try {
-            const res = await axios.put(`${USER_URL}/${user.id}`, user);
+            const res = await axios.put(`${USER_URL}/me`, user);
 
             return res.data;
 
@@ -76,11 +76,30 @@ export const updateUser = createAsyncThunk(
     },
 )
 
+export const updateUserPassword = createAsyncThunk(
+    "user/updateUserPassword",
+    async (password, { rejectWithValue }) => {
+        try {
+            const res = await axios.put(`${USER_URL}/me/password`, password);
+
+            return res.data;
+
+        } catch (error) {
+            const message =
+                error.response?.data?.message ||
+                error.message ||
+                "Update user password failed";
+
+            return rejectWithValue(message);
+        }
+    },
+)
+
 export const deleteUser = createAsyncThunk(
     "user/deleteUser",
-    async (id, { rejectWithValue }) => {
+    async (_, { rejectWithValue }) => {
         try {
-            const res = await axios.delete(`${USER_URL}/${id}`);
+            const res = await axios.delete(`${USER_URL}/me`);
 
             return res.data;
 

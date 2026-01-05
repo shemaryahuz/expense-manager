@@ -84,6 +84,21 @@ export const userSlice = createSlice({
                 state.message = action.payload || action.error.message;
             })
 
+            // update user password thunk
+            .addCase(updateUserPassword.pending, (state) => {
+                state.status = LOADING;
+            })
+            .addCase(updateUserPassword.fulfilled, (state, action) => {
+                const { message } = action.payload;
+
+                state.status = SUCCEEDED;
+                state.message = message;
+            })
+            .addCase(updateUserPassword.rejected, (state, action) => {
+                state.status = FAILED;
+                state.message = action.payload || action.error.message;
+            })
+
             // delete user thunk
             .addCase(deleteUser.pending, (state) => {
                 state.status = LOADING;

@@ -57,8 +57,16 @@ export async function updateUser(req, res) {
             return res.status(404).send({ message: "User not found" });
         }
 
+
+        if (updatedUser.email !== email) {
+            const existingUser = usersJson.find((user) => user.email === email);
+            if (existingUser) {
+                return res.status(409).send({ message: "Email already exists" });
+            }
+            updatedUser.email = email;
+        }
+
         updatedUser.name = name;
-        updatedUser.email = email;
 
         await writeUsers(usersJson);
 
@@ -76,7 +84,7 @@ export async function updateUserPassword(req, res) {
         const { password } = req.body;
 
         if (!password) {
-            return res.status(400).send({ message: "Password is required"});
+            return res.status(400).send({ message: "Password is required" });
         }
 
         const usersJson = await readUsers();
