@@ -7,8 +7,8 @@ import usersRouter from "./src/routes/usersRouter.js";
 import transactionsRouter from "./src/routes/transactionsRouter.js";
 import categoriesRouter from "./src/routes/categoriesRouter.js";
 
-const CLIENT_URL = env.CLIENT_URL || "http://localhost:5173";
-const PORT = env.PORT || 3000;
+const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5173";
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 
@@ -23,5 +23,5 @@ app.use("/api/categories", categoriesRouter);
 app.use("/", (req, res) => res.sendStatus(404));
 
 app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    console.log(`server is running on port ${PORT}`);
 });
