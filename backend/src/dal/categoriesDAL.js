@@ -1,0 +1,73 @@
+import { supabase } from "../config/supabase.js";
+
+export async function findUserCategories(userId) {
+    const { data, error } = await supabase.from("categories")
+        .select("*")
+        .or(`user_id.is.null, user_id.eq.${userId}`)
+        .order("created_at", { ascending: true });
+
+    if (error) {
+        console.error(error);
+        return null;
+    }
+
+    return data;
+}
+
+export async function createCategory({ name, userId }) {
+    const { data, error } = await supabase.from("categories")
+        .insert([{
+            name,
+            user_id: userId
+        }])
+        .select("*")
+        .single();
+
+    if (error) {
+        console.error(error);
+        return null;
+    }
+
+    return data;
+}
+
+export async function updateCategoryName(id, { name }) {
+    const { data, error } = await supabase.from("categories")
+        .update({ name })
+        .eq("id", id)
+        .select("*")
+        .single();
+
+    if (error) {
+        console.error(error);
+        return null;
+    }
+
+    return data;
+}
+
+export async function deleteCategoryById(id) {
+    const { error } = await supabase.from("categories")
+        .delete()
+        .eq("id", id);
+
+    if (error) {
+        console.error(error);
+        return false;
+    }
+
+    return true;
+}
+
+export async function deleteUserCategories(userId) {
+    const { error } = await supabase.from("categories")
+        .delete()
+        .eq("user_id", userId);
+
+    if (error) {
+        console.error(error);
+        return false;
+    }
+
+    return true;
+}
