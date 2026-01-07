@@ -1,6 +1,6 @@
 # Expense Manager API (Backend)
 
-Express.js REST API server that provides authentication and CRUD operations for users, categories, and transactions. The service uses JSON file-based storage for simplicity, making it ideal for demos, local development, and learning purposes.
+Express.js REST API server that provides authentication and CRUD operations for users, categories, and transactions. The service now uses **Supabase (PostgreSQL)** for persistence.
 
 ## Tech Stack
 
@@ -10,17 +10,22 @@ Express.js REST API server that provides authentication and CRUD operations for 
 - **bcrypt** - Password hashing (10 rounds)
 - **cookie-parser** - HTTP-only cookie management
 - **cors** - Cross-origin resource sharing
-- **File-based storage** - JSON files in `database/` directory
+- **Supabase (PostgreSQL)** - Managed database
 
 ## Prerequisites
 
 - Node.js 18 or newer
 - npm 9+
+- Supabase project (PostgreSQL)
 - `.env` file in the `backend/` directory with:
   ```env
   JWT_SECRET=your-strong-random-secret-key-here
   PORT=3000
+  CLIENT_URL=http://localhost:5173
+  SUPABASE_URL=your-supabase-project-url
+  SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
   ```
+  - `SUPABASE_SERVICE_ROLE_KEY` is required for server-side operations; keep it secret.
 
 ## Installation
 
@@ -39,19 +44,59 @@ This runs `node --watch --env-file=.env server.js`, which:
 - Watches for file changes and automatically restarts
 - Loads environment variables from `.env`
 - Starts the server on port 3000 (or the port specified in `.env`)
+- Connects to Supabase using the supplied credentials
 
 The server will be available at `http://localhost:3000` with the API under `/api`.
+
+## Supabase Setup (one-time)
+
+1. Create a Supabase project (PostgreSQL).
+2. In the Supabase SQL editor, run:
+   ```sql
+   create table if not exists public.users (
+     id uuid primary key default gen_random_uuid(),
+     name text not null,
+     email text not null unique,
+     password_hash text not null,
+     created_at timestamptz not null default now(),
+     updated_at timestamptz not null default now()
+   );
+
+   create table if not exists public.categories (
+     id uuid primary key default gen_random_uuid(),
+     name text not null,
+     user_id uuid references public.users(id) on delete cascade,
+     created_at timestamptz not null default now(),
+     updated_at timestamptz not null default now()
+   );
+
+   create table if not exists public.transactions (
+     id uuid primary key default gen_random_uuid(),
+     user_id uuid not null references public.users(id) on delete cascade,
+     category_id uuid not null references public.categories(id) on delete set null,
+     title text not null,
+     type text not null check (type in ('income','expense')),
+     amount numeric(12,2) not null,
+     date timestamptz not null,
+     created_at timestamptz not null default now(),
+     updated_at timestamptz not null default now()
+   );
+
+   insert into public.categories (id, name, user_id)
+   values
+     (gen_random_uuid(), 'Income', null),
+     (gen_random_uuid(), 'Miscellaneous', null)
+   on conflict do nothing;
+   ```
+3. Set `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` in `backend/.env`.
 
 ## Project Structure
 
 ```
 backend/
-├── database/                 # JSON file storage
-│   ├── users.json           # User accounts
-│   ├── categories.json      # Transaction categories
-│   └── transactions.json    # Transaction records
-│
 ├── src/
+│   ├── config/              # Supabase client setup
+│   ├── dal/                 # Data access layer (Supabase queries)
 │   ├── controllers/         # Business logic layer
 │   │   ├── authController.js      # Signup, login, logout
 │   │   ├── usersController.js     # User CRUD operations
@@ -76,7 +121,7 @@ backend/
 
 1. **Request arrives** at `server.js`
 2. **Middleware applied**:
-   - CORS (allows `http://localhost:5173`)
+   - CORS (allows `CLIENT_URL`, default `http://localhost:5173`)
    - Cookie parser (extracts `token` cookie)
    - JSON body parser
 3. **Route matching**: Request is routed to appropriate router (`/api/auth`, `/api/users`, etc.)
@@ -84,7 +129,7 @@ backend/
    - Extract `token` from cookies
    - Verify JWT signature using `JWT_SECRET`
    - Decode payload and inject `req.userId`
-5. **Controller execution**: Business logic reads/writes JSON files
+5. **Controller execution**: Business logic uses Supabase via the DAL
 6. **Response sent**: JSON response with appropriate status code
 
 ## API Reference
@@ -549,40 +594,44 @@ Delete a transaction.
 - `404` - Transaction not found
 - `500` - Server error
 
-## Data Models
+## Data Models (Supabase Tables)
 
-### User
+### User (`users`)
 ```json
 {
-  "id": "string",
+  "id": "uuid",
   "name": "string",
   "email": "string",
-  "passwordHash": "string"
+  "password_hash": "string",
+  "created_at": "timestamp",
+  "updated_at": "timestamp"
 }
 ```
 
-### Category
+### Category (`categories`)
 ```json
 {
-  "id": "string",
+  "id": "uuid",
   "name": "string",
-  "userId": "string | null"
+  "user_id": "uuid | null",
+  "created_at": "timestamp",
+  "updated_at": "timestamp"
 }
 ```
+- `user_id: null` indicates a default system category (e.g., Income, Miscellaneous)
 
-- `userId: null` indicates a default system category
-- Default categories: "Income" (id: `c0`), "Miscellaneous" (id: `c1`)
-
-### Transaction
+### Transaction (`transactions`)
 ```json
 {
-  "id": "string",
-  "userId": "string",
-  "categoryId": "string",
+  "id": "uuid",
+  "user_id": "uuid",
+  "category_id": "uuid",
   "title": "string",
   "type": "income" | "expense",
   "amount": "number",
-  "date": "string (ISO 8601)"
+  "date": "string (ISO 8601)",
+  "created_at": "timestamp",
+  "updated_at": "timestamp"
 }
 ```
 
@@ -615,36 +664,17 @@ curl -b cookie.txt -X POST http://localhost:3000/api/auth/logout
 
 ## Data Storage
 
-The application uses JSON files in the `database/` directory:
+The application uses Supabase (PostgreSQL) tables:
 
-- **`users.json`** - User accounts with hashed passwords
-- **`categories.json`** - Transaction categories (includes defaults)
-- **`transactions.json`** - All transaction records
+- **`users`** - User accounts with hashed passwords
+- **`categories`** - Transaction categories (includes defaults with `user_id: null`)
+- **`transactions`** - All transaction records
 
-### Storage Characteristics
+### Default Categories
 
-- **Synchronous I/O**: Each request reads/writes the entire file
-- **No concurrency control**: Avoid concurrent edits to prevent race conditions
-- **File format**: Pretty-printed JSON (2-space indentation)
-- **Default categories**: Must have `userId: null` and should not be manually removed
-
-### Initializing Default Categories
-
-The `categories.json` file should contain at minimum:
-```json
-[
-  {
-    "id": "c0",
-    "name": "Income",
-    "userId": null
-  },
-  {
-    "id": "c1",
-    "name": "Miscellaneous",
-    "userId": null
-  }
-]
-```
+Ensure default categories exist in `categories` with `user_id: null`, including at minimum:
+- Income
+- Miscellaneous
 
 ## Error Handling
 
@@ -691,22 +721,16 @@ netstat -ano | findstr :3000  # Windows
 - Verify the secret hasn't changed between server restarts
 - Check that cookies are being sent with requests (`withCredentials: true`)
 
-### File Write Errors
-- Ensure `database/` directory exists and is writable
-- Check file permissions: `chmod 644 database/*.json`
-- Verify disk space is available
-
-### Data Corruption
-If JSON files become corrupted:
-1. Stop the server
-2. Restore from backup or reset files to initial state
-3. Restart the server
+### Supabase Connection Issues
+- Verify `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` in `.env`
+- Ensure the service role key has insert/update/delete permissions for your tables
+- Confirm the Supabase project is reachable from your network
 
 ## Limitations & Production Considerations
 
 ⚠️ **This is a development/demo application. For production:**
 
-1. **Database**: Replace JSON files with a proper database (PostgreSQL, MongoDB, etc.)
+1. **Database**: Supabase is used for persistence; harden roles, RLS, and backups for production
 2. **Security**:
    - Use HTTPS
    - Enable `secure: true` for cookies
@@ -730,6 +754,6 @@ If JSON files become corrupted:
 
 - Use `node --watch` for automatic restarts during development
 - Check server console for error messages
-- Verify JSON file structure if data seems incorrect
+- Verify Supabase table data if results seem incorrect
 - Test API endpoints with tools like Postman or curl
 - Use Redux DevTools to inspect frontend state

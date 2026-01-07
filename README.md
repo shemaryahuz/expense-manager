@@ -4,7 +4,7 @@ A full-stack expense tracking application built as a monorepo with a cookie-base
 
 ## Repository Layout
 
-- **`backend/`** – Express 5 server with JSON file-based storage, JWT authentication, and REST APIs
+- **`backend/`** – Express 5 server with Supabase (PostgreSQL), JWT authentication, and REST APIs
 - **`frontend/`** – React 19 application using Redux Toolkit, React Router v7, and Material UI v7
 
 ## Features
@@ -22,11 +22,11 @@ A full-stack expense tracking application built as a monorepo with a cookie-base
 ### Backend
 - Node.js 18+ with ES modules
 - Express 5
+- Supabase (PostgreSQL) for persistence
 - JWT authentication (jsonwebtoken)
 - Password hashing (bcrypt)
 - Cookie-based sessions (cookie-parser)
 - CORS enabled for frontend communication
-- JSON file-based data persistence
 
 ### Frontend
 - React 19 with StrictMode
@@ -59,12 +59,14 @@ Create a `.env` file in the `backend/` directory:
 ```env
 JWT_SECRET=your-strong-random-secret-key-here
 PORT=3000
+CLIENT_URL=http://localhost:5173
+SUPABASE_URL=your-supabase-project-url
+SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
 ```
 
-**Important**: Replace `JWT_SECRET` with a long, random string for production use. You can generate one using:
-```bash
-node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
-```
+**Important**:
+- Replace `JWT_SECRET` with a long, random string (e.g., `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`).
+- Keep `SUPABASE_SERVICE_ROLE_KEY` secret; it is required for server-side Supabase access.
 
 ### 3. Install Dependencies
 
@@ -89,6 +91,48 @@ npm start
 
 The server will start on `http://localhost:3000` (or the port specified in `.env`). The API is available under `/api`.
 
+### 5. Set Up Supabase (one-time)
+
+1. Create a Supabase project (PostgreSQL).
+2. Run the SQL below in the Supabase SQL editor to create tables and seed default categories:
+   ```sql
+   create table if not exists public.users (
+     id uuid primary key default gen_random_uuid(),
+     name text not null,
+     email text not null unique,
+     password_hash text not null,
+     created_at timestamptz not null default now(),
+     updated_at timestamptz not null default now()
+   );
+
+   create table if not exists public.categories (
+     id uuid primary key default gen_random_uuid(),
+     name text not null,
+     user_id uuid references public.users(id) on delete cascade,
+     created_at timestamptz not null default now(),
+     updated_at timestamptz not null default now()
+   );
+
+   create table if not exists public.transactions (
+     id uuid primary key default gen_random_uuid(),
+     user_id uuid not null references public.users(id) on delete cascade,
+     category_id uuid not null references public.categories(id) on delete set null,
+     title text not null,
+     type text not null check (type in ('income','expense')),
+     amount numeric(12,2) not null,
+     date timestamptz not null,
+     created_at timestamptz not null default now(),
+     updated_at timestamptz not null default now()
+   );
+
+   insert into public.categories (id, name, user_id)
+   values
+     (gen_random_uuid(), 'Income', null),
+     (gen_random_uuid(), 'Miscellaneous', null)
+   on conflict do nothing;
+   ```
+3. Set `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` in `backend/.env` to the project credentials.
+
 ### 5. Run the Frontend Development Server
 
 From the `frontend/` directory (in a new terminal):
@@ -103,14 +147,13 @@ The frontend will be available at `http://localhost:5173`.
 ```
 expense-manager/
 ├── backend/
-│   ├── database/           # JSON file storage
-│   │   ├── users.json
-│   │   ├── categories.json
-│   │   └── transactions.json
 │   ├── src/
+│   │   ├── config/         # Supabase client setup
+│   │   ├── dal/            # Data access layer (Supabase queries)
 │   │   ├── controllers/    # Business logic
 │   │   ├── middlewares/    # Authentication middleware
-│   │   └── routes/         # Express route handlers
+│   │   ├── routes/         # Express route handlers
+│   │   └── utils/          # Helpers (e.g., case conversion)
 │   ├── server.js           # Application entry point
 │   ├── package.json
 │   └── .env                # Environment variables (create this)
@@ -178,8 +221,8 @@ For detailed frontend documentation, see [`frontend/README.md`](frontend/README.
 
 ### Backend Development
 - The server uses `node --watch` for automatic restarts on file changes
-- JSON files in `database/` are the data store (ensure they're writable)
-- Default categories are stored with `userId: null` and cannot be deleted
+- Data is stored in Supabase tables (`users`, `categories`, `transactions`)
+- Default categories (Income, Miscellaneous) should exist in Supabase with `user_id: null`
 
 ### Frontend Development
 - Vite provides hot module replacement (HMR) for instant updates
@@ -191,9 +234,8 @@ For detailed frontend documentation, see [`frontend/README.md`](frontend/README.
 ### Backend
 The backend runs directly with Node.js. For production:
 - Use a process manager like PM2
-- Set up environment variables securely
+- Set up environment variables securely (including Supabase keys)
 - Consider using a reverse proxy (nginx) with HTTPS
-- Replace JSON file storage with a proper database
 
 ### Frontend
 Build the frontend for production:
@@ -225,7 +267,7 @@ npm run preview
 ### Backend Issues
 - **Port already in use**: Change `PORT` in `.env` or kill the process using port 3000
 - **JWT errors**: Ensure `JWT_SECRET` is set in `.env`
-- **File write errors**: Check that `database/` directory is writable
+- **Supabase errors**: Verify `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` are set correctly
 
 ### Frontend Issues
 - **API connection errors**: Verify backend is running on `http://localhost:3000`
@@ -234,8 +276,8 @@ npm run preview
 
 ### Common Issues
 - **Cookie not persisting**: Ensure `withCredentials: true` is set in Axios (already configured)
-- **Authentication fails**: Check that JWT_SECRET matches between sessions
-- **Data not persisting**: Verify JSON files in `backend/database/` are writable
+- **Authentication fails**: Check that `JWT_SECRET` is consistent
+- **Data not persisting**: Verify Supabase credentials and table access
 
 ## Contributing
 
