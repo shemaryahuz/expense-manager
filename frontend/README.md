@@ -261,27 +261,49 @@ All API calls are made through Redux thunks, which:
 
 ### API Base URL
 
-Update the API base URL in `src/constants/api/urlConstants.js`:
+The base API URL is defined in `src/constants/api/urlConstants.js` and is driven by a Vite environment variable:
 
 ```javascript
-export const BASE_URL = "http://localhost:3000/api";
-```
-
-Or use environment variables in `src/main.jsx`:
-
-```javascript
-axios.defaults.baseURL = import.meta.env.VITE_API_URL || "http://localhost:3000/api";
+export const BASE_URL =
+  import.meta.env.VITE_API_URL || "http://localhost:3000/api";
 ```
 
 ### Environment Variables
 
-Create a `.env` file in the `frontend/` directory (optional):
+Create a `.env` file in the `frontend/` directory:
 
 ```env
 VITE_API_URL=http://localhost:3000/api
+VITE_SUPABASE_INCOME_CATEGORY_ID=<your_income_category_id>
+VITE_SUPABASE_MISC_CATEGORY_ID=<your_misc_category_id>
 ```
 
 Vite requires the `VITE_` prefix for environment variables to be exposed to the client.
+
+### Supabase Category IDs
+
+The application treats two categories as **special defaults** stored in Supabase:
+
+- **Income category** (`INCOME_ID`) – used for positive transactions
+- **Miscellaneous category** (`MISCELLANEOUS_ID`) – fallback category for reassigned expenses
+
+Because these IDs come from your own Supabase database, configure them through Vite environment variables:
+
+1. In your Supabase project, create (or locate) the two default categories (e.g., `Income` and `Miscellaneous`) and note their `id` values.
+2. Create or update `.env` in the `frontend/` directory:
+
+```env
+VITE_SUPABASE_INCOME_CATEGORY_ID=<your_income_category_id>
+VITE_SUPABASE_MISC_CATEGORY_ID=<your_misc_category_id>
+```
+
+3. Restart the Vite dev server after changing `.env`:
+
+```bash
+npm run dev
+```
+
+If these variables are not set, the app will fall back to the legacy IDs `"c0"` (income) and `"c1"` (miscellaneous), which will **not** match your Supabase data. Always set these env variables when using your own Supabase database.
 
 ### Vite Configuration
 

@@ -88,11 +88,11 @@ export async function deleteCategory(req, res) {
             return res.status(404).send({ message: "Category not found" });
         }
 
-        if (category.user_id === null) {
+        if (category.userId === null) {
             return res.status(400).send({ message: "Cannot delete default category" });
         }
 
-        if (category.user_id !== userId) {
+        if (category.userId !== userId) {
             return res.status(403).send({ message: "You are not authorized to delete this category" });
         }
 

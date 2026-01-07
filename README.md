@@ -68,6 +68,16 @@ SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
 - Replace `JWT_SECRET` with a long, random string (e.g., `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`).
 - Keep `SUPABASE_SERVICE_ROLE_KEY` secret; it is required for server-side Supabase access.
 
+For the **frontend**, create a `.env` file in the `frontend/` directory:
+
+```env
+VITE_API_URL=http://localhost:3000/api
+VITE_SUPABASE_INCOME_CATEGORY_ID=<your_income_category_id>
+VITE_SUPABASE_MISC_CATEGORY_ID=<your_misc_category_id>
+```
+
+These variables control the API base URL and the IDs of the two default Supabase categories (`Income` and `Miscellaneous`) that the frontend treats as special.
+
 ### 3. Install Dependencies
 
 Install backend dependencies:
