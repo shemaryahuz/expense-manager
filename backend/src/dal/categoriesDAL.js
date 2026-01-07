@@ -14,6 +14,20 @@ export async function findUserCategories(userId) {
     return data;
 }
 
+export async function findCategoryById(id) {
+    const { data, error } = await supabase.from("categories")
+        .select("*")
+        .eq("id", id)
+        .single();
+
+    if (error) {
+        console.error(error);
+        return null;
+    }
+
+    return data;
+}
+
 export async function createCategory({ name, userId }) {
     const { data, error } = await supabase.from("categories")
         .insert([{
@@ -70,4 +84,24 @@ export async function deleteUserCategories(userId) {
     }
 
     return true;
+}
+
+export async function isDefaultCategort(id) {
+    const category = await findCategoryById(id);
+    return category && category.user_id === null;
+}
+
+export async function getMiscellaneousCategoryId() {
+    const { data, error } = await supabase.from("categories")
+        .select("id")
+        .eq("name", "Miscellaneous")
+        .is("user_id", null)
+        .single();
+
+    if (error) {
+        console.error(error);
+        return null;
+    }
+
+    return data?.id;
 }

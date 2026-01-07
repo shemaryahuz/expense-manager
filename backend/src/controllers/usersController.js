@@ -1,8 +1,8 @@
 import bcrypt from "bcrypt";
 
-import { readTransactions, writeTransactions } from "./transactionsController.js";
 import { deleteUserById, findUserByEmail, findUserById, findUsers, updateUserPassword, updateUserProfile } from "../dal/usersDAL.js";
 import { deleteUserCategories } from "../dal/categoriesDAL.js";
+import { deleteUserTransactions } from "../dal/transactionsDAL.js";
 
 export async function getUsers(req, res) {
     try {
@@ -111,10 +111,12 @@ export async function deleteUser(req, res) {
             return res.status(500).send({ message: "Something went wrong" });
         }
 
-        // delete user from transactions
-        const transactionsJson = await readTransactions();
-        const newTransactions = transactionsJson.filter((transaction) => transaction.userId !== id);
-        await writeTransactions(newTransactions);
+        // delete user transactions
+        const transactionsDeleted = await deleteUserTransactions(id);
+
+        if (!transactionsDeleted) {
+            return res.status(500).send({ message: "Something went wrong" });
+        }
 
         res.send({ message: "User deleted successfully" });
 

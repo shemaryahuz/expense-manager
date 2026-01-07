@@ -1,29 +1,16 @@
-import { readFile, writeFile } from "fs/promises";
+import { createTransaction, deleteTransactionById, findTransactionsByMonth, findUserTransactions, searchTransactionsByTitle, updateTransactionById } from "../dal/transactionsDAL.js";
 
-const PATH = "./database/transactions.json"; // relative to server.js
-
-export async function readTransactions() {
-    const transactions = await readFile(PATH, "utf-8");
-    return JSON.parse(transactions);
-};
-
-export async function writeTransactions(transactions) {
-    await writeFile(PATH, JSON.stringify(transactions, null, 2));
-};
 
 export async function getTransactions(req, res) {
     try {
         const userId = req.userId;
-        const transactions = await readTransactions();
+        const transactions = await findUserTransactions(userId);
 
-        const filtered = transactions.filter((transaction) => transaction.userId === userId);
-        filtered.sort((a, b) => {
-            const dateA = new Date(a.date);
-            const dateB = new Date(b.date);
-            return dateB - dateA;
-        });
+        if (!transactions) {
+            return res.status(404).send({ message: "Transactions not found" });
+        }
 
-        res.send(filtered);
+        res.send(transactions);
 
     } catch (error) {
 
@@ -37,24 +24,13 @@ export async function getTransactionsByMonth(req, res) {
         const userId = req.userId;
         const { year, month } = req.params;
 
-        const transactionsJson = await readTransactions();
+        const transactions = await findTransactionsByMonth(userId, year, month);
 
-        const filtered = transactionsJson.filter((transaction) => {
+        if (!transactions) {
+            return res.status(404).send({ message: "Transactions not found" });
+        }
 
-            const date = new Date(transaction.date);
-
-            return transaction.userId === userId &&
-                date.getFullYear() === Number(year) &&
-                date.getMonth() + 1 === Number(month);
-        });
-
-        filtered.sort((a, b) => {
-            const dateA = new Date(a.date);
-            const dateB = new Date(b.date);
-            return dateB - dateA;
-        });
-
-        res.send(filtered);
+        res.send(transactions);
 
     } catch (error) {
 
@@ -71,14 +47,13 @@ export async function searchTransactions(req, res) {
 
         const searchTerm = title.toLowerCase().trim() || '';
 
-        const transactionsJson = await readTransactions();
+        const transactions = await searchTransactionsByTitle(userId, searchTerm);
 
-        const filtered = transactionsJson.filter((transaction) =>
-            transaction.userId === userId &&
-            transaction.title.toLowerCase().includes(searchTerm)
-        );
+        if (!transactions) {
+            return res.status(404).send({ message: "Transactions not found" });
+        }
 
-        res.send(filtered);
+        res.send(transactions);
 
     } catch (error) {
 
@@ -96,19 +71,18 @@ export async function addTransaction(req, res) {
             return res.status(400).send({ message: "Transaction title, amount, user id and category id are required" });
         }
 
-        const newTransaction = {
-            id: Date.now().toString(),
+        const newTransaction = await createTransaction({
             userId,
             categoryId,
             title,
             type,
             amount,
             date
-        };
+        })
 
-        const transactionsJson = await readTransactions();
-        transactionsJson.push(newTransaction);
-        await writeTransactions(transactionsJson);
+        if (!newTransaction) {
+            return res.status(500).send({ message: "Something went wrong" });
+        }
 
         res.send({ transaction: newTransaction, message: "Transaction added successfully" });
 
@@ -130,26 +104,17 @@ export async function updateTransaction(req, res) {
             return res.status(400).send({ message: "Transaction title, amount, user id and category id are required" });
         }
 
-        const updatedTransaction = {
-            id,
-            userId,
+        const updatedTransaction = await updateTransactionById(id, {
             categoryId,
             title,
             type,
             amount,
             date
-        };
+        })
 
-        const transactionsJson = await readTransactions();
-
-        const updatedTransactions = transactionsJson.map((transaction) => {
-            if (transaction.id === id) {
-                return updatedTransaction;
-            }
-            return transaction;
-        });
-
-        await writeTransactions(updatedTransactions);
+        if (!updatedTransaction) {
+            return res.status(500).send({ message: "Something went wrong" });
+        }
 
         res.send({ transaction: updatedTransaction, message: "Transaction updated successfully" });
 
@@ -164,17 +129,11 @@ export async function deleteTransaction(req, res) {
     try {
         const { id } = req.params;
 
-        const transactionsJson = await readTransactions();
-
-        const deleted = transactionsJson.find((transaction) => transaction.id === id);
+        const deleted = await deleteTransactionById(id);
 
         if (!deleted) {
             return res.status(404).send({ message: "Transaction not found" });
         }
-
-        const updatedTransactions = transactionsJson.filter((transaction) => transaction.id !== id);
-
-        await writeTransactions(updatedTransactions);
 
         res.send({ id, message: "Transaction deleted successfully" });
 

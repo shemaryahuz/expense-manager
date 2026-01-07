@@ -1,7 +1,5 @@
-import { createCategory, deleteCategoryById, findUserCategories, updateCategoryName } from "../dal/categoriesDAL.js";
-import { readTransactions, writeTransactions } from "./transactionsController.js";
-
-const MISCELLANEOUS_ID = "c1";
+import { createCategory, deleteCategoryById, findCategoryById, findUserCategories, getMiscellaneousCategoryId, updateCategoryName } from "../dal/categoriesDAL.js";
+import { updateTransactionsCategoryId } from "../dal/transactionsDAL.js";
 
 export async function getCategories(req, res) {
     try {
@@ -74,24 +72,40 @@ export async function updateCategory(req, res) {
 
 export async function deleteCategory(req, res) {
     try {
+        const userId = req.userId;
         const { id } = req.params;
 
-        // update category transactions to miscellaneous or income
-        const transactionsJson = await readTransactions();
+        const category = await findCategoryById(id);
 
-        const updatedTransactions = transactionsJson.map((transaction) => {
-            if (transaction.categoryId === id) {
-                transaction.categoryId = MISCELLANEOUS_ID;
-            }
-            return transaction;
-        });
+        if (!category) {
+            return res.status(404).send({ message: "Category not found" });
+        }
 
-        await writeTransactions(updatedTransactions);
+        if (category.user_id === null) {
+            return res.status(400).send({ message: "Cannot delete default category" });
+        }
+
+        if (category.user_id !== userId) {
+            return res.status(403).send({ message: "You are not authorized to delete this category" });
+        }
+
+        const miscellaneousCategoryId = await getMiscellaneousCategoryId();
+
+        if (!miscellaneousCategoryId) {
+            return res.status(500).send({ message: "Something went wrong" });
+        }
+
+        // update category transactions to miscellaneous
+        const updatedTransactions = updateTransactionsCategoryId(id, miscellaneousCategoryId);
+
+        if (!updatedTransactions) {
+            return res.status(500).send({ message: "Something went wrong" });
+        }
 
         const deleted = await deleteCategoryById(id);
 
         if (!deleted) {
-            return res.status(404).send({ message: "Category not found" });
+            return res.status(500).send({ message: "Something went wrong" });
         }
 
         res.send({ id, message: "Category deleted successfully" });
