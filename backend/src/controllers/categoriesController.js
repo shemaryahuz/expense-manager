@@ -1,4 +1,11 @@
-import { createCategory, deleteCategoryById, findCategoryById, findUserCategories, getMiscellaneousCategoryId, updateCategoryName } from "../dal/categoriesDAL.js";
+import {
+    createCategory,
+    deleteCategoryById,
+    findCategoryById,
+    findUserCategories,
+    getMiscellaneousCategoryId,
+    updateCategoryName
+} from "../dal/categoriesDAL.js";
 import { updateTransactionsCategoryId } from "../dal/transactionsDAL.js";
 
 export async function getCategories(req, res) {

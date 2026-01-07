@@ -1,6 +1,13 @@
 import bcrypt from "bcrypt";
 
-import { deleteUserById, findUserByEmail, findUserById, findUsers, updateUserPassword, updateUserProfile } from "../dal/usersDAL.js";
+import {
+    deleteUserById,
+    findUserByEmail,
+    findUserById,
+    findUsers,
+    updateUserPassword,
+    updateUserProfile
+} from "../dal/usersDAL.js";
 import { deleteUserCategories } from "../dal/categoriesDAL.js";
 import { deleteUserTransactions } from "../dal/transactionsDAL.js";
 

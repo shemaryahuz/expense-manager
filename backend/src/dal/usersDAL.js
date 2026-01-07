@@ -1,7 +1,9 @@
 import { supabase } from "../config/supabase.js";
 
+const USERS_TABLE_NAME = "users";
+
 export async function findUsers() {
-    const { data, error } = await supabase.from("users")
+    const { data, error } = await supabase.from(USERS_TABLE_NAME)
         .select("id, name, email, created_at, updated_at")
         .order("created_at", { ascending: false });
 
@@ -14,7 +16,7 @@ export async function findUsers() {
 }
 
 export async function findUserById(id) {
-    const { data, error } = await supabase.from("users")
+    const { data, error } = await supabase.from(USERS_TABLE_NAME)
         .select("id, name, email, created_at, updated_at")
         .eq("id", id)
         .single();
@@ -28,7 +30,7 @@ export async function findUserById(id) {
 }
 
 export async function findUserByEmail(email) {
-    const { data, error } = await supabase.from("users")
+    const { data, error } = await supabase.from(USERS_TABLE_NAME)
         .select("id, name, email, password_hash, created_at")
         .eq("email", email)
         .single();
@@ -42,7 +44,7 @@ export async function findUserByEmail(email) {
 }
 
 export async function creatUser({ name, email, passwordHash }) {
-    const { data, error } = await supabase.from("users")
+    const { data, error } = await supabase.from(USERS_TABLE_NAME)
         .insert([{
             name,
             email,
@@ -60,7 +62,7 @@ export async function creatUser({ name, email, passwordHash }) {
 }
 
 export async function updateUserProfile(id, { name, email }) {
-    const { data, error } = await supabase.from("users")
+    const { data, error } = await supabase.from(USERS_TABLE_NAME)
         .update({
             name,
             email,
@@ -79,7 +81,7 @@ export async function updateUserProfile(id, { name, email }) {
 }
 
 export async function updateUserPassword(id, { passwordHash }) {
-    const { data, error } = await supabase.from("users")
+    const { data, error } = await supabase.from(USERS_TABLE_NAME)
         .update({
             password_hash: passwordHash,
             updated_at: new Date().toISOString()
@@ -97,7 +99,7 @@ export async function updateUserPassword(id, { passwordHash }) {
 }
 
 export async function deleteUserById(id) {
-    const { error } = await supabase.from("users")
+    const { error } = await supabase.from(USERS_TABLE_NAME)
         .delete()
         .eq("id", id);
 

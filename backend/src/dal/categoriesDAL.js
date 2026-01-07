@@ -1,7 +1,9 @@
 import { supabase } from "../config/supabase.js";
 
+const CATEGORIES_TABLE_NAME = "categories";
+
 export async function findUserCategories(userId) {
-    const { data, error } = await supabase.from("categories")
+    const { data, error } = await supabase.from(CATEGORIES_TABLE_NAME)
         .select("*")
         .or(`user_id.is.null, user_id.eq.${userId}`)
         .order("created_at", { ascending: true });
@@ -15,7 +17,7 @@ export async function findUserCategories(userId) {
 }
 
 export async function findCategoryById(id) {
-    const { data, error } = await supabase.from("categories")
+    const { data, error } = await supabase.from(CATEGORIES_TABLE_NAME)
         .select("*")
         .eq("id", id)
         .single();
@@ -29,7 +31,7 @@ export async function findCategoryById(id) {
 }
 
 export async function createCategory({ name, userId }) {
-    const { data, error } = await supabase.from("categories")
+    const { data, error } = await supabase.from(CATEGORIES_TABLE_NAME)
         .insert([{
             name,
             user_id: userId
@@ -46,7 +48,7 @@ export async function createCategory({ name, userId }) {
 }
 
 export async function updateCategoryName(id, { name }) {
-    const { data, error } = await supabase.from("categories")
+    const { data, error } = await supabase.from(CATEGORIES_TABLE_NAME)
         .update({ name })
         .eq("id", id)
         .select("*")
@@ -61,7 +63,7 @@ export async function updateCategoryName(id, { name }) {
 }
 
 export async function deleteCategoryById(id) {
-    const { error } = await supabase.from("categories")
+    const { error } = await supabase.from(CATEGORIES_TABLE_NAME)
         .delete()
         .eq("id", id);
 
@@ -74,7 +76,7 @@ export async function deleteCategoryById(id) {
 }
 
 export async function deleteUserCategories(userId) {
-    const { error } = await supabase.from("categories")
+    const { error } = await supabase.from(CATEGORIES_TABLE_NAME)
         .delete()
         .eq("user_id", userId);
 
@@ -92,7 +94,7 @@ export async function isDefaultCategort(id) {
 }
 
 export async function getMiscellaneousCategoryId() {
-    const { data, error } = await supabase.from("categories")
+    const { data, error } = await supabase.from(CATEGORIES_TABLE_NAME)
         .select("id")
         .eq("name", "Miscellaneous")
         .is("user_id", null)

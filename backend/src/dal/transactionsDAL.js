@@ -1,7 +1,9 @@
 import { supabase } from "../config/supabase.js";
 
+const TRANSACTIONS_TABLE_NAME = "transactions";
+
 export async function findUserTransactions(userId) {
-    const { data, error } = await supabase.from("transactions")
+    const { data, error } = await supabase.from(TRANSACTIONS_TABLE_NAME)
         .select("*")
         .eq("user_id", userId)
         .order("created_at", { ascending: false });
@@ -18,7 +20,7 @@ export async function findTransactionsByMonth(userId, year, month) {
     const startDate = new Date(year, month - 1, 1).toISOString();
     const endDate = new Date(year, month, 0, 23, 59).toISOString();
 
-    const { data, error } = await supabase.from("transactions")
+    const { data, error } = await supabase.from(TRANSACTIONS_TABLE_NAME)
         .select("*")
         .eq("user_id", userId)
         .gte("date", startDate)
@@ -34,7 +36,7 @@ export async function findTransactionsByMonth(userId, year, month) {
 }
 
 export async function searchTransactionsByTitle(userId, searchTerm) {
-    const { data, error } = await supabase.from("transactions")
+    const { data, error } = await supabase.from(TRANSACTIONS_TABLE_NAME)
         .select("*")
         .eq("user_id", userId)
         .ilike("title", `%${searchTerm}%`)
@@ -56,7 +58,7 @@ export async function createTransaction({
     amount,
     date
 }) {
-    const { data, error } = await supabase.from("transactions")
+    const { data, error } = await supabase.from(TRANSACTIONS_TABLE_NAME)
         .insert({
             user_id: userId,
             category_id: categoryId,
@@ -83,7 +85,7 @@ export async function updateTransactionById(id, {
     amount,
     date
 }) {
-    const { data, error } = await supabase.from("transactions")
+    const { data, error } = await supabase.from(TRANSACTIONS_TABLE_NAME)
         .update({
             category_id: categoryId,
             title,
@@ -105,7 +107,7 @@ export async function updateTransactionById(id, {
 }
 
 export async function updateTransactionsCategoryId(curCategoryId, newCategoryId) {
-    const { data, error } = await supabase.from("transactions")
+    const { data, error } = await supabase.from(TRANSACTIONS_TABLE_NAME)
         .update({
             category_id: newCategoryId,
             updated_at: new Date().toISOString()
@@ -122,7 +124,7 @@ export async function updateTransactionsCategoryId(curCategoryId, newCategoryId)
 }
 
 export async function deleteTransactionById(id) {
-    const { error } = await supabase.from("transactions")
+    const { error } = await supabase.from(TRANSACTIONS_TABLE_NAME)
         .delete()
         .eq("id", id)
         .select("*")
@@ -137,7 +139,7 @@ export async function deleteTransactionById(id) {
 }
 
 export async function deleteUserTransactions(userId) {
-    const { error } = await supabase.from("transactions")
+    const { error } = await supabase.from(TRANSACTIONS_TABLE_NAME)
         .delete()
         .eq("user_id", userId);
 
