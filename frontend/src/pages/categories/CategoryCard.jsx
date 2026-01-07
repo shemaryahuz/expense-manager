@@ -40,7 +40,7 @@ export default function CategoryCard({ category }) {
 
   const menuOpen = Boolean(anchorEl);
 
-  const amount = getTotalAmount(transactions);
+  const amount = getTotalAmount(transactions).toFixed(2);
 
   const handleMenuClick = (event) => {
     event.stopPropagation();

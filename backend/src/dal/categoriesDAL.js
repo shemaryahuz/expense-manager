@@ -1,5 +1,7 @@
 import { supabase } from "../config/supabase.js";
 
+import { keysToCamel } from "../utils/caseConvertor.js";
+
 const CATEGORIES_TABLE_NAME = "categories";
 
 export async function findUserCategories(userId) {
@@ -13,7 +15,7 @@ export async function findUserCategories(userId) {
         return null;
     }
 
-    return data;
+    return keysToCamel(data);
 }
 
 export async function findCategoryById(id) {
@@ -27,7 +29,7 @@ export async function findCategoryById(id) {
         return null;
     }
 
-    return data;
+    return keysToCamel(data);
 }
 
 export async function createCategory({ name, userId }) {
@@ -44,7 +46,7 @@ export async function createCategory({ name, userId }) {
         return null;
     }
 
-    return data;
+    return keysToCamel(data);
 }
 
 export async function updateCategoryName(id, { name }) {
@@ -59,7 +61,7 @@ export async function updateCategoryName(id, { name }) {
         return null;
     }
 
-    return data;
+    return keysToCamel(data);
 }
 
 export async function deleteCategoryById(id) {

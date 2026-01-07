@@ -34,7 +34,7 @@ export async function signup(req, res) {
 
         res.cookie("token", token, { httpOnly: true, secure: false, sameSite: "lax", maxAge: 1000 * 60 * 60 });
 
-        newUser.password_hash = undefined;
+        newUser.passwordHash = undefined;
         res.send({ user: newUser, message: "You are signed up successfully" });
 
     } catch (error) {
@@ -55,7 +55,7 @@ export async function login(req, res) {
         if (!user) {
             return res.status(401).send({ message: "User not found" });
         }
-        const isValidPassword = await bcrypt.compare(password, user.password_hash);
+        const isValidPassword = await bcrypt.compare(password, user.passwordHash);
         if (!isValidPassword) {
             return res.status(401).send({ message: "Invalid password" });
         }
@@ -65,7 +65,7 @@ export async function login(req, res) {
 
         res.cookie("token", token, { httpOnly: true, secure: false, sameSite: "lax", maxAge: 1000 * 60 * 60 });
 
-        user.password_hash = undefined;
+        user.passwordHash = undefined;
         res.send({ user, message: "You are logged in successfully" });
 
     } catch (error) {

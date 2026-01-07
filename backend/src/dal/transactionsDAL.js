@@ -1,5 +1,7 @@
 import { supabase } from "../config/supabase.js";
 
+import { keysToCamel } from "../utils/caseConvertor.js";
+
 const TRANSACTIONS_TABLE_NAME = "transactions";
 
 export async function findUserTransactions(userId) {
@@ -13,7 +15,7 @@ export async function findUserTransactions(userId) {
         return null;
     }
 
-    return data;
+    return keysToCamel(data);
 }
 
 export async function findTransactionsByMonth(userId, year, month) {
@@ -32,7 +34,7 @@ export async function findTransactionsByMonth(userId, year, month) {
         return null;
     }
 
-    return data;
+    return keysToCamel(data);
 }
 
 export async function searchTransactionsByTitle(userId, searchTerm) {
@@ -47,7 +49,7 @@ export async function searchTransactionsByTitle(userId, searchTerm) {
         return null;
     }
 
-    return data;
+    return keysToCamel(data);
 }
 
 export async function createTransaction({
@@ -75,7 +77,7 @@ export async function createTransaction({
         return null;
     }
 
-    return data;
+    return keysToCamel(data);
 }
 
 export async function updateTransactionById(id, {
@@ -103,7 +105,7 @@ export async function updateTransactionById(id, {
         return null;
     }
 
-    return data;
+    return keysToCamel(data);
 }
 
 export async function updateTransactionsCategoryId(curCategoryId, newCategoryId) {
@@ -120,7 +122,7 @@ export async function updateTransactionsCategoryId(curCategoryId, newCategoryId)
         return null;
     }
 
-    return data;
+    return keysToCamel(data);
 }
 
 export async function deleteTransactionById(id) {

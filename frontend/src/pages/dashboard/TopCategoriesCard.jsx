@@ -35,7 +35,7 @@ export default function TopCategoriesCard({ transactions, categories }) {
               <Box sx={styles.categoryItem}>
                 <Typography variant="body1">{name}</Typography>
                 <Typography variant="body1" sx={styles.categoryAmount}>
-                  - ${amount}
+                  - ${amount.toFixed(2)}
                 </Typography>
               </Box>
               {index !== topCategories.length - 1 && <Divider />}

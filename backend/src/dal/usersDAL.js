@@ -1,5 +1,7 @@
 import { supabase } from "../config/supabase.js";
 
+import { keysToCamel } from "../utils/caseConvertor.js";
+
 const USERS_TABLE_NAME = "users";
 
 export async function findUsers() {
@@ -12,7 +14,7 @@ export async function findUsers() {
         return null;
     }
 
-    return data;
+    return keysToCamel(data);
 }
 
 export async function findUserById(id) {
@@ -26,7 +28,7 @@ export async function findUserById(id) {
         return null;
     }
 
-    return data;
+    return keysToCamel(data);
 }
 
 export async function findUserByEmail(email) {
@@ -40,7 +42,7 @@ export async function findUserByEmail(email) {
         return null;
     }
 
-    return data;
+    return keysToCamel(data);
 }
 
 export async function creatUser({ name, email, passwordHash }) {
@@ -58,7 +60,7 @@ export async function creatUser({ name, email, passwordHash }) {
         return null;
     }
 
-    return data;
+    return keysToCamel(data);
 }
 
 export async function updateUserProfile(id, { name, email }) {
@@ -77,7 +79,7 @@ export async function updateUserProfile(id, { name, email }) {
         return null;
     }
 
-    return data;
+    return keysToCamel(data);
 }
 
 export async function updateUserPassword(id, { passwordHash }) {
@@ -95,7 +97,7 @@ export async function updateUserPassword(id, { passwordHash }) {
         return null;
     }
 
-    return data;
+    return keysToCamel(data);
 }
 
 export async function deleteUserById(id) {
