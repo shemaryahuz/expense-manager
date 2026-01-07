@@ -14,9 +14,9 @@ export default function MonthlyBudget() {
   const incomeTransactions = useSelector(selectIncomeTransactions);
   const expenseTransactions = useSelector(selectExpenseTransactions);
 
-  const totalIncome = getTotalAmount(incomeTransactions);
-  const totalExpenses = getTotalAmount(expenseTransactions);
-  const balance = totalIncome - totalExpenses;
+  const totalIncome = getTotalAmount(incomeTransactions).toFixed(2);
+  const totalExpenses = getTotalAmount(expenseTransactions).toFixed(2);
+  const balance = (totalIncome - totalExpenses).toFixed(2);
 
   return (
     <Grid container spacing={2} sx={styles.container}>
