@@ -1,8 +1,9 @@
 import { createTheme } from "@mui/material";
 import { teal } from "@mui/material/colors";
 
-const theme = createTheme({
+export const getTheme = (mode = "light") => createTheme({
     palette: {
+        mode,
         primary: {
             main: teal[500],
             light: teal[300],
@@ -15,11 +16,22 @@ const theme = createTheme({
             dark: teal[900],
             contrastText: "#fff",
         },
-        background: {
-            default: teal[50],
-            paper: "#fff",
-        },
+        ...(mode === "light")
+            ? {
+                background: {
+                    default: teal[50],
+                    paper: "#fff",
+                },
+            }
+            : {
+                background: {
+                    default: "#000",
+                    paper: "#121212",
+                },
+                text: {
+                    primary: "#fff",
+                    secondary: "rgba(255, 255, 255, 0.7)",
+                },
+            },
     }
 });
-
-export default theme;

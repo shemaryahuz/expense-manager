@@ -1,15 +1,33 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import { Box, IconButton, Link, Toolbar, Typography } from "@mui/material";
-import { Menu, AccountCircle } from "@mui/icons-material";
+import {
+  Menu,
+  AccountCircle,
+  Brightness7,
+  Brightness4,
+} from "@mui/icons-material";
 
 import { AppBar } from "./styles/Header.styles.js";
 import AccountMenu from "../../pages/user/AccountMenu.jsx";
 
-export default function Header({ drawerOpen, handleDrawerOpen }) {
-  const [anchorEl, setAnchorEl] = useState(null);
+import {
+  selectThemeMode,
+  toggleThemeMode,
+} from "../../features/settings/settingsSlice.js";
 
+export default function Header({ drawerOpen, handleDrawerOpen }) {
+  const dispatch = useDispatch();
+
+  const [anchorEl, setAnchorEl] = useState(null);
   const accountMenuOpen = Boolean(anchorEl);
+
+  const themeMode = useSelector(selectThemeMode);
+
+  const handleThemeModeToggle = () => {
+    dispatch(toggleThemeMode());
+  };
 
   const handleAccountMenuOpen = ({ currentTarget }) =>
     setAnchorEl(currentTarget);
@@ -39,14 +57,24 @@ export default function Header({ drawerOpen, handleDrawerOpen }) {
             Expense Manager
           </Typography>
         </Link>
-        <IconButton
-          sx={{ ml: 1 }}
-          color="inherit"
-          aria-label="account"
-          onClick={handleAccountMenuOpen}
-        >
-          <AccountCircle fontSize="large" />
-        </IconButton>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <IconButton
+            color="inherit"
+            aria-label="toggle theme"
+            onClick={handleThemeModeToggle}
+            sx={{ ml: 1 }}
+          >
+            {themeMode === "light" ? <Brightness4 /> : <Brightness7 />}
+          </IconButton>
+          <IconButton
+            sx={{ ml: 1 }}
+            color="inherit"
+            aria-label="account"
+            onClick={handleAccountMenuOpen}
+          >
+            <AccountCircle fontSize="large" />
+          </IconButton>
+        </Box>
         <AccountMenu
           open={accountMenuOpen}
           anchorEl={anchorEl}
