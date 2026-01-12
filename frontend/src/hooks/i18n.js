@@ -5,12 +5,9 @@ export const useTranslation = () => {
     const language = useSelector(selectLanguage);
     const translations = useSelector(selectTranslations);
 
-    const translate = (key, ...args) => {
-        const translation = translations[language]?.[key];
-        if (typeof translation === "function") {
-            return translation(...args);
-        }
-        return translation ?? key;
+    const translate = (key) => {
+        const langMap = translations[language] || {};
+        return langMap[key] || key;
     };
 
     return { translate, language };

@@ -1,9 +1,10 @@
 import { createTheme } from "@mui/material";
 import { teal } from "@mui/material/colors";
 
-export const getTheme = (mode = "light") => createTheme({
+export const getTheme = (mode = "light", direction = "ltr") => createTheme({
     palette: {
         mode,
+        direction,
         primary: {
             main: teal[500],
             light: teal[300],

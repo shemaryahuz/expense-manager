@@ -47,9 +47,9 @@ export const settingsSlice = createSlice({
 });
 
 export const selectThemeMode = (state) => state.settings.themeMode;
-export const selectLanguage = (state) => state.i18n.language;
-export const selectDirection = (state) => state.i18n.direction;
-export const selectTranslations = (state) => state.i18n.translations;
+export const selectLanguage = (state) => state.settings.language;
+export const selectDirection = (state) => state.settings.direction;
+export const selectTranslations = (state) => state.settings.translations;
 
 
 export const { toggleThemeMode, setThemeMode, setLanguage, toggleLanguage } = settingsSlice.actions;

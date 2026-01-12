@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+import { StrictMode, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import { Provider as ReduxProvider, useSelector } from "react-redux";
 import { ThemeProvider } from "@mui/material";
@@ -8,7 +8,10 @@ import axios from "axios";
 import store from "./app/store";
 import App from "./App.jsx";
 import { getTheme } from "./theme/theme";
-import { selectThemeMode } from "./features/settings/settingsSlice.js";
+import {
+  selectDirection,
+  selectThemeMode,
+} from "./features/settings/settingsSlice.js";
 
 import { BASE_URL } from "./constants/api/urlConstants.js";
 
@@ -17,7 +20,13 @@ axios.defaults.withCredentials = true;
 
 function AppWithTheme() {
   const themeMode = useSelector(selectThemeMode);
-  const theme = getTheme(themeMode);
+  const direction = useSelector(selectDirection);
+  
+  const theme = getTheme(themeMode, direction);
+
+  useEffect(() => {
+    document.documentElement.dir = direction;
+  }, [direction]);
 
   return (
     <ThemeProvider theme={theme}>
