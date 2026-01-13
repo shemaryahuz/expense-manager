@@ -7,12 +7,12 @@ export const layoutStyles = {
         flexDirection: 'column',
         minHeight: '100vh',
     },
-    mainBox: {
-        display: 'flex',
-    },
     content: {
+        display: 'flex',
+        flexDirection: 'column',
         flexGrow: 1,
-        padding: '3rem',
+        overflow: 'auto',
+        margin: 'auto',
     },
 };
 

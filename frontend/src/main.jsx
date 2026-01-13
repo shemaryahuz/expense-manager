@@ -1,7 +1,8 @@
-import { StrictMode, useEffect } from "react";
+import { StrictMode, useEffect, useMemo } from "react";
 import { createRoot } from "react-dom/client";
 import { Provider as ReduxProvider, useSelector } from "react-redux";
 import { ThemeProvider } from "@mui/material";
+import { CacheProvider } from "@emotion/react";
 
 import axios from "axios";
 
@@ -12,6 +13,7 @@ import {
   selectDirection,
   selectThemeMode,
 } from "./features/settings/settingsSlice.js";
+import { createRtlCache, createLtrCache } from "./theme/rtlCache.js";
 
 import { BASE_URL } from "./constants/api/urlConstants.js";
 
@@ -21,17 +23,17 @@ axios.defaults.withCredentials = true;
 function AppWithTheme() {
   const themeMode = useSelector(selectThemeMode);
   const direction = useSelector(selectDirection);
-  
-  const theme = getTheme(themeMode, direction);
 
-  useEffect(() => {
-    document.documentElement.dir = direction;
-  }, [direction]);
+  const cache = useMemo(() => direction === "rtl" ? createRtlCache() : createLtrCache(), [direction]);
+
+  const theme = useMemo(() => getTheme(themeMode, direction), [themeMode, direction]);
 
   return (
-    <ThemeProvider theme={theme}>
-      <App />
-    </ThemeProvider>
+    <CacheProvider value={cache}>
+      <ThemeProvider theme={theme}>
+        <App />
+      </ThemeProvider>
+    </CacheProvider>
   );
 }
 

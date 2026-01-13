@@ -9,10 +9,10 @@ export const ROUTE_PATHS = {
 };
 
 const ROUTE_NAMES = {
-    HOME: "Home",
-    DASHBOARD: "Dashboard",
-    TRANSACTIONS: "Transactions",
-    CATEGORIES: "Categories",
+    HOME: "home",
+    DASHBOARD: "dashboard",
+    TRANSACTIONS: "transactions",
+    CATEGORIES: "categories",
 };
 
 const ROUTE_ICONS = {

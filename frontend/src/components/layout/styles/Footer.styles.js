@@ -11,7 +11,8 @@ export const StyledFooter = styled(MuiAppBar)(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    '& .MuiTypography-root': {
+    '& .MuiBox-root': {
+        flexDirection: 'row',
         '& a': {
             color: 'inherit',
             textDecoration: 'none',

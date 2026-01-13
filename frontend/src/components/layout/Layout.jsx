@@ -21,7 +21,7 @@ export default function Layout() {
     <Box sx={styles.layout}>
       <CssBaseline />
       <Header drawerOpen={drawerOpen} handleDrawerOpen={handleDrawerOpen} />
-      <Box sx={styles.mainBox}>
+      <Box>
         <Sidebar
           drawerOpen={drawerOpen}
           handleDrawerClose={handleDrawerClose}

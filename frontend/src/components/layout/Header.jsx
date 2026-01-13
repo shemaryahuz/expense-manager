@@ -1,85 +1,126 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
 
 import { Box, IconButton, Link, Toolbar, Typography } from "@mui/material";
 import {
-  Menu,
   AccountCircle,
-  Brightness7,
-  Brightness4,
+  MenuOpen,
+  Settings,
+  Translate,
 } from "@mui/icons-material";
 
 import { AppBar } from "./styles/Header.styles.js";
 import AccountMenu from "../../pages/user/AccountMenu.jsx";
 
-import {
-  selectThemeMode,
-  toggleThemeMode,
-} from "../../features/settings/settingsSlice.js";
+import { useTranslation } from "../../hooks/i18n.js";
+import SettingsMenu from "./SettingsMenu.jsx";
+import LanguageMenu from "./LanguageMenu.jsx";
 
 export default function Header({ drawerOpen, handleDrawerOpen }) {
-  const dispatch = useDispatch();
+  const [accountMenuAnchor, setAccountMenuAnchor] = useState(null);
+  const [settingsMenuAnchor, setSettingsMenuAnchor] = useState(null);
+  const [languageMenuAnchor, setLanguageMenuAnchor] = useState(null);
 
-  const [anchorEl, setAnchorEl] = useState(null);
-  const accountMenuOpen = Boolean(anchorEl);
+  const { translate } = useTranslation();
 
-  const themeMode = useSelector(selectThemeMode);
-
-  const handleThemeModeToggle = () => {
-    dispatch(toggleThemeMode());
-  };
+  const accountMenuOpen = Boolean(accountMenuAnchor);
+  const settingsMenuOpen = Boolean(settingsMenuAnchor);
+  const languageMenuOpen = Boolean(languageMenuAnchor);
 
   const handleAccountMenuOpen = ({ currentTarget }) =>
-    setAnchorEl(currentTarget);
+    setAccountMenuAnchor(currentTarget);
 
-  const handleAccountMenuClose = () => setAnchorEl(null);
+  const handleAccountMenuClose = () => setAccountMenuAnchor(null);
+
+  const handleSettingsMenuOpen = ({ currentTarget }) =>
+    setSettingsMenuAnchor(currentTarget);
+
+  const handleSettingsMenuClose = () => setSettingsMenuAnchor(null);
+
+  const handleLanguageMenuOpen = ({ currentTarget }) =>
+    setLanguageMenuAnchor(currentTarget);
+
+  const handleLanguageMenuClose = () => setLanguageMenuAnchor(null);
 
   return (
-    <AppBar component="header" open={drawerOpen}>
+    <AppBar component="header" position="fixed" open={drawerOpen}>
       <Toolbar>
-        <IconButton
-          color="inherit"
-          aria-label="open drawer"
-          onClick={handleDrawerOpen}
-          edge="start"
-          sx={[
-            {
-              marginRight: 5,
-            },
-            drawerOpen && { visibility: "hidden" },
-          ]}
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            width: "100%",
+            direction: "ltr",
+          }}
         >
-          <Menu />
-        </IconButton>
-        <Link href="/" variant="contained">
-          <Box component="img" src="/images/money-management.svg" alt="Logo" />
-          <Typography variant="h4" component="span">
-            Expense Manager
-          </Typography>
-        </Link>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <IconButton
             color="inherit"
-            aria-label="toggle theme"
-            onClick={handleThemeModeToggle}
-            sx={{ ml: 1 }}
+            aria-label="open drawer"
+            onClick={handleDrawerOpen}
+            edge="start"
+            sx={{ mr: 2, ...(drawerOpen && { display: "none" }) }}
           >
-            {themeMode === "light" ? <Brightness4 /> : <Brightness7 />}
+            <MenuOpen />
           </IconButton>
+
+          <Link
+            href="/"
+            underline="none"
+            color="inherit"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+              flexGrow: 1,
+            }}
+          >
+            <Box
+              component="img"
+              src="/images/money-management.svg"
+              alt="Logo"
+              sx={{ height: 40 }}
+            />
+            <Typography variant="h4">{translate("appName")}</Typography>
+          </Link>
+
           <IconButton
-            sx={{ ml: 1 }}
+            color="inherit"
+            aria-label="language"
+            onClick={handleLanguageMenuOpen}
+          >
+            <Translate />
+          </IconButton>
+          <LanguageMenu
+            open={languageMenuOpen}
+            anchorEl={languageMenuAnchor}
+            onClose={handleLanguageMenuClose}
+          />
+
+          <IconButton
+            color="inherit"
+            aria-label="settings"
+            onClick={handleSettingsMenuOpen}
+          >
+            <Settings fontSize="large" />
+          </IconButton>
+          <SettingsMenu
+            open={settingsMenuOpen}
+            anchorEl={settingsMenuAnchor}
+            onClose={handleSettingsMenuClose}
+          />
+
+          <IconButton
             color="inherit"
             aria-label="account"
             onClick={handleAccountMenuOpen}
           >
             <AccountCircle fontSize="large" />
           </IconButton>
+          <AccountMenu
+            open={accountMenuOpen}
+            anchorEl={accountMenuAnchor}
+            onClose={handleAccountMenuClose}
+          />
         </Box>
-        <AccountMenu
-          open={accountMenuOpen}
-          anchorEl={anchorEl}
-          onClose={handleAccountMenuClose}
-        />
       </Toolbar>
     </AppBar>
   );

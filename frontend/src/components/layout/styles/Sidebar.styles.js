@@ -27,19 +27,22 @@ export const DrawerTop = styled("div")(({ theme }) => ({
     height: headerHeight,
     display: "flex",
     alignItems: "center",
-    justifyContent: "flex-end",
+    justifyContent: theme.direction === "rtl" ? "flex-start" : "flex-end",
     padding: theme.spacing(0, 1),
     ...theme.mixins.toolbar,
     backgroundColor: theme.palette.primary.main,
     color: theme.palette.getContrastText(theme.palette.primary.main),
 }));
 
-export const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
+export const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open', })(
     ({ theme, open }) => ({
         width: drawerWidth,
         flexShrink: 0,
         whiteSpace: 'nowrap',
-        boxSizing: 'border-box',
+        "& .MuiDrawer-paper": {
+            width: drawerWidth,
+            boxSizing: "border-box",
+        },
         ...(open && {
             ...openedMixin(theme),
             '& .MuiDrawer-paper': openedMixin(theme),
