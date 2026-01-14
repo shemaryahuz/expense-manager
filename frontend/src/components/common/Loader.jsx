@@ -1,11 +1,21 @@
-import { Box, CircularProgress, Divider, Typography } from "@mui/material";
+import { Backdrop, CircularProgress, Typography } from "@mui/material";
+
+import { useTranslation } from "../../hooks/i18n.js";
 
 export default function Loader() {
+  const { translate } = useTranslation();
+
   return (
-    <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-      <Typography>Loading...</Typography>
-      <Divider />
+    <Backdrop
+      sx={(theme) => ({
+        color: "#fff",
+        zIndex: theme.zIndex.drawer + 1,
+        gap: 2,
+      })}
+      open
+    >
+      <Typography>{translate("Loading...")}</Typography>
       <CircularProgress />
-    </Box>
+    </Backdrop>
   );
 }

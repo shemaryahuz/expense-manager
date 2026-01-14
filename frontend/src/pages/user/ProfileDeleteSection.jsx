@@ -2,15 +2,20 @@ import { Box, Button, Divider, Typography } from "@mui/material";
 
 import { profileSectionStyles as styles } from "./styles/ProfileSections.styles";
 
+import { useTranslation } from "../../hooks/i18n";
+
 export default function ProfileDeleteSection({ isLoading, onOpenDialog }) {
+  const { translate } = useTranslation();
+
   return (
     <Box sx={styles.narrowCard}>
       <Typography variant="h6" color="error.main">
-        Delete account
+        {translate("Delete Account")}
       </Typography>
       <Typography variant="body2" color="text.secondary">
-        This action is permanent and cannot be undone. All user data will be
-        permanently deleted.
+        {translate(
+          "This action is permanent and cannot be undone. All user data will be permanently deleted"
+        )}
       </Typography>
       <Divider sx={{ my: 1 }} />
       <Button
@@ -18,9 +23,9 @@ export default function ProfileDeleteSection({ isLoading, onOpenDialog }) {
         color="error"
         onClick={onOpenDialog}
         disabled={isLoading}
-        sx={{ textTransform: "none", alignSelf: "flex-start" }}
+        sx={{ textTransform: "none" }}
       >
-        Delete my account
+        {translate("Delete Account")}
       </Button>
     </Box>
   );

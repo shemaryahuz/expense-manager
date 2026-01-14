@@ -1,7 +1,11 @@
 import { Button } from "@mui/material";
 import { CallMade } from "@mui/icons-material";
 
+import { useTranslation } from "../../hooks/i18n";
+
 export default function DashboardButton({ onClick }) {
+  const { translate } = useTranslation();
+
   return (
     <Button
       onClick={onClick}
@@ -14,7 +18,8 @@ export default function DashboardButton({ onClick }) {
         textTransform: "none",
       }}
     >
-      Go to Dashboard <CallMade sx={{ fontSize: "small" }} />
+      {translate("Dashboard")}
+      <CallMade sx={{ fontSize: "small" }} />
     </Button>
   );
 }

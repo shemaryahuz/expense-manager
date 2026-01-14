@@ -7,24 +7,32 @@ import {
   Typography,
 } from "@mui/material";
 
+import { useTranslation } from "../../hooks/i18n";
+
 export default function DeleteAccountDialog({
   open,
   isLoading,
   onCancel,
   onConfirm,
 }) {
+  const { translate } = useTranslation();
+
   return (
-    <Dialog open={open} onClose={onCancel}>
-      <DialogTitle>Delete account</DialogTitle>
+    <Dialog open={open} onClose={onCancel} closeAfterTransition={false}>
+      <DialogTitle>{translate("Delete Account")}</DialogTitle>
       <DialogContent>
         <Typography variant="body1">
-          Are you sure you want to delete your account? This action cannot be
-          undone and will permanently remove all user data.
+          {translate("Are you sure you want to delete your account?")}
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          {translate(
+            "This action is permanent and cannot be undone. All user data will be permanently deleted"
+          )}
         </Typography>
       </DialogContent>
       <DialogActions>
         <Button onClick={onCancel} sx={{ textTransform: "none" }}>
-          Cancel
+          {translate("Cancel")}
         </Button>
         <Button
           onClick={onConfirm}
@@ -33,7 +41,7 @@ export default function DeleteAccountDialog({
           disabled={isLoading}
           sx={{ textTransform: "none" }}
         >
-          Delete account
+          {translate("Delete")}
         </Button>
       </DialogActions>
     </Dialog>

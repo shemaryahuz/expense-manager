@@ -4,6 +4,8 @@ import HomeHeader from "./HomeHeader";
 import DashboardButton from "./DashboardButton";
 import Feedback from "../../components/common/Feedback";
 
+import { homePageStyles as styles } from "./styles/HomePage.styles";
+
 export default function PrivateHome({
   name,
   showSuccess,
@@ -12,9 +14,7 @@ export default function PrivateHome({
   onNavigate,
 }) {
   return (
-    <Box
-      sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}
-    >
+    <Box sx={styles.mainBox}>
       <HomeHeader name={name} />
       <Feedback
         open={showSuccess}

@@ -126,12 +126,9 @@ export const userSlice = createSlice({
             .addCase(logout.pending, (state) => {
                 state.status = LOADING;
             })
-            .addCase(logout.fulfilled, (state, action) => {
-                const { message } = action.payload;
-
+            .addCase(logout.fulfilled, (state) => {
                 state.status = SUCCEEDED;
                 state.user = null;
-                state.message = message;
             })
             .addCase(logout.rejected, (state, action) => {
                 state.status = FAILED;

@@ -2,25 +2,25 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 
 import { profileSectionStyles as styles } from "./styles/ProfileSections.styles";
 
+import { useTranslation } from "../../hooks/i18n";
+
 export default function ProfileDetailsSection({
   profile,
   isLoading,
   onChange,
   onSubmit,
 }) {
+  const { translate } = useTranslation();
+
   return (
     <Box sx={styles.card}>
-      <Typography variant="h6">Profile details</Typography>
+      <Typography variant="h6">{translate("Profile Details")}</Typography>
       <Typography variant="body2" color="text.secondary">
-        Update your name and email address.
+        {translate("Update your name and email address")}
       </Typography>
-      <Box
-        component="form"
-        onSubmit={onSubmit}
-        sx={styles.form}
-      >
+      <Box component="form" onSubmit={onSubmit} sx={styles.form}>
         <TextField
-          label="Name"
+          label={translate("Name")}
           name="name"
           value={profile.name}
           required
@@ -28,7 +28,7 @@ export default function ProfileDetailsSection({
         />
         <TextField
           type="email"
-          label="Email"
+          label={translate("Email")}
           name="email"
           value={profile.email}
           required
@@ -40,11 +40,9 @@ export default function ProfileDetailsSection({
           disabled={isLoading}
           sx={styles.primaryButton}
         >
-          {isLoading ? "Saving..." : "Save changes"}
+          {isLoading ? translate("Saving") : translate("Save")}
         </Button>
       </Box>
     </Box>
   );
 }
-
-

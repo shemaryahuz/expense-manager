@@ -17,6 +17,8 @@ import { ROUTE_PATHS } from "../../constants/app/routes";
 import PublicHome from "./PublicHome";
 import PrivateHome from "./PrivateHome";
 
+import { homePageStyles as styles } from "./styles/HomePage.styles";
+
 const { SUCCEEDED } = STATUSES;
 const { DASHBOARD } = ROUTE_PATHS;
 
@@ -51,7 +53,7 @@ export default function HomePage() {
   const handleNavigate = () => navigate(DASHBOARD);
 
   return (
-    <Container sx={{ mt: 4 }}>
+    <Container sx={styles.container}>
       {user ? (
         <PrivateHome
           name={name}

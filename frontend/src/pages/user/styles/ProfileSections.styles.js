@@ -1,7 +1,10 @@
 const baseCard = {
   display: "flex",
   flexDirection: "column",
-  gap: 3,
+  alignItems: "center",
+  justifyContent: "center",
+  width: "40%",
+  gap: 2,
   bgcolor: "background.paper",
   p: 3,
   borderRadius: 3,
@@ -13,19 +16,14 @@ export const profileSectionStyles = {
   narrowCard: {
     ...baseCard,
     gap: 2,
-    maxWidth: 480,
   },
   form: {
     display: "flex",
     flexDirection: "column",
     gap: 2,
-    mt: 1,
-    maxWidth: 480,
   },
   primaryButton: {
     textTransform: "none",
-    alignSelf: "flex-start",
-    mt: 1,
   },
 };
 

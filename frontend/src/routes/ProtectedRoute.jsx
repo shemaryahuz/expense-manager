@@ -5,8 +5,6 @@ import { selectUserState } from "../features/user/userSlice";
 import { STATUSES } from "../constants/features/statusConstants";
 import { ROUTE_PATHS } from "../constants/app/routes";
 
-import Loader from "../components/common/Loader";
-
 const { IDLE, LOADING } = STATUSES;
 const { HOME } = ROUTE_PATHS;
 
@@ -19,7 +17,6 @@ export default function ProtectedRoute() {
 
   return (
     <>
-      {loading && <Loader />}
       {!loading && user && <Outlet />}
       {!loading && !user && (
         <Navigate to={HOME} state={{ from: location }} replace />

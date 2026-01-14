@@ -1,22 +1,26 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-import { Box, Button, Container, TextField, Typography } from "@mui/material";
+import { Box, Button, Dialog, TextField, Typography } from "@mui/material";
 
 import AlertMessage from "../../components/common/AlertMessage";
 
 import { clearMessage, selectUserState } from "../../features/user/userSlice";
 import { login, signup } from "../../features/user/userThunks";
 
+import { useTranslation } from "../../hooks/i18n";
+
 import { LOGIN_MODE, SIGNUP_MODE } from "../../constants/ui/loginConstants";
 import { STATUSES } from "../../constants/features/statusConstants";
 
 import { loginFormStyles as styles } from "./styles/LoginForm.styles";
 
-const { LOADING, FAILED } = STATUSES;
+const { LOADING, FAILED, SUCCEEDED } = STATUSES;
 
-export default function LoginForm() {
+export default function LoginForm({ open, onClose }) {
   const dispatch = useDispatch();
+
+  const { translate } = useTranslation();
 
   const [mode, setMode] = useState(LOGIN_MODE);
   const [user, setUser] = useState({
@@ -28,6 +32,12 @@ export default function LoginForm() {
   const { status, message } = useSelector(selectUserState);
 
   const { name, email, password } = user;
+
+  useEffect(() => {
+    if (status === SUCCEEDED && message) {
+      onClose();
+    }
+  }, [status, message, onClose]);
 
   const handleChange = ({ target: { name, value } }) => {
     dispatch(clearMessage());
@@ -49,17 +59,19 @@ export default function LoginForm() {
   };
 
   return (
-    <Container sx={styles.container}>
+    <Dialog open={open} onClose={onClose} sx={styles.container}>
       <Typography variant="h4" sx={styles.title}>
-        {mode === LOGIN_MODE ? "Log in" : "Sign up"}
+        {mode === LOGIN_MODE ? translate("Log in") : translate("Sign up")}
       </Typography>
       <Typography variant="body1" sx={styles.subTitle}>
-        {mode === LOGIN_MODE ? "Log in to your account" : "Create an account"}
+        {mode === LOGIN_MODE
+          ? translate("Log in to your account")
+          : translate("Create an account")}
       </Typography>
       <Box component="form" onSubmit={handleSubmit} sx={styles.form}>
         {mode === SIGNUP_MODE && (
           <TextField
-            label="Name"
+            label={translate("Name")}
             name="name"
             value={name}
             required
@@ -70,7 +82,7 @@ export default function LoginForm() {
         )}
         <TextField
           type="email"
-          label="Email"
+          label={translate("Email")}
           name="email"
           value={email}
           required
@@ -80,7 +92,7 @@ export default function LoginForm() {
         />
         <TextField
           type="password"
-          label="Password"
+          label={translate("Password")}
           name="password"
           value={password}
           required
@@ -96,10 +108,10 @@ export default function LoginForm() {
           sx={styles.submitButton}
         >
           {status === LOADING
-            ? "Loading..."
+            ? translate("Loading...")
             : mode === LOGIN_MODE
-            ? "Log in"
-            : "Sign up"}
+            ? translate("Log in")
+            : translate("Sign up")}
         </Button>
       </Box>
       {status === FAILED && message && (
@@ -107,12 +119,12 @@ export default function LoginForm() {
       )}
       <Typography variant="body2" sx={styles.switchText}>
         {mode === LOGIN_MODE
-          ? "Don't have an account? "
-          : "Already have an account? "}
+          ? translate("Don't have an account?")
+          : translate("Already have an account?")}
       </Typography>
       <Button variant="outlined" sx={styles.switchButton} onClick={toggleMode}>
-        {mode === LOGIN_MODE ? "Create an account" : "Log in"}
+        {mode === LOGIN_MODE ? translate("Sign up") : translate("Log in")}
       </Button>
-    </Container>
+    </Dialog>
   );
 }

@@ -1,52 +1,60 @@
 export const loginFormStyles = {
+    /** Dialog root (optional – mostly for backdrop tweaks) */
     container: {
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        bgcolor: "background.paper",
-        width: "40%",
-        minWidth: "360px",
-        height: "auto",
-        maxWidth: "sm",
-        mt: 4,
-        mb: 4,
-        p: 3,
-        borderRadius: 3,
-        boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+        "& .MuiDialog-paper": {
+            width: "90%",
+            maxWidth: 380,
+            minWidth: 300,
+
+            margin: 0,
+            padding: "24px",
+
+            borderRadius: 5,
+            boxShadow: "0px 8px 24px rgba(0,0,0,0.18)",
+
+            boxSizing: "border-box",
+        },
     },
+
     title: {
-        fontWeight: "bold",
-        mb: 2,
+        textAlign: "center",
+        fontWeight: 600,
+        mb: 1,
     },
+
     subTitle: {
+        textAlign: "center",
         color: "text.secondary",
+        mb: 3,
     },
+
     form: {
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
-        width: "100%",
         gap: 2,
-        mt: 2,
-        p: 1,
+        width: "100%",
     },
+
     input: {
         width: "100%",
     },
+
     submitButton: {
         textTransform: "none",
-        width: "80%",
-        p: 1,
-        mb: 2,
+        mt: 2,
+        py: 1.2,
+        fontWeight: 600,
     },
+
     switchText: {
+        textAlign: "center",
+        mt: 2,
         color: "text.secondary",
-        mb: 1,
     },
+
     switchButton: {
+        alignSelf: "center",
+        mt: 1,
         textTransform: "none",
-        p: 1,
-        width: "80%",
     },
-}
+};

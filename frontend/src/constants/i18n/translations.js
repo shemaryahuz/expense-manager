@@ -1,93 +1,78 @@
 export const translations = {
-  en: {
-    // layout
-    appName: "Expense Manager",
-    author: "Shemaryahu Zelmonov",
+  "Expense Manager": "מנהל ההוצאות",
+  "Shemaryahu Zelmanov": "שמריהו זלמנוב",
 
-    // common
-    home: "Home",
-    dashboard: "Dashboard",
-    transactions: "Transactions",
-    categories: "Categories",
+  "Home": "בית",
+  "Dashboard": "לוח הבקרה",
+  "Transactions": "עסקאות",
+  "Categories": "קטגוריות",
 
-    // auth
-    login: "Log in",
-    signup: "Sign up",
-    logout: "Logout",
-    email: "Email",
-    password: "Password",
-    name: "Name",
+  "Month": "חודש",
+  "Loading...": "טוען...",
+  "Saving...": "שומר...",
 
-    // dashboard
-    totalIncome: "Total Income",
-    totalExpenses: "Total Expenses",
-    balance: "Balance",
+  "Network Error": "שגיאת רשת",
+  "Unknown Error": "שגיאה לא ידועה",
+  "Something went wrong": "אירעה שגיאה",
 
-    // transactions
-    title: "Title",
-    amount: "Amount",
-    type: "Type",
-    category: "Category",
-    date: "Date",
-    income: "Income",
-    expense: "Expense",
+  "You are logged in successfully": "התחברת בהצלחה",
+  "You are signed up successfully": "נרשמת בהצלחה",
+  "Email already exists": "האימייל כבר קיים",
+  "User not found": "משתמש לא נמצא",
+  "Invalid password": "סיסמא שגויה",
+  "User updated successfully": "משתמש עודכן בהצלחה",
+  "Password updated successfully": "סיסמה עודכנה בהצלחה",
 
-    // buttons
-    cancel: "Cancel",
-    save: "Save",
-    add: "Add",
-    update: "Update",
-    viewAllTransactions: "View All Transactions",
-    viewAllCategories: "View All Categories",
 
-    // empty states
-    noTransactions: "No transactions found.",
-    noCategories: "No categories found.",
-  },
+  "Welcome to Expense Manager": "ברוכים הבאים למנהל ההוצאות",
+  "Track your expenses, manage categories, and understand your financial life": "עקוב אחר הוצאות, נהל קטגוריות ושפר את חייך הפיננסים",
 
-  he: {
-    // layout
-    appName: "מנהל הוצאות",
-    author: "שמריהו זלמנוב",
+  "Welcome": "ברוך הבא",
+  "User": "משתמש",
+  "Guest": "אורח",
+  "You are logged in": "אתה מחובר",
+  "Please login or signup to access your account": "אנא התחבר או הירשם לצפייה בחשבון שלך",
+  "Account Settings": "הגדרות חשבון",
+  "Log in": "התחבר",
+  "Sign up": "הירשם",
+  "Log out": "התנתק",
+  "Email": "אימייל",
+  "Password": "סיסמה",
+  "Name": "שם",
+  "Don't have an account?": "אין לך חשבון?",
+  "Already have an account?": "יש לך כבר חשבון?",
+  "Log in to your account": "התחבר לחשבון שלך",
+  "Create an account": "צור חשבון",
 
-    // common
-    home: "בית",
-    dashboard: "לוח בקרה",
-    transactions: "עסקאות",
-    categories: "קטגוריות",
+  "View and manage your account details": "צפה ונהל את פרטי החשבון שלך",
+  "Profile Details": "פרטי המשתמש",
+  "Update your name and email address": "עדכן שם ואימייל",
+  "Set a new password for your account": "הגדר סיסמה חדשה לחשבון שלך",
+  "New Password": "סיסמה חדשה",
+  "Delete Account": "מחק חשבון",
+  "This action is permanent and cannot be undone. All user data will be permanently deleted": "פעולה זו היא קבועה ולא ניתן לבטלה, כל נתוני המשתמש יימחקו לצמיתות",
+  "Are you sure you want to delete your account?": "האם אתה בטוח שברצונך למחוק את החשבון שלך?",
 
-    // auth
-    login: "התחבר",
-    signup: "הירשם",
-    logout: "התנתק",
-    email: "אימייל",
-    password: "סיסמה",
-    name: "שם",
+  "Total Income": "סה\"כ הכנסות",
+  "Total Expenses": "סה\"כ הוצאות",
+  "Balance": "יתרה",
 
-    // dashboard
-    totalIncome: "סה\"כ הכנסות",
-    totalExpenses: "סה\"כ הוצאות",
-    balance: "יתרה",
+  "Title": "כותרת",
+  "Amount": "סכום",
+  "Type": "סוג",
+  "Category": "קטגוריה",
+  "Date": "תאריך",
+  "Income": "הכנסה",
+  "Expense": "הוצאה",
 
-    // transactions
-    title: "כותרת",
-    amount: "סכום",
-    type: "סוג",
-    category: "קטגוריה",
-    date: "תאריך",
-    income: "הכנסה",
-    expense: "הוצאה",
+  "Cancel": "ביטול",
+  "Save": "שמור",
+  "Add": "הוסף",
+  "Update": "עדכן",
+  "Delete": "מחק",
+  "View All Transactions": "צפה בכל העסקאות",
+  "View All Categories": "צפה בכל הקטגוריות",
 
-    // buttons
-    cancel: "ביטול",
-    save: "שמור",
-    add: "הוסף",
-    update: "עדכן",
-    viewAllTransactions: "צפה בכל העסקאות",
-    viewAllCategories: "צפה בכל הקטגוריות",
-
-    // empty states
-    noTransactions: "לא נמצאו עסקאות.",
-    noCategories: "לא נמצאו קטגוריות.",
-  },
+  "No transactions found.": "לא נמצאו עסקאות.",
+  "No categories found.": "לא נמצאו קטגוריות.",
 };

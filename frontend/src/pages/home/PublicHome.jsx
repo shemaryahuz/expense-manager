@@ -1,26 +1,41 @@
-import { Box, Typography } from "@mui/material";
+import { useState } from "react";
 
-import LoginForm from "../user/LoginForm";
+import { Box, Typography, Button } from "@mui/material";
+
+import { useTranslation } from "../../hooks/i18n";
+import LoginForm from "../../pages/user/LoginForm";
+
+import { homePageStyles as styles } from "./styles/HomePage.styles";
 
 export default function PublicHome() {
+  const [loginFormOpen, setLoginFormOpen] = useState(false);
+
+  const { translate } = useTranslation();
+
+  const handleOpenLoginForm = () => setLoginFormOpen(true);
+  const handleCloseLoginForm = () => setLoginFormOpen(false);
+
   return (
-    <Box>
-      <Typography
-        variant="h4"
-        gutterBottom
-        sx={{ fontWeight: "bold", textAlign: "center", mb: 2 }}
-      >
-        Welcome to Expense Manager!
+    <Box sx={styles.mainBox}>
+      <Typography variant="h3" sx={{ fontWeight: "bold" }}>
+        {translate("Welcome to Expense Manager")}
       </Typography>
-      <Typography
-        variant="body1"
-        gutterBottom
-        sx={{ textAlign: "center", mb: 2, mt: 2 }}
-      >
-        Track your expenses, manage categories, and understand your financial
-        life.
+      <Typography variant="h6">
+        {translate(
+          "Track your expenses, manage categories, and understand your financial life"
+        )}
       </Typography>
-      <LoginForm />
+      <Typography variant="body1" color="text.secondary">
+        {translate("Please login or signup to access your account")}
+      </Typography>
+      <Button
+        variant="contained"
+        onClick={handleOpenLoginForm}
+        sx={{ textTransform: "none" }}
+      >
+        {translate("Log in")} / {translate("Sign up")}
+      </Button>
+      <LoginForm open={loginFormOpen} onClose={handleCloseLoginForm} />
     </Box>
   );
 }

@@ -1,4 +1,4 @@
-import { StrictMode, useEffect, useMemo } from "react";
+import { StrictMode, useMemo } from "react";
 import { createRoot } from "react-dom/client";
 import { Provider as ReduxProvider, useSelector } from "react-redux";
 import { ThemeProvider } from "@mui/material";
@@ -24,9 +24,15 @@ function AppWithTheme() {
   const themeMode = useSelector(selectThemeMode);
   const direction = useSelector(selectDirection);
 
-  const cache = useMemo(() => direction === "rtl" ? createRtlCache() : createLtrCache(), [direction]);
+  const cache = useMemo(
+    () => (direction === "rtl" ? createRtlCache() : createLtrCache()),
+    [direction]
+  );
 
-  const theme = useMemo(() => getTheme(themeMode, direction), [themeMode, direction]);
+  const theme = useMemo(
+    () => getTheme(themeMode, direction),
+    [themeMode, direction]
+  );
 
   return (
     <CacheProvider value={cache}>

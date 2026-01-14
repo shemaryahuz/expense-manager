@@ -11,12 +11,16 @@ import dayjs from "dayjs";
 import { INITIAL_DATE, MONTH, YEAR } from "../../constants/ui/dateConstants";
 import { dayjsToMonthStart } from "../../utiles/monthUtils";
 
+import { useTranslation } from "../../hooks/i18n.js";
+
 import { monthHeaderStyles as styles } from "./styles/MonthHeader.styles";
 
 const minDate = dayjs(INITIAL_DATE);
 const maxDate = dayjs(new Date());
 
 export default function MonthHeader({ month, onMonthChange }) {
+  const { translate, language } = useTranslation();
+
   const hasPrevMonth = month.isAfter(minDate, MONTH);
   const hasNextMonth = month.isBefore(maxDate, MONTH);
 
@@ -36,7 +40,7 @@ export default function MonthHeader({ month, onMonthChange }) {
           </IconButton>
         )}
       </Box>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={language}>
         <DemoContainer components={["DatePicker"]}>
           <DatePicker
             minDate={minDate}
@@ -44,8 +48,17 @@ export default function MonthHeader({ month, onMonthChange }) {
             views={[YEAR, MONTH]}
             openTo={MONTH}
             value={month}
-            label="Month"
+            label={translate("Month")}
             onChange={handleDatePickerChange}
+            slotProps={{
+              textField: {
+                sx: {
+                  "& .MuiInputAdornment-root": {
+                    marginInlineStart: 1,
+                  },
+                },
+              },
+            }}
           />
         </DemoContainer>
       </LocalizationProvider>

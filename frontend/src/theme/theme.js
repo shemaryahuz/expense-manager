@@ -1,8 +1,28 @@
 import { createTheme } from "@mui/material";
 import { teal } from "@mui/material/colors";
 
+const LTR_FONT = `"Inter", "SF Pro Display", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", sans-serif`;
+const RTL_FONT = `"Rubik", "Heebo", "Assistant", "Arimo", "Arial", sans-serif`;
+
 export const getTheme = (mode = "light", direction = "ltr") => createTheme({
     direction,
+    typography: {
+        fontFamily: direction === "rtl" ? RTL_FONT : LTR_FONT,
+
+        h1: { fontWeight: 700 },
+        h2: { fontWeight: 700 },
+        h3: { fontWeight: 600 },
+        h4: { fontWeight: 600 },
+        h5: { fontWeight: 500 },
+        h6: { fontWeight: 500 },
+
+        body1: { fontWeight: 400 },
+        body2: { fontWeight: 400 },
+        button: {
+            fontWeight: 500,
+            textTransform: "none",
+        },
+    },
     palette: {
         mode,
         primary: {
@@ -34,5 +54,5 @@ export const getTheme = (mode = "light", direction = "ltr") => createTheme({
                     secondary: "rgba(255, 255, 255, 0.7)",
                 },
             },
-    }
+    },
 });

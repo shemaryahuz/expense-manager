@@ -79,7 +79,7 @@ export default function Header({ drawerOpen, handleDrawerOpen }) {
               alt="Logo"
               sx={{ height: 40 }}
             />
-            <Typography variant="h4">{translate("appName")}</Typography>
+            <Typography variant="h4">{translate("Expense Manager")}</Typography>
           </Link>
 
           <IconButton

@@ -15,7 +15,7 @@ export default function Footer() {
           href="https://github.com/shemaryahuz"
           target="_blank"
         >
-          {translate("author")}
+          {translate("Shemaryahu Zelmanov")}
         </Link>
       </Box>
     </StyledFooter>

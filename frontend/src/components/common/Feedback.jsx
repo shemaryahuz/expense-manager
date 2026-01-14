@@ -1,5 +1,7 @@
 import { Alert, Snackbar, Typography } from "@mui/material";
 
+import { useTranslation } from "../../hooks/i18n";
+
 export default function Feedback({
   message,
   severity = "success",
@@ -7,6 +9,8 @@ export default function Feedback({
   onClose,
   anchorOrigin = { vertical: "center", horizontal: "left" },
 }) {
+  const { translate } = useTranslation();
+
   return (
     <Snackbar
       open={open}
@@ -15,7 +19,7 @@ export default function Feedback({
       onClose={onClose}
     >
       <Alert variant="filled" severity={severity} onClose={onClose}>
-        <Typography variant="body1">{message}</Typography>
+        <Typography variant="body1">{translate(message)}</Typography>
       </Alert>
     </Snackbar>
   );

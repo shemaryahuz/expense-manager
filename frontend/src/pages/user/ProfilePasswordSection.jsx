@@ -2,26 +2,26 @@ import { Box, Button, TextField, Typography } from "@mui/material";
 
 import { profileSectionStyles as styles } from "./styles/ProfileSections.styles";
 
+import { useTranslation } from "../../hooks/i18n";
+
 export default function ProfilePasswordSection({
   password,
   isLoading,
   onChange,
   onSubmit,
 }) {
+  const { translate } = useTranslation();
+
   return (
     <Box sx={styles.card}>
-      <Typography variant="h6">Password</Typography>
+      <Typography variant="h6">{translate("Password")}</Typography>
       <Typography variant="body2" color="text.secondary">
-        Set a new password for your account.
+        {translate("Set a new password for your account")}
       </Typography>
-      <Box
-        component="form"
-        onSubmit={onSubmit}
-        sx={styles.form}
-      >
+      <Box component="form" onSubmit={onSubmit} sx={styles.form}>
         <TextField
           type="password"
-          label="New password"
+          label={translate("New Password")}
           name="password"
           value={password}
           required
@@ -35,11 +35,9 @@ export default function ProfilePasswordSection({
           disabled={isLoading || !password}
           sx={styles.primaryButton}
         >
-          {isLoading ? "Saving..." : "Update password"}
+          {isLoading ? translate("Saving") : translate("Update")}
         </Button>
       </Box>
     </Box>
   );
 }
-
-
