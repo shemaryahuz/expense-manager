@@ -10,25 +10,25 @@ export const layoutStyles = {
     pageContainer: {
         minHeight: "100vh",
         boxSizing: "border-box",
-        width: "100%",
-        maxWidth: "100%",
         overflowX: "hidden",
         overflowY: "auto",
 
         marginTop: "4rem",
-
         marginBottom: "6rem",
 
-        marginLeft: { md: "15rem" },
+        paddingInlineStart: { md: `${drawerWidth}px` },
+        width: { md: `calc(100% - ${drawerWidth}px)` },
 
         "[dir='rtl'] &": {
-            marginLeft: 0,
-            marginRight: { md: "15rem" },
+            paddingInlineStart: 0,
+            paddingInlineEnd: { md: `${drawerWidth}px` },
+            width: { md: `calc(100% - ${drawerWidth}px)` },
         },
 
         "@media (max-width: 900px)": {
-            marginLeft: 0,
-            marginRight: 0,
+            paddingInlineStart: 0,
+            paddingInlineEnd: 0,
+            width: "100%",
         },
     },
 };
