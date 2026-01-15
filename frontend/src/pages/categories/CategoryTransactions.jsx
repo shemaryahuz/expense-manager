@@ -1,4 +1,7 @@
 import { Fragment } from "react";
+import { useSelector } from "react-redux";
+
+import { selectCurrency } from "../../features/settings/settingsSlice";
 
 import {
   Box,
@@ -12,6 +15,8 @@ import {
 import { INCOME } from "../../constants/features/transactionsConstants";
 
 export default function CategoryTransactions({ transactions }) {
+  const { symbol } = useSelector(selectCurrency);
+
   return (
     <List dense>
       {transactions.map(({ id, title, date, type, amount }, index) => (
@@ -26,7 +31,9 @@ export default function CategoryTransactions({ transactions }) {
               }}
             >
               <Typography variant="body1">
-                {type === INCOME ? "+ " : "- "}${amount}
+                {type === INCOME ? "+ " : "- "}
+                {symbol}
+                {amount}
               </Typography>
             </Box>
           </ListItem>

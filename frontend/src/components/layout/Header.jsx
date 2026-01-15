@@ -1,40 +1,59 @@
 import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 import { Box, IconButton, Link, Toolbar, Typography } from "@mui/material";
 import {
   AccountCircle,
+  LightMode,
   MenuOpen,
-  Settings,
+  ModeNight,
+  Paid,
   Translate,
 } from "@mui/icons-material";
 
 import { AppBar } from "./styles/Header.styles.js";
 import AccountMenu from "../../pages/user/AccountMenu.jsx";
 
+import { selectUser } from "../../features/user/userSlice.js";
+import {
+  selectThemeMode,
+  toggleThemeMode,
+} from "../../features/settings/settingsSlice.js";
+
 import { useTranslation } from "../../hooks/i18n.js";
-import SettingsMenu from "./SettingsMenu.jsx";
+
+import CurrencyMenu from "./CurrencyMenu.jsx";
 import LanguageMenu from "./LanguageMenu.jsx";
 
 export default function Header({ drawerOpen, handleDrawerOpen }) {
-  const [accountMenuAnchor, setAccountMenuAnchor] = useState(null);
-  const [settingsMenuAnchor, setSettingsMenuAnchor] = useState(null);
-  const [languageMenuAnchor, setLanguageMenuAnchor] = useState(null);
+  const dispatch = useDispatch();
 
   const { translate } = useTranslation();
 
+  const [accountMenuAnchor, setAccountMenuAnchor] = useState(null);
+  const [currencyMenuAnchor, setCurrencyMenuAnchor] = useState(null);
+  const [languageMenuAnchor, setLanguageMenuAnchor] = useState(null);
+
+  const user = useSelector(selectUser);
+  const themeMode = useSelector(selectThemeMode);
+
   const accountMenuOpen = Boolean(accountMenuAnchor);
-  const settingsMenuOpen = Boolean(settingsMenuAnchor);
+  const currencyMenuOpen = Boolean(currencyMenuAnchor);
   const languageMenuOpen = Boolean(languageMenuAnchor);
+
+  const handleToggleThemeMode = () => {
+    dispatch(toggleThemeMode());
+  };
 
   const handleAccountMenuOpen = ({ currentTarget }) =>
     setAccountMenuAnchor(currentTarget);
 
   const handleAccountMenuClose = () => setAccountMenuAnchor(null);
 
-  const handleSettingsMenuOpen = ({ currentTarget }) =>
-    setSettingsMenuAnchor(currentTarget);
+  const handleCurrencyMenuOpen = ({ currentTarget }) =>
+    setCurrencyMenuAnchor(currentTarget);
 
-  const handleSettingsMenuClose = () => setSettingsMenuAnchor(null);
+  const handleCurrencyMenuClose = () => setCurrencyMenuAnchor(null);
 
   const handleLanguageMenuOpen = ({ currentTarget }) =>
     setLanguageMenuAnchor(currentTarget);
@@ -84,6 +103,14 @@ export default function Header({ drawerOpen, handleDrawerOpen }) {
 
           <IconButton
             color="inherit"
+            aria-label="theme-mode"
+            onClick={handleToggleThemeMode}
+          >
+            {themeMode === "light" ? <ModeNight /> : <LightMode />}
+          </IconButton>
+
+          <IconButton
+            color="inherit"
             aria-label="language"
             onClick={handleLanguageMenuOpen}
           >
@@ -95,18 +122,23 @@ export default function Header({ drawerOpen, handleDrawerOpen }) {
             onClose={handleLanguageMenuClose}
           />
 
-          <IconButton
-            color="inherit"
-            aria-label="settings"
-            onClick={handleSettingsMenuOpen}
-          >
-            <Settings fontSize="large" />
-          </IconButton>
-          <SettingsMenu
-            open={settingsMenuOpen}
-            anchorEl={settingsMenuAnchor}
-            onClose={handleSettingsMenuClose}
-          />
+          {user && (
+            <>
+              {" "}
+              <IconButton
+                color="inherit"
+                aria-label="currency"
+                onClick={handleCurrencyMenuOpen}
+              >
+                <Paid fontSize="large" />
+              </IconButton>
+              <CurrencyMenu
+                open={currencyMenuOpen}
+                anchorEl={currencyMenuAnchor}
+                onClose={handleCurrencyMenuClose}
+              />
+            </>
+          )}
 
           <IconButton
             color="inherit"

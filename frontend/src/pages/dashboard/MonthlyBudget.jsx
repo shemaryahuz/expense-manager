@@ -6,8 +6,9 @@ import {
   selectIncomeTransactions,
   selectExpenseTransactions,
 } from "../../features/transactions/transactionsSelectors";
-import { getTotalAmount } from "../../utiles/transactionsUtils";
+import { selectCurrency } from "../../features/settings/settingsSlice";
 
+import { getTotalAmount } from "../../utiles/transactionsUtils";
 import { useTranslation } from "../../hooks/i18n";
 
 import { monthlyBudgetStyles as styles } from "./styles/MonthlyBudget.styles";
@@ -17,6 +18,8 @@ export default function MonthlyBudget() {
 
   const incomeTransactions = useSelector(selectIncomeTransactions);
   const expenseTransactions = useSelector(selectExpenseTransactions);
+
+  const { symbol } = useSelector(selectCurrency);
 
   const totalIncome = getTotalAmount(incomeTransactions).toFixed(2);
   const totalExpenses = getTotalAmount(expenseTransactions).toFixed(2);
@@ -29,7 +32,8 @@ export default function MonthlyBudget() {
           {translate("Total Income")}
         </Typography>
         <Typography variant="h4" sx={{ color: "green" }}>
-          ${totalIncome}
+          {symbol}
+          {totalIncome}
         </Typography>
       </Grid>
       <Grid size={6} sx={styles.gridItem}>
@@ -37,7 +41,8 @@ export default function MonthlyBudget() {
           {translate("Balance")}
         </Typography>
         <Typography variant="h4" sx={{ color: balance >= 0 ? "green" : "red" }}>
-          ${balance}
+          {symbol}
+          {balance}
         </Typography>
       </Grid>
       <Grid size="grow" sx={styles.gridItem}>
@@ -45,7 +50,8 @@ export default function MonthlyBudget() {
           {translate("Total Expenses")}
         </Typography>
         <Typography variant="h4" sx={{ color: "red" }}>
-          ${totalExpenses}
+          {symbol}
+          {totalExpenses}
         </Typography>
       </Grid>
     </Grid>

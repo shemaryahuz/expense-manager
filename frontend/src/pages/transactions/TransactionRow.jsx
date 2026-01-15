@@ -7,6 +7,7 @@ import { Delete, Edit } from "@mui/icons-material";
 import { deleteTransaction } from "../../features/transactions/transactionsThunks";
 import { fetchCategories } from "../../features/categories/categoriesThunks";
 import { selectCategories } from "../../features/categories/categoriesSelectors";
+import { selectCurrency } from "../../features/settings/settingsSlice";
 
 import { useTranslation } from "../../hooks/i18n";
 import { getCategoryName } from "../../utiles/categoriesUtils";
@@ -25,6 +26,8 @@ export default function TransactionRow({ transaction }) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const categories = useSelector(selectCategories);
+
+  const { symbol } = useSelector(selectCurrency);
 
   const { id, date, title, amount, type, categoryId } = transaction;
   const categoryName = getCategoryName(categories, categoryId) || "None";
@@ -61,7 +64,9 @@ export default function TransactionRow({ transaction }) {
             alignItems: "center",
           }}
         >
-          {type === INCOME ? "+ " : "- "}${amount}
+          {type === INCOME ? "+ " : "- "}
+          {symbol}
+          {amount}
         </Box>
       </TableCell>
 

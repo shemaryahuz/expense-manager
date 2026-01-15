@@ -1,8 +1,10 @@
 import { Box, TextField, Typography } from "@mui/material";
+import { useSelector } from "react-redux";
 
-import { INCOME_ID } from "../../constants/features/categoriesConstants";
+import { selectCurrency } from "../../features/settings/settingsSlice";
 
 import { useTranslation } from "../../hooks/i18n";
+import { INCOME_ID } from "../../constants/features/categoriesConstants";
 
 import { CategoryCardStyles as styles } from "./styles/CategoryCard.styles";
 
@@ -15,6 +17,8 @@ export default function CategoryHeader({
   id,
 }) {
   const { translate } = useTranslation();
+
+  const { symbol } = useSelector(selectCurrency);
 
   return (
     <Box sx={styles.categoryHeader}>
@@ -51,7 +55,9 @@ export default function CategoryHeader({
                 alignItems: "center",
               }}
             >
-              {id === INCOME_ID ? "+ " : "- "}${amount}
+              {id === INCOME_ID ? "+ " : "- "}
+              {symbol}
+              {amount}
             </Typography>
           )}
         </Box>

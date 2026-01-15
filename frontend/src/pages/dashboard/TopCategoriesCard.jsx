@@ -1,14 +1,16 @@
 import { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import { Card, Typography, Button, Box, Divider } from "@mui/material";
 
+import { selectCurrency } from "../../features/settings/settingsSlice";
+
+import { useTranslation } from "../../hooks/i18n";
 import { getTopCategories } from "../../utiles/categoriesUtils";
 
 import { ROUTE_PATHS } from "../../constants/app/routes";
 import { TOP_CATEGORIES_LIMIT } from "../../constants/ui/dashboardConstants";
-
-import { useTranslation } from "../../hooks/i18n";
 
 import { dashboardStyles as styles } from "./styles/Dashboard.styles";
 
@@ -18,6 +20,8 @@ export default function TopCategoriesCard({ transactions, categories }) {
   const navigate = useNavigate();
 
   const { translate } = useTranslation();
+
+  const { symbol } = useSelector(selectCurrency);
 
   const topCategories = getTopCategories(
     categories,
@@ -39,7 +43,8 @@ export default function TopCategoriesCard({ transactions, categories }) {
               <Box sx={styles.categoryItem}>
                 <Typography variant="body1">{translate(name)}</Typography>
                 <Typography variant="body1" sx={styles.categoryAmount}>
-                  - ${amount.toFixed(2)}
+                  - {symbol}
+                  {amount.toFixed(2)}
                 </Typography>
               </Box>
               {index !== topCategories.length - 1 && <Divider />}

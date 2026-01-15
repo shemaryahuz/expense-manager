@@ -4,12 +4,20 @@ import { translations } from "../../constants/i18n/translations";
 
 const getInitialThemeMode = () => {
     const themeMode = localStorage.getItem("themeMode");
-    return themeMode === "dark" ? themeMode : "light";
+    return themeMode || "light";
 };
 
 const getInitialLanguage = () => {
     const storedLanguage = localStorage.getItem("language");
     return storedLanguage === "he" ? storedLanguage : "en";
+};
+
+const getInitialCurrency = () => {
+    const storedCurrency = localStorage.getItem("currency") || "USD";
+    return {
+        currency: storedCurrency,
+        symbol: storedCurrency === "USD" ? "$" : "₪",
+    }
 };
 
 const initialLanguage = getInitialLanguage();
@@ -19,6 +27,7 @@ const initialState = {
     language: initialLanguage,
     direction: initialLanguage === "he" ? "rtl" : "ltr",
     translations,
+    currency: getInitialCurrency(),
 };
 
 export const settingsSlice = createSlice({
@@ -43,6 +52,10 @@ export const settingsSlice = createSlice({
             state.direction = state.language === "he" ? "rtl" : "ltr";
             localStorage.setItem("language", state.language);
         },
+        setCurrency: (state, action) => {
+            state.currency = action.payload;
+            localStorage.setItem("currency", state.currency.currency);
+        },
     },
 });
 
@@ -50,8 +63,9 @@ export const selectThemeMode = (state) => state.settings.themeMode;
 export const selectLanguage = (state) => state.settings.language;
 export const selectDirection = (state) => state.settings.direction;
 export const selectTranslations = (state) => state.settings.translations;
+export const selectCurrency = (state) => state.settings.currency;
 
 
-export const { toggleThemeMode, setThemeMode, setLanguage, toggleLanguage } = settingsSlice.actions;
+export const { toggleThemeMode, setThemeMode, setLanguage, toggleLanguage, setCurrency } = settingsSlice.actions;
 
 export default settingsSlice.reducer;

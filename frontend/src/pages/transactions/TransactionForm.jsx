@@ -27,7 +27,10 @@ import {
 import { selectTransactionsState } from "../../features/transactions/transactionsSelectors";
 import { clearMessage } from "../../features/transactions/transactionsSlice";
 import { selectExpenseCategories } from "../../features/categories/categoriesSelectors";
-import { selectLanguage } from "../../features/settings/settingsSlice";
+import {
+  selectLanguage,
+  selectCurrency,
+} from "../../features/settings/settingsSlice";
 
 import { useTranslation } from "../../hooks/i18n";
 
@@ -68,6 +71,7 @@ export default function TransactionForm({
   const expenseCategories = useSelector(selectExpenseCategories);
 
   const language = useSelector(selectLanguage);
+  const { currency } = useSelector(selectCurrency);
 
   const date = transaction.date ? dayjs(transaction.date) : null;
 
@@ -138,7 +142,7 @@ export default function TransactionForm({
         <TextField
           required
           name="amount"
-          label={translate("Amount")}
+          label={`${translate("Amount")} (${translate(currency)})`}
           type="number"
           value={amount}
           slotProps={{ htmlInput: { min: 0.1, step: 0.01 } }}

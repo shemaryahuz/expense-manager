@@ -8,6 +8,9 @@ export const translations = {
   "Transactions": "עסקאות",
   "Categories": "קטגוריות",
 
+  "USD": "דולר",
+  "ILS": "שקל",
+
   "Month": "חודש",
   "Loading...": "טוען...",
   "Saving...": "שומר...",

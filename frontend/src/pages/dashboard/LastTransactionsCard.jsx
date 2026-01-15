@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import { useTranslation } from "../../hooks/i18n";
 
@@ -14,6 +15,8 @@ import {
   ListItemText,
 } from "@mui/material";
 
+import { selectCurrency } from "../../features/settings/settingsSlice";
+
 import { INCOME } from "../../constants/features/transactionsConstants";
 import { ROUTE_PATHS } from "../../constants/app/routes";
 import { LAST_TRANSACTIONS_LIMIT } from "../../constants/ui/dashboardConstants";
@@ -26,6 +29,8 @@ export default function LastTransactionsCard({ transactions }) {
   const navigate = useNavigate();
 
   const { translate } = useTranslation();
+
+  const { symbol } = useSelector(selectCurrency);
 
   const lastTransactions = transactions.slice(0, LAST_TRANSACTIONS_LIMIT);
 
@@ -50,7 +55,9 @@ export default function LastTransactionsCard({ transactions }) {
                   }}
                 >
                   <Typography variant="body1">
-                    {type === INCOME ? "+ " : "- "}${amount}
+                    {type === INCOME ? "+ " : "- "}
+                    {symbol}
+                    {amount}
                   </Typography>
                 </Box>
               </ListItem>
