@@ -4,7 +4,7 @@ import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 
 import dayjs from "dayjs";
 
@@ -40,9 +40,17 @@ export default function MonthHeader({ month, onMonthChange }) {
           </IconButton>
         )}
       </Box>
-      <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale={language}>
+      <LocalizationProvider
+        dateAdapter={AdapterDayjs}
+        adapterLocale={language}
+        localeText={{
+          datePickerToolbarTitle: translate("Select month"),
+          cancelButtonLabel: translate("Cancel"),
+          okButtonLabel: translate("OK"),
+        }}
+      >
         <DemoContainer components={["DatePicker"]}>
-          <DatePicker
+          <MobileDatePicker
             minDate={minDate}
             maxDate={maxDate}
             views={[YEAR, MONTH]}

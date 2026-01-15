@@ -11,12 +11,15 @@ export const translations = {
   "USD": "דולר",
   "ILS": "שקל",
 
+  "Select date": "בחר תאריך",
+  "Select month": "בחר חודש",
   "Month": "חודש",
   "Loading...": "טוען...",
   "Saving...": "שומר...",
 
   "Search": "חיפוש",
   "Cancel": "ביטול",
+  "OK": "אישור",
   "Save": "שמור",
   "Update": "עדכן",
   "Delete": "מחק",

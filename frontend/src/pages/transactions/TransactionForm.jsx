@@ -17,7 +17,7 @@ import {
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
-import { DatePicker } from "@mui/x-date-pickers";
+import { MobileDatePicker } from "@mui/x-date-pickers";
 import dayjs from "dayjs";
 
 import {
@@ -186,9 +186,14 @@ export default function TransactionForm({
         <LocalizationProvider
           dateAdapter={AdapterDayjs}
           adapterLocale={language}
+          localeText={{
+            datePickerToolbarTitle: translate("Select date"),
+            cancelButtonLabel: translate("Cancel"),
+            okButtonLabel: translate("OK"),
+          }}
         >
           <DemoContainer components={["DatePicker"]}>
-            <DatePicker
+            <MobileDatePicker
               slotProps={{
                 textField: {
                   required: true,
