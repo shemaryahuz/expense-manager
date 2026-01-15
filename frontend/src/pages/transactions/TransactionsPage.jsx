@@ -20,6 +20,8 @@ import {
   clearMessage,
   clearSearched,
 } from "../../features/transactions/transactionsSlice";
+import { selectCategories } from "../../features/categories/categoriesSelectors";
+import { fetchCategories } from "../../features/categories/categoriesThunks";
 
 import { getCurrentMonth, dayjsToDate } from "../../utiles/monthUtils";
 
@@ -52,11 +54,16 @@ export default function TransactionsPage() {
     selectTransactionsState
   );
 
+  const categories = useSelector(selectCategories);
+
   const currentTransactions = isSearching ? searched : transactions;
 
   useEffect(() => {
     dispatch(fetchTransactions(dayjsToDate(month)));
-  }, [dispatch, month]);
+    if (categories.length === 0) {
+      dispatch(fetchCategories());
+    }
+  }, [categories, dispatch, month]);
 
   useEffect(() => {
     if ((message && status === SUCCEEDED) || status === FAILED) {

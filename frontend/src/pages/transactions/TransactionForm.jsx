@@ -141,7 +141,7 @@ export default function TransactionForm({
           label={translate("Amount")}
           type="number"
           value={amount}
-          slotProps={{ htmlInput: { min: 0.1, step: 0.1 } }}
+          slotProps={{ htmlInput: { min: 0.1, step: 0.01 } }}
           onChange={handleChange}
         />
         <FormControl fullWidth required>

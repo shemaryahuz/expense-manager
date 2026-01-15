@@ -22,12 +22,16 @@ import CategoryHeader from "./CategoryHeader";
 import CategoryEditActions from "./CategoryEditActions";
 import CategoryMenu from "./CategoryMenu";
 
+import { useTranslation } from "../../hooks/i18n";
+
 import { CategoryCardStyles as styles } from "./styles/CategoryCard.styles";
 
 export default function CategoryCard({ category }) {
   const { id, userId, name } = category;
 
   const dispatch = useDispatch();
+
+  const { translate } = useTranslation();
 
   const [anchorEl, setAnchorEl] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -135,7 +139,7 @@ export default function CategoryCard({ category }) {
         {transactions.length > 0 ? (
           <CategoryTransactions transactions={transactions} />
         ) : (
-          <Typography>No transactions yet</Typography>
+          <Typography>{translate("No transactions yet")}</Typography>
         )}
       </AccordionDetails>
     </Accordion>

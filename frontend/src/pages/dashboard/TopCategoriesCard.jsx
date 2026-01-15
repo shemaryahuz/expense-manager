@@ -37,7 +37,7 @@ export default function TopCategoriesCard({ transactions, categories }) {
           topCategories.map(({ name, amount }, index) => (
             <Fragment key={name}>
               <Box sx={styles.categoryItem}>
-                <Typography variant="body1">{name}</Typography>
+                <Typography variant="body1">{translate(name)}</Typography>
                 <Typography variant="body1" sx={styles.categoryAmount}>
                   - ${amount.toFixed(2)}
                 </Typography>
