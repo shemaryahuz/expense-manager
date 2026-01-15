@@ -98,7 +98,14 @@ export default function TransactionsPage() {
   };
 
   return (
-    <Container>
+    <Container 
+      maxWidth="xl"
+      sx={{ 
+        width: "100%",
+        px: { xs: 1, sm: 2 },
+        boxSizing: "border-box",
+      }}
+    >
       <Typography variant="h3" gutterBottom sx={styles.heading}>
         {translate("Transactions")}
       </Typography>

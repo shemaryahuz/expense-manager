@@ -27,7 +27,7 @@ export default function MonthlyBudget() {
 
   return (
     <Grid container spacing={2} sx={styles.container}>
-      <Grid size="grow" sx={styles.gridItem}>
+      <Grid size={{ xs: 12, md: "grow" }} sx={styles.gridItem}>
         <Typography variant="h6" sx={styles.title}>
           {translate("Total Income")}
         </Typography>
@@ -36,7 +36,7 @@ export default function MonthlyBudget() {
           {totalIncome}
         </Typography>
       </Grid>
-      <Grid size={6} sx={styles.gridItem}>
+      <Grid size={{ xs: 12, md: 6 }} sx={styles.gridItem}>
         <Typography variant="h6" sx={styles.title}>
           {translate("Balance")}
         </Typography>
@@ -45,7 +45,7 @@ export default function MonthlyBudget() {
           {balance}
         </Typography>
       </Grid>
-      <Grid size="grow" sx={styles.gridItem}>
+      <Grid size={{ xs: 12, md: "grow" }} sx={styles.gridItem}>
         <Typography variant="h6" sx={styles.title}>
           {translate("Total Expenses")}
         </Typography>

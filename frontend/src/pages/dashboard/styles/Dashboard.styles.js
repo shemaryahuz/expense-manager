@@ -3,6 +3,8 @@ export const dashboardStyles = {
         mb: 2,
         fontWeight: "bold",
         textAlign: "center",
+        width: "100%",
+        px: { xs: 1, sm: 0 },
     },
     cardsBox: {
         display: "flex",

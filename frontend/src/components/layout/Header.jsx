@@ -25,7 +25,7 @@ import { useTranslation } from "../../hooks/i18n.js";
 import CurrencyMenu from "./CurrencyMenu.jsx";
 import LanguageMenu from "./LanguageMenu.jsx";
 
-export default function Header({ drawerOpen, handleDrawerOpen }) {
+export default function Header({ drawerOpen, handleDrawerToggle, isMobile = false }) {
   const dispatch = useDispatch();
 
   const { translate } = useTranslation();
@@ -73,10 +73,10 @@ export default function Header({ drawerOpen, handleDrawerOpen }) {
         >
           <IconButton
             color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
+            aria-label="toggle drawer"
+            onClick={handleDrawerToggle}
             edge="start"
-            sx={{ mr: 2, ...(drawerOpen && { display: "none" }) }}
+            sx={{ mr: 2, display: "flex" }}
           >
             <MenuOpen />
           </IconButton>
@@ -98,7 +98,12 @@ export default function Header({ drawerOpen, handleDrawerOpen }) {
               alt="Logo"
               sx={{ height: 40 }}
             />
-            <Typography variant="h4">{translate("Expense Manager")}</Typography>
+            <Typography 
+              variant="h4" 
+              sx={{ display: { xs: 'none', sm: 'block' } }}
+            >
+              {translate("Expense Manager")}
+            </Typography>
           </Link>
 
           <IconButton

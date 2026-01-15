@@ -13,6 +13,13 @@ export const monthlyBudgetStyles = {
         p: 2,
         borderRadius: 1,
         boxShadow: "0px 4px 4px rgba(0, 0, 0, 0.25)",
+        overflow: "hidden",
+        wordWrap: "break-word",
+        "& .MuiTypography-root": {
+            wordBreak: "break-word",
+            textAlign: "center",
+            overflowWrap: "break-word",
+        },
     },
     title: {
         fontWeight: "bold",

@@ -53,6 +53,11 @@ export default function MonthHeader({ month, onMonthChange }) {
             slotProps={{
               textField: {
                 sx: {
+                  width: "100%",
+                  "& .MuiInputBase-input": {
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  },
                   "& .MuiInputAdornment-root": {
                     marginInlineStart: 1,
                   },

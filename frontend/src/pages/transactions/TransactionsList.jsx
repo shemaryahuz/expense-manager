@@ -2,6 +2,7 @@ import {
   Table,
   TableBody,
   TableCell,
+  TableContainer,
   TableHead,
   TableRow,
 } from "@mui/material";
@@ -18,20 +19,22 @@ export default function TransactionsList({ transactions }) {
   const { translate } = useTranslation();
 
   return (
-    <Table sx={styles.table}>
-      <TableHead>
-        <TableRow sx={styles.tableHead}>
-          {columnNames.map((columnName) => (
-            <TableCell key={columnName}>{translate(columnName)}</TableCell>
-          ))}
-        </TableRow>
-      </TableHead>
+    <TableContainer sx={styles.tableContainer}>
+      <Table sx={styles.table}>
+        <TableHead>
+          <TableRow sx={styles.tableHead}>
+            {columnNames.map((columnName) => (
+              <TableCell key={columnName}>{translate(columnName)}</TableCell>
+            ))}
+          </TableRow>
+        </TableHead>
 
-      <TableBody>
-        {transactions.map((transaction) => (
-          <TransactionRow transaction={transaction} key={transaction.id} />
-        ))}
-      </TableBody>
-    </Table>
+        <TableBody>
+          {transactions.map((transaction) => (
+            <TransactionRow transaction={transaction} key={transaction.id} />
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 }

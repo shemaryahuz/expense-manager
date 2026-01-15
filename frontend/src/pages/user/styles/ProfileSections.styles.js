@@ -3,7 +3,7 @@ const baseCard = {
   flexDirection: "column",
   alignItems: "center",
   justifyContent: "center",
-  width: "40%",
+  width: "60%",
   gap: 2,
   bgcolor: "background.paper",
   p: 3,

@@ -10,16 +10,20 @@ export const layoutStyles = {
     pageContainer: {
         minHeight: "100vh",
         boxSizing: "border-box",
+        width: "100%",
+        maxWidth: "100%",
+        overflowX: "hidden",
+        overflowY: "auto",
 
         marginTop: "4rem",
 
         marginBottom: "6rem",
 
-        marginLeft: { sm: "15rem" },
+        marginLeft: { md: "15rem" },
 
         "[dir='rtl'] &": {
             marginLeft: 0,
-            marginRight: { sm: "15rem" },
+            marginRight: { md: "15rem" },
         },
 
         "@media (max-width: 900px)": {
