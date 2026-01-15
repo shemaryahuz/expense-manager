@@ -14,6 +14,8 @@ import {
   selectCategoriesState,
 } from "../../features/categories/categoriesSelectors";
 
+import { useTranslation } from "../../hooks/i18n";
+
 import MonthHeader from "../../components/common/MonthHeader";
 import Loader from "../../components/common/Loader";
 import AlertMessage from "../../components/common/AlertMessage";
@@ -31,6 +33,8 @@ const { IDLE, LOADING, FAILED, SUCCEEDED } = STATUSES;
 
 export default function DashboardPage() {
   const dispatch = useDispatch();
+
+  const { translate } = useTranslation();
 
   const [month, setMonth] = useState(getCurrentMonth);
 
@@ -66,9 +70,9 @@ export default function DashboardPage() {
   const handleMonthChange = (dayjsMonth) => setMonth(dayjsMonth);
 
   return (
-    <Container sx={styles.container}>
-      <Typography variant="h2" gutterBottom sx={styles.heading}>
-        Dashboard
+    <Container>
+      <Typography variant="h3" gutterBottom sx={styles.heading}>
+        {translate("Dashboard")}
       </Typography>
 
       <MonthHeader month={month} onMonthChange={handleMonthChange} />

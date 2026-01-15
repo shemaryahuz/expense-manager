@@ -14,6 +14,8 @@ import { addCategory } from "../../features/categories/categoriesThunks";
 import { clearMessage } from "../../features/categories/categoriesSlice";
 import { selectCategoriesState } from "../../features/categories/categoriesSelectors";
 
+import { useTranslation } from "../../hooks/i18n";
+
 import { STATUSES } from "../../constants/features/statusConstants";
 
 import AlertMessage from "../../components/common/AlertMessage";
@@ -22,6 +24,8 @@ const { LOADING, FAILED, SUCCEEDED } = STATUSES;
 
 export default function AddCategoryForm({ open, onClose }) {
   const dispatch = useDispatch();
+
+  const { translate } = useTranslation();
 
   const [categoryName, setCategoryName] = useState("");
 
@@ -58,13 +62,13 @@ export default function AddCategoryForm({ open, onClose }) {
       onClose={onClose}
       closeAfterTransition={false}
     >
-      <DialogTitle>Add Category</DialogTitle>
+      <DialogTitle>{translate("Add category")}</DialogTitle>
       <DialogContent>
         <TextField
           sx={{ mt: 2 }}
           required
           id="category-name"
-          label="Category Name"
+          label={translate("Category name")}
           variant="outlined"
           fullWidth
           onChange={handleCategoryNameChange}
@@ -74,9 +78,9 @@ export default function AddCategoryForm({ open, onClose }) {
         <AlertMessage severity="error" message={message} />
       )}
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
+        <Button onClick={handleClose}>{translate("Cancel")}</Button>
         <Button type="submit" sx={{ color: "success.dark" }}>
-          {status === LOADING ? "Saving..." : "Add"}
+          {status === LOADING ? translate("Saving...") : translate("Save")}
         </Button>
       </DialogActions>
     </Dialog>

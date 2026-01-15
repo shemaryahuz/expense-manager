@@ -53,7 +53,7 @@ export default function HomePage() {
   const handleNavigate = () => navigate(DASHBOARD);
 
   return (
-    <Container sx={styles.container}>
+    <Container>
       {user ? (
         <PrivateHome
           name={name}

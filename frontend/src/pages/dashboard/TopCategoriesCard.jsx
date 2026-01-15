@@ -8,12 +8,16 @@ import { getTopCategories } from "../../utiles/categoriesUtils";
 import { ROUTE_PATHS } from "../../constants/app/routes";
 import { TOP_CATEGORIES_LIMIT } from "../../constants/ui/dashboardConstants";
 
+import { useTranslation } from "../../hooks/i18n";
+
 import { dashboardStyles as styles } from "./styles/Dashboard.styles";
 
 const { CATEGORIES } = ROUTE_PATHS;
 
 export default function TopCategoriesCard({ transactions, categories }) {
   const navigate = useNavigate();
+
+  const { translate } = useTranslation();
 
   const topCategories = getTopCategories(
     categories,
@@ -26,7 +30,7 @@ export default function TopCategoriesCard({ transactions, categories }) {
   return (
     <Card sx={styles.card}>
       <Typography variant="h6" gutterBottom sx={styles.cardTitle}>
-        Top Categories
+        {translate("Top Categories")}
       </Typography>
       <Box>
         {topCategories.length > 0 ? (
@@ -43,7 +47,7 @@ export default function TopCategoriesCard({ transactions, categories }) {
           ))
         ) : (
           <Typography variant="body1" sx={{ textAlign: "center" }}>
-            No categories found.
+            {translate("No categories found")}
           </Typography>
         )}
       </Box>
@@ -53,7 +57,7 @@ export default function TopCategoriesCard({ transactions, categories }) {
         variant="contained"
         sx={styles.cardButton}
       >
-        View All Categories
+        {translate("See all categories")}
       </Button>
     </Card>
   );

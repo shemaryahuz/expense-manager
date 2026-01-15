@@ -27,6 +27,9 @@ import {
 import { selectTransactionsState } from "../../features/transactions/transactionsSelectors";
 import { clearMessage } from "../../features/transactions/transactionsSlice";
 import { selectExpenseCategories } from "../../features/categories/categoriesSelectors";
+import { selectLanguage } from "../../features/settings/settingsSlice";
+
+import { useTranslation } from "../../hooks/i18n";
 
 import {
   INCOME_ID,
@@ -56,11 +59,15 @@ export default function TransactionForm({
 }) {
   const dispatch = useDispatch();
 
+  const { translate } = useTranslation();
+
   const [transaction, setTransaction] = useState(existingTransaction);
   const { title, amount, type, categoryId } = transaction;
 
   const { status, message } = useSelector(selectTransactionsState);
   const expenseCategories = useSelector(selectExpenseCategories);
+
+  const language = useSelector(selectLanguage);
 
   const date = transaction.date ? dayjs(transaction.date) : null;
 
@@ -114,45 +121,51 @@ export default function TransactionForm({
       sx={{ padding: 2 }}
       closeAfterTransition={false}
     >
-      <DialogTitle>{isEditMode ? "Edit" : "Add"} Transaction</DialogTitle>
+      <DialogTitle>
+        {isEditMode
+          ? translate("Edit Transaction")
+          : translate("Add Transaction")}
+      </DialogTitle>
       <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
         <TextField
           sx={{ mt: 1 }}
           required
           name="title"
-          label="Title"
+          label={translate("Title")}
           value={title}
           onChange={handleChange}
         />
         <TextField
           required
           name="amount"
-          label="Amount (USD)"
+          label={translate("Amount")}
           type="number"
           value={amount}
           slotProps={{ htmlInput: { min: 0.1, step: 0.1 } }}
           onChange={handleChange}
         />
         <FormControl fullWidth required>
-          <InputLabel id="type-select-label">Type</InputLabel>
+          <InputLabel id="type-select-label">{translate("Type")}</InputLabel>
           <Select
             name="type"
-            label="Type"
+            label={translate("Type")}
             labelId="type-select-label"
             id="type-select"
             value={type}
             onChange={handleChange}
           >
-            <MenuItem value={INCOME}>Income</MenuItem>
-            <MenuItem value={EXPENSE}>Expense</MenuItem>
+            <MenuItem value={INCOME}>{translate("Income")}</MenuItem>
+            <MenuItem value={EXPENSE}>{translate("Expense")}</MenuItem>
           </Select>
         </FormControl>
         {type === EXPENSE && (
           <FormControl fullWidth required>
-            <InputLabel id="category-select-label">Category</InputLabel>
+            <InputLabel id="category-select-label">
+              {translate("Category")}
+            </InputLabel>
             <Select
               name="categoryId"
-              label="Category"
+              label={translate("Category")}
               labelId="category-select-label"
               id="category-select"
               value={categoryId}
@@ -160,13 +173,16 @@ export default function TransactionForm({
             >
               {expenseCategories.map(({ id, name }) => (
                 <MenuItem key={id} value={id}>
-                  {name}
+                  {translate(name)}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
         )}
-        <LocalizationProvider dateAdapter={AdapterDayjs}>
+        <LocalizationProvider
+          dateAdapter={AdapterDayjs}
+          adapterLocale={language}
+        >
           <DemoContainer components={["DatePicker"]}>
             <DatePicker
               slotProps={{
@@ -176,7 +192,7 @@ export default function TransactionForm({
               }}
               disableFuture
               name="date"
-              label="Date"
+              label={translate("Date")}
               value={date}
               onChange={handleDateChange}
             />
@@ -188,14 +204,18 @@ export default function TransactionForm({
       )}
       <DialogActions>
         <Button onClick={handleClose} disabled={status === LOADING}>
-          Cancel
+          {translate("Cancel")}
         </Button>
         <Button
           type="submit"
           disabled={status === LOADING}
           sx={{ color: "success.dark" }}
         >
-          {status === LOADING ? "Saving..." : isEditMode ? "Update" : "Add"}
+          {status === LOADING
+            ? translate("Saving...")
+            : isEditMode
+            ? translate("Update")
+            : translate("Save")}
         </Button>
       </DialogActions>
     </Dialog>

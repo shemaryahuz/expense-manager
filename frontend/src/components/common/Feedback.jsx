@@ -19,7 +19,7 @@ export default function Feedback({
       onClose={onClose}
     >
       <Alert variant="filled" severity={severity} onClose={onClose}>
-        <Typography variant="body1">{translate(message)}</Typography>
+        <Typography variant="body1">{translate(message) || message}</Typography>
       </Alert>
     </Snackbar>
   );

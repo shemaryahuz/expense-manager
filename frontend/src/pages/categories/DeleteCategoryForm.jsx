@@ -7,25 +7,31 @@ import {
   DialogTitle,
 } from "@mui/material";
 
+import { useTranslation } from "../../hooks/i18n";
+
 import { CategoryCardStyles as styles } from "./styles/CategoryCard.styles";
 
 export default function DeleteCategoryForm({ open, onClose, onDelete }) {
+  const { translate } = useTranslation();
+
   return (
     <Dialog open={open} onClose={onClose} closeAfterTransition={false}>
-      <DialogTitle>Delete Category</DialogTitle>
+      <DialogTitle>{translate("Delete category")}</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          If you delete this category, all transactions associated with it will
-          be moved to the "Miscellaneous" category.
+          {translate(
+            "If you delete this category, all transactions associated with it will be moved to the 'Miscellaneous' category."
+          )}
         </DialogContentText>
         <DialogContentText>
-          This action cannot be undone, are you sure you want to delete this
-          category?
+          {translate(
+            "This action cannot be undone, are you sure you want to delete this category?"
+          )}
         </DialogContentText>
         <DialogActions>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button onClick={onClose}>{translate("Cancel")}</Button>
           <Button onClick={onDelete} sx={styles.deleteButton}>
-            Delete
+            {translate("Delete")}
           </Button>
         </DialogActions>
       </DialogContent>

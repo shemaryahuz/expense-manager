@@ -14,7 +14,7 @@ export default function Loader() {
       })}
       open
     >
-      <Typography>{translate("Loading...")}</Typography>
+      <Typography variant="h4">{translate("Loading...")}</Typography>
       <CircularProgress />
     </Backdrop>
   );

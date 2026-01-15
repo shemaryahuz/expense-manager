@@ -6,7 +6,7 @@ export const useTranslation = () => {
     const language = useSelector(selectLanguage);
 
     const translate = (key) => {
-        return language === "en" ? key : translations[key];
+        return language === "en" ? key : translations[key] || key;
     };
 
     return { translate, language };

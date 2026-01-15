@@ -1,6 +1,8 @@
 import { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
 
+import { useTranslation } from "../../hooks/i18n";
+
 import {
   Button,
   Card,
@@ -23,6 +25,8 @@ const { TRANSACTIONS } = ROUTE_PATHS;
 export default function LastTransactionsCard({ transactions }) {
   const navigate = useNavigate();
 
+  const { translate } = useTranslation();
+
   const lastTransactions = transactions.slice(0, LAST_TRANSACTIONS_LIMIT);
 
   const handleNavigate = () => navigate(TRANSACTIONS);
@@ -30,7 +34,7 @@ export default function LastTransactionsCard({ transactions }) {
   return (
     <Card sx={styles.card}>
       <Typography variant="h6" gutterBottom sx={styles.cardTitle}>
-        Last Transactions
+        {translate("Last Transactions")}
       </Typography>
       <List dense>
         {lastTransactions.length > 0 ? (
@@ -55,7 +59,7 @@ export default function LastTransactionsCard({ transactions }) {
           ))
         ) : (
           <Typography variant="body1" sx={{ textAlign: "center" }}>
-            No transactions found.
+            {translate("No transactions found")}
           </Typography>
         )}
       </List>
@@ -65,7 +69,7 @@ export default function LastTransactionsCard({ transactions }) {
         variant="contained"
         sx={styles.cardButton}
       >
-        View All Transactions
+        {translate("See all transactions")}
       </Button>
     </Card>
   );

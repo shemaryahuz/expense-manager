@@ -5,6 +5,8 @@ import { Add } from "@mui/icons-material";
 
 import { GROUP_NAMES } from "../../constants/features/categoriesConstants";
 
+import { useTranslation } from "../../hooks/i18n";
+
 import CategoryCard from "./CategoryCard";
 import AddCategoryForm from "./AddCategoryForm";
 
@@ -13,6 +15,8 @@ import { CategoriesGroupStyles as styles } from "./styles/CategoriesGroup.styles
 const { CUSTOM } = GROUP_NAMES;
 
 export default function CategoriesGroupe({ name, categories }) {
+  const { translate } = useTranslation();
+
   const [addOpen, setAddOpen] = useState(false);
 
   const handleAddOpen = () => setAddOpen(true);
@@ -22,7 +26,7 @@ export default function CategoriesGroupe({ name, categories }) {
     <Container sx={styles.container}>
       <Box sx={styles.mainBox}>
         <Typography variant="h4" gutterBottom sx={{ fontWeight: "bold" }}>
-          {name}
+          {translate(name)}
         </Typography>
         {name === CUSTOM && (
           <Button
@@ -31,7 +35,7 @@ export default function CategoriesGroupe({ name, categories }) {
             sx={{ textTransform: "none" }}
             onClick={handleAddOpen}
           >
-            Add Category
+            {translate("Add category")}
           </Button>
         )}
       </Box>

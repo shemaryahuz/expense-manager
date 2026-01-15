@@ -6,7 +6,7 @@ export const MISCELLANEOUS_ID =
   import.meta.env.VITE_SUPABASE_MISC_CATEGORY_ID || "c1";
 
 export const GROUP_NAMES = {
-    INCOME: "Income",
-    DEFAULTS: "Defaults",
-    CUSTOM: "Custom"
+  INCOME: "Income Categories",
+  DEFAULTS: "Default Categories",
+  CUSTOM: "Custom Categories",
 }

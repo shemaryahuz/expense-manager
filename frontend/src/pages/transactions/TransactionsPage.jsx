@@ -31,12 +31,16 @@ import TransactionForm from "./TransactionForm";
 
 import { STATUSES } from "../../constants/features/statusConstants";
 
+import { useTranslation } from "../../hooks/i18n";
+
 import { transactionsPageStyles as styles } from "./styles/TransactionsPage.styles";
 
 const { LOADING, FAILED, SUCCEEDED } = STATUSES;
 
 export default function TransactionsPage() {
   const dispatch = useDispatch();
+
+  const { translate } = useTranslation();
 
   const [month, setMonth] = useState(getCurrentMonth);
   const [search, setSearch] = useState("");
@@ -87,9 +91,9 @@ export default function TransactionsPage() {
   };
 
   return (
-    <Container sx={styles.container}>
-      <Typography variant="h2" gutterBottom sx={styles.heading}>
-        Transactions
+    <Container>
+      <Typography variant="h3" gutterBottom sx={styles.heading}>
+        {translate("Transactions")}
       </Typography>
 
       <MonthHeader month={month} onMonthChange={handleMonthChange} />
@@ -99,7 +103,7 @@ export default function TransactionsPage() {
             <TextField
               value={search}
               onChange={handleSearchChange}
-              label="Search"
+              label={translate("Search")}
               variant="outlined"
             />
             <IconButton disabled={!search} onClick={handleSearch}>
@@ -119,7 +123,9 @@ export default function TransactionsPage() {
               sx={styles.addButton}
               onClick={handleAddOpen}
             >
-              <Typography variant="h6">Add Transaction</Typography>
+              <Typography variant="h6">
+                {translate("Add Transaction")}
+              </Typography>
               <Add sx={styles.addIcon} />
             </Button>
             <TransactionForm
@@ -133,7 +139,9 @@ export default function TransactionsPage() {
         {currentTransactions.length > 0 ? (
           <TransactionsList transactions={currentTransactions} />
         ) : (
-          <Typography variant="h6">No transactions found</Typography>
+          <Typography variant="h6">
+            {translate("No transactions found")}
+          </Typography>
         )}
       </Box>
       {(status === FAILED || status === SUCCEEDED) && message && (

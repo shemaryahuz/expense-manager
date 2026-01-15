@@ -8,6 +8,7 @@ import { deleteTransaction } from "../../features/transactions/transactionsThunk
 import { fetchCategories } from "../../features/categories/categoriesThunks";
 import { selectCategories } from "../../features/categories/categoriesSelectors";
 
+import { useTranslation } from "../../hooks/i18n";
 import { getCategoryName } from "../../utiles/categoriesUtils";
 
 import { INCOME } from "../../constants/features/transactionsConstants";
@@ -17,6 +18,8 @@ import TransactionForm from "./TransactionForm";
 
 export default function TransactionRow({ transaction }) {
   const dispatch = useDispatch();
+
+  const { translate } = useTranslation();
 
   const [editDialogOpen, setEditDialogOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -49,7 +52,7 @@ export default function TransactionRow({ transaction }) {
     <TableRow>
       <TableCell>{date}</TableCell>
       <TableCell>{title}</TableCell>
-      <TableCell>{categoryName}</TableCell>
+      <TableCell>{translate(categoryName)}</TableCell>
       <TableCell>
         <Box
           sx={{

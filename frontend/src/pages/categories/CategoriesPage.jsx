@@ -8,6 +8,8 @@ import { clearMessage } from "../../features/categories/categoriesSlice";
 import { selectCategoriesState } from "../../features/categories/categoriesSelectors";
 import { fetchCategoriesTransactions } from "../../features/transactions/transactionsThunks";
 
+import { useTranslation } from "../../hooks/i18n";
+
 import { STATUSES } from "../../constants/features/statusConstants";
 import { getCurrentMonth, dayjsToDate } from "../../utiles/monthUtils";
 
@@ -21,6 +23,8 @@ const { IDLE, LOADING, FAILED, SUCCEEDED } = STATUSES;
 
 export default function CategoriesPage() {
   const dispatch = useDispatch();
+
+  const { translate } = useTranslation();
 
   const [month, setMonth] = useState(getCurrentMonth);
   const [showMessage, setShowMessage] = useState(false);
@@ -53,13 +57,13 @@ export default function CategoriesPage() {
   };
 
   return (
-    <Container sx={{ mt: 4 }}>
+    <Container>
       <Typography
-        variant="h2"
+        variant="h3"
         gutterBottom
         sx={{ fontWeight: "bold", textAlign: "center", mb: 2 }}
       >
-        Categories
+        {translate("Categories")}
       </Typography>
 
       <MonthHeader month={month} onMonthChange={handleMonthChange} />
@@ -69,7 +73,7 @@ export default function CategoriesPage() {
       {categories.length > 0 ? (
         <CategoriesContainer />
       ) : (
-        <Typography variant="h6">No categories found</Typography>
+        <Typography variant="h6">{translate("No categories found")}</Typography>
       )}
 
       {(status === FAILED || status === SUCCEEDED) && message && (

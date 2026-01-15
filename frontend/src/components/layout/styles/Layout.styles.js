@@ -7,12 +7,25 @@ export const layoutStyles = {
         flexDirection: 'column',
         minHeight: '100vh',
     },
-    content: {
-        display: 'flex',
-        flexDirection: 'column',
-        flexGrow: 1,
-        overflow: 'auto',
-        margin: 'auto',
+    pageContainer: {
+        minHeight: "100vh",
+        boxSizing: "border-box",
+
+        marginTop: "4rem",
+
+        marginBottom: "6rem",
+
+        marginLeft: { sm: "15rem" },
+
+        "[dir='rtl'] &": {
+            marginLeft: 0,
+            marginRight: { sm: "15rem" },
+        },
+
+        "@media (max-width: 900px)": {
+            marginLeft: 0,
+            marginRight: 0,
+        },
     },
 };
 

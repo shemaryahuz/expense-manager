@@ -7,25 +7,30 @@ import {
   DialogTitle,
 } from "@mui/material";
 
+import { useTranslation } from "../../hooks/i18n";
+
 export default function DeleteTransactionDialog({ open, onClose, onDelete }) {
+  const { translate } = useTranslation();
+
   return (
     <Dialog open={open} onClose={onClose} closeAfterTransition={false}>
-      <DialogTitle>Delete Transaction</DialogTitle>
+      <DialogTitle>{translate("Delete Transaction")}</DialogTitle>
 
       <DialogContent>
         <DialogContentText>
-          This action cannot be undone, are you sure you want to delete this
-          transaction?
+          {translate(
+            "This action cannot be undone, are you sure you want to delete this transaction?"
+          )}
         </DialogContentText>
       </DialogContent>
 
       <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
+        <Button onClick={onClose}>{translate("Cancel")}</Button>
         <Button
           onClick={onDelete}
           sx={{ color: "error.dark", "&:hover": { bgcolor: "#fef0ecff" } }}
         >
-          Delete
+          {translate("Delete")}
         </Button>
       </DialogActions>
     </Dialog>

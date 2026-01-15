@@ -1,8 +1,4 @@
 export const dashboardStyles = {
-    container: {
-        mt: 4,
-        mb: 4,
-    },
     heading: {
         mb: 2,
         fontWeight: "bold",

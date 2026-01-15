@@ -7,7 +7,7 @@ export default function AlertMessage({ severity, message }) {
 
   return (
     <Alert severity={severity} sx={{ mt: 2, mb: 2 }}>
-      {translate(message)}
+      {translate(message) || message}
     </Alert>
   );
 }

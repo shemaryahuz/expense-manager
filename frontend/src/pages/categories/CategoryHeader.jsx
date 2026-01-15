@@ -2,6 +2,8 @@ import { Box, TextField, Typography } from "@mui/material";
 
 import { INCOME_ID } from "../../constants/features/categoriesConstants";
 
+import { useTranslation } from "../../hooks/i18n";
+
 import { CategoryCardStyles as styles } from "./styles/CategoryCard.styles";
 
 export default function CategoryHeader({
@@ -12,6 +14,8 @@ export default function CategoryHeader({
   amount,
   id,
 }) {
+  const { translate } = useTranslation();
+
   return (
     <Box sx={styles.categoryHeader}>
       {isEditing ? (
@@ -35,7 +39,7 @@ export default function CategoryHeader({
       ) : (
         <Box sx={{ flexGrow: 1 }}>
           <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-            {name}
+            {id === INCOME_ID ? translate("Incomes") : translate(name)}
           </Typography>
 
           {amount > 0 && (

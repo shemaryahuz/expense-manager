@@ -1,7 +1,4 @@
 export const transactionsPageStyles = {
-  container: {
-    mt: 4,
-  },
   heading: {
     mb: 2,
     fontWeight: "bold",

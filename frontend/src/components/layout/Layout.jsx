@@ -26,7 +26,7 @@ export default function Layout() {
           drawerOpen={drawerOpen}
           handleDrawerClose={handleDrawerClose}
         />
-        <Box component="main" sx={styles.content}>
+        <Box component="main" sx={styles.pageContainer}>
           <DrawerHeader />
           <Outlet />
         </Box>
