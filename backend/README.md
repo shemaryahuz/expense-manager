@@ -41,6 +41,7 @@ npm start
 ```
 
 This runs `node --watch --env-file=.env server.js`, which:
+
 - Watches for file changes and automatically restarts
 - Loads environment variables from `.env`
 - Starts the server on port 3000 (or the port specified in `.env`)
@@ -52,6 +53,7 @@ The server will be available at `http://localhost:3000` with the API under `/api
 
 1. Create a Supabase project (PostgreSQL).
 2. In the Supabase SQL editor, run:
+
    ```sql
    create table if not exists public.users (
      id uuid primary key default gen_random_uuid(),
@@ -85,9 +87,11 @@ The server will be available at `http://localhost:3000` with the API under `/api
    insert into public.categories (id, name, user_id)
    values
      (gen_random_uuid(), 'Income', null),
-     (gen_random_uuid(), 'Miscellaneous', null)
+     (gen_random_uuid(), 'Miscellaneous', null),
+     (gen_random_uuid(), 'Fixed Expenses', null)
    on conflict do nothing;
    ```
+
 3. Set `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` in `backend/.env`.
 
 ## Project Structure
@@ -141,9 +145,11 @@ All endpoints are prefixed with `/api`. Base URL: `http://localhost:3000/api`
 These endpoints do not require authentication.
 
 #### `POST /signup`
+
 Create a new user account.
 
 **Request Body:**
+
 ```json
 {
   "name": "John Doe",
@@ -153,6 +159,7 @@ Create a new user account.
 ```
 
 **Response (201):**
+
 ```json
 {
   "user": {
@@ -165,19 +172,23 @@ Create a new user account.
 ```
 
 **Errors:**
+
 - `400` - Missing required fields
 - `409` - Email already exists
 - `500` - Server error
 
 **Notes:**
+
 - Password is hashed with bcrypt (10 rounds)
 - JWT token is set as HTTP-only cookie (expires in 1 hour)
 - User ID is generated using `Date.now().toString()`
 
 #### `POST /login`
+
 Authenticate an existing user.
 
 **Request Body:**
+
 ```json
 {
   "email": "john@example.com",
@@ -186,6 +197,7 @@ Authenticate an existing user.
 ```
 
 **Response (200):**
+
 ```json
 {
   "user": {
@@ -198,18 +210,22 @@ Authenticate an existing user.
 ```
 
 **Errors:**
+
 - `400` - Missing email or password
 - `401` - Invalid credentials
 - `500` - Server error
 
 **Notes:**
+
 - JWT token is set as HTTP-only cookie (expires in 1 hour)
 - Password hash is never returned in response
 
 #### `POST /logout`
+
 Clear the authentication cookie.
 
 **Response (200):**
+
 ```json
 {
   "message": "You are logged out successfully"
@@ -221,9 +237,11 @@ Clear the authentication cookie.
 All user endpoints require authentication (valid JWT cookie).
 
 #### `GET /`
+
 Get all registered users.
 
 **Response (200):**
+
 ```json
 [
   {
@@ -236,14 +254,17 @@ Get all registered users.
 ```
 
 **Errors:**
+
 - `401` - Unauthorized (no valid token)
 - `404` - No users found
 - `500` - Server error
 
 #### `GET /me`
+
 Get the currently authenticated user.
 
 **Response (200):**
+
 ```json
 {
   "user": {
@@ -255,17 +276,21 @@ Get the currently authenticated user.
 ```
 
 **Errors:**
+
 - `401` - Unauthorized
 - `404` - User not found
 - `500` - Server error
 
 **Notes:**
+
 - Password hash is excluded from response
 
 #### `DELETE /me`
+
 Delete the currently authenticated user account.
 
 **Response (200):**
+
 ```json
 {
   "message": "User deleted successfully"
@@ -273,14 +298,17 @@ Delete the currently authenticated user account.
 ```
 
 **Errors:**
+
 - `401` - Unauthorized
 - `404` - User not found
 - `500` - Server error
 
 #### `PUT /me`
+
 Update the currently authenticated user's profile (name and email).
 
 **Request Body:**
+
 ```json
 {
   "name": "Updated Name",
@@ -289,6 +317,7 @@ Update the currently authenticated user's profile (name and email).
 ```
 
 **Response (200):**
+
 ```json
 {
   "user": {
@@ -301,6 +330,7 @@ Update the currently authenticated user's profile (name and email).
 ```
 
 **Errors:**
+
 - `400` - Missing name or email
 - `401` - Unauthorized
 - `404` - User not found
@@ -308,9 +338,11 @@ Update the currently authenticated user's profile (name and email).
 - `500` - Server error
 
 #### `PUT /me/password`
+
 Update the currently authenticated user's password.
 
 **Request Body:**
+
 ```json
 {
   "password": "newSecurePassword123"
@@ -318,6 +350,7 @@ Update the currently authenticated user's password.
 ```
 
 **Response (200):**
+
 ```json
 {
   "user": {
@@ -330,6 +363,7 @@ Update the currently authenticated user's password.
 ```
 
 **Errors:**
+
 - `400` - Missing password
 - `401` - Unauthorized
 - `404` - User not found
@@ -340,9 +374,11 @@ Update the currently authenticated user's password.
 All category endpoints require authentication.
 
 #### `GET /`
+
 Get all categories available to the authenticated user.
 
 **Response (200):**
+
 ```json
 [
   {
@@ -364,18 +400,22 @@ Get all categories available to the authenticated user.
 ```
 
 **Errors:**
+
 - `401` - Unauthorized
 - `404` - No categories found
 - `500` - Server error
 
 **Notes:**
+
 - Returns user's custom categories plus default categories (`userId === null`)
 - Default categories: "Income" (id: `c0`) and "Miscellaneous" (id: `c1`)
 
 #### `POST /`
+
 Create a new category for the authenticated user.
 
 **Request Body:**
+
 ```json
 {
   "name": "Entertainment"
@@ -383,6 +423,7 @@ Create a new category for the authenticated user.
 ```
 
 **Response (200):**
+
 ```json
 {
   "category": {
@@ -395,14 +436,17 @@ Create a new category for the authenticated user.
 ```
 
 **Errors:**
+
 - `400` - Missing category name
 - `401` - Unauthorized
 - `500` - Server error
 
 #### `PUT /:id`
+
 Update a category's name.
 
 **Request Body:**
+
 ```json
 {
   "name": "Updated Category Name"
@@ -410,6 +454,7 @@ Update a category's name.
 ```
 
 **Response (200):**
+
 ```json
 {
   "category": {
@@ -422,15 +467,18 @@ Update a category's name.
 ```
 
 **Errors:**
+
 - `400` - Missing category name
 - `401` - Unauthorized
 - `404` - Category not found
 - `500` - Server error
 
 #### `DELETE /:id`
+
 Delete a user-owned category.
 
 **Response (200):**
+
 ```json
 {
   "id": "1234567890",
@@ -439,12 +487,14 @@ Delete a user-owned category.
 ```
 
 **Errors:**
+
 - `400` - Cannot delete default categories
 - `401` - Unauthorized
 - `404` - Category not found
 - `500` - Server error
 
 **Notes:**
+
 - Default categories (`userId === null`) cannot be deleted
 - Transactions referencing the deleted category are automatically reassigned to "Miscellaneous" (id: `c1`)
 
@@ -453,9 +503,11 @@ Delete a user-owned category.
 All transaction endpoints require authentication.
 
 #### `GET /`
+
 Get all transactions for the authenticated user, sorted by date (newest first).
 
 **Response (200):**
+
 ```json
 [
   {
@@ -464,20 +516,23 @@ Get all transactions for the authenticated user, sorted by date (newest first).
     "categoryId": "c1",
     "title": "Coffee",
     "type": "expense",
-    "amount": 5.50,
+    "amount": 5.5,
     "date": "2024-01-15T10:30:00.000Z"
   }
 ]
 ```
 
 **Errors:**
+
 - `401` - Unauthorized
 - `500` - Server error
 
 #### `GET /month/:year/:month`
+
 Get transactions for a specific calendar month.
 
 **Parameters:**
+
 - `year` - Four-digit year (e.g., `2024`)
 - `month` - Month number (1-12)
 
@@ -486,13 +541,16 @@ Get transactions for a specific calendar month.
 **Response (200):** Same format as `GET /`
 
 **Errors:**
+
 - `401` - Unauthorized
 - `500` - Server error
 
 #### `GET /search?title=<term>`
+
 Search transactions by title (case-insensitive).
 
 **Query Parameters:**
+
 - `title` - Search term
 
 **Example:** `GET /api/transactions/search?title=coffee`
@@ -500,13 +558,16 @@ Search transactions by title (case-insensitive).
 **Response (200):** Same format as `GET /`
 
 **Errors:**
+
 - `401` - Unauthorized
 - `500` - Server error
 
 #### `POST /`
+
 Create a new transaction.
 
 **Request Body:**
+
 ```json
 {
   "categoryId": "c1",
@@ -518,6 +579,7 @@ Create a new transaction.
 ```
 
 **Response (200):**
+
 ```json
 {
   "transaction": {
@@ -534,30 +596,35 @@ Create a new transaction.
 ```
 
 **Errors:**
+
 - `400` - Missing required fields
 - `401` - Unauthorized
 - `500` - Server error
 
 **Notes:**
+
 - Transaction ID is generated using `Date.now().toString()`
 - `type` should be either `"income"` or `"expense"`
 - `date` should be an ISO 8601 string
 
 #### `PUT /:id`
+
 Update an existing transaction.
 
 **Request Body:**
+
 ```json
 {
   "categoryId": "c1",
   "title": "Updated Title",
   "type": "expense",
-  "amount": 150.00,
+  "amount": 150.0,
   "date": "2024-01-15T10:30:00.000Z"
 }
 ```
 
 **Response (200):**
+
 ```json
 {
   "transaction": {
@@ -566,7 +633,7 @@ Update an existing transaction.
     "categoryId": "c1",
     "title": "Updated Title",
     "type": "expense",
-    "amount": 150.00,
+    "amount": 150.0,
     "date": "2024-01-15T10:30:00.000Z"
   },
   "message": "Transaction updated successfully"
@@ -574,14 +641,17 @@ Update an existing transaction.
 ```
 
 **Errors:**
+
 - `400` - Missing required fields
 - `401` - Unauthorized
 - `500` - Server error
 
 #### `DELETE /:id`
+
 Delete a transaction.
 
 **Response (200):**
+
 ```json
 {
   "id": "1234567890",
@@ -590,6 +660,7 @@ Delete a transaction.
 ```
 
 **Errors:**
+
 - `401` - Unauthorized
 - `404` - Transaction not found
 - `500` - Server error
@@ -597,6 +668,7 @@ Delete a transaction.
 ## Data Models (Supabase Tables)
 
 ### User (`users`)
+
 ```json
 {
   "id": "uuid",
@@ -609,6 +681,7 @@ Delete a transaction.
 ```
 
 ### Category (`categories`)
+
 ```json
 {
   "id": "uuid",
@@ -618,9 +691,11 @@ Delete a transaction.
   "updated_at": "timestamp"
 }
 ```
+
 - `user_id: null` indicates a default system category (e.g., Income, Miscellaneous)
 
 ### Transaction (`transactions`)
+
 ```json
 {
   "id": "uuid",
@@ -673,6 +748,7 @@ The application uses Supabase (PostgreSQL) tables:
 ### Default Categories
 
 Ensure default categories exist in `categories` with `user_id: null`, including at minimum:
+
 - Income
 - Miscellaneous
 
@@ -687,6 +763,7 @@ All errors follow a consistent format:
 ```
 
 Common HTTP status codes:
+
 - `200` - Success
 - `201` - Created
 - `400` - Bad Request (validation errors)
@@ -708,6 +785,7 @@ To change the allowed origin, update `server.js`.
 ## Troubleshooting
 
 ### Port Already in Use
+
 ```bash
 # Find process using port 3000
 lsof -i :3000  # macOS/Linux
@@ -717,11 +795,13 @@ netstat -ano | findstr :3000  # Windows
 ```
 
 ### JWT Verification Fails
+
 - Ensure `JWT_SECRET` is set in `.env`
 - Verify the secret hasn't changed between server restarts
 - Check that cookies are being sent with requests (`withCredentials: true`)
 
 ### Supabase Connection Issues
+
 - Verify `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` in `.env`
 - Ensure the service role key has insert/update/delete permissions for your tables
 - Confirm the Supabase project is reachable from your network
