@@ -109,7 +109,6 @@ export default function CategoryCard({ category }) {
           id={id}
         />
       </AccordionSummary>
-      <Divider />
 
       <AccordionDetails sx={styles.accordionDetails}>
         {isEditing && (
@@ -136,6 +135,7 @@ export default function CategoryCard({ category }) {
           onClose={handleDeleteClose}
           onDelete={handleDelete}
         />
+        <Divider />
         {transactions.length > 0 ? (
           <CategoryTransactions transactions={transactions} />
         ) : (

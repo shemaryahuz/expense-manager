@@ -25,17 +25,17 @@ export const CategoryCardStyles = {
     },
     categoryMenu: {
         display: "flex",
-        justifyContent: "flex-end",
+        mb: 1
     },
     menuItem: {
         display: "flex",
         gap: 1
     },
-    deleteButton: { 
-        color: "error.dark", 
-        "&:hover": { 
-            bgcolor: "#fef0ecff" 
-        } 
+    deleteButton: {
+        color: "error.dark",
+        "&:hover": {
+            bgcolor: "#fef0ecff"
+        }
     }
 
 }

@@ -1,4 +1,4 @@
-import { Box, IconButton, Menu, MenuItem, Typography } from "@mui/material";
+import { Box, Button, Menu, MenuItem, Typography } from "@mui/material";
 import { Delete, Edit, MoreVert } from "@mui/icons-material";
 
 import { useTranslation } from "../../hooks/i18n";
@@ -17,9 +17,14 @@ export default function CategoryMenu({
 
   return (
     <Box sx={styles.categoryMenu}>
-      <IconButton onClick={onMenuClick}>
-        <MoreVert />
-      </IconButton>
+      <Button
+        variant="contained"
+        startIcon={<MoreVert />}
+        onClick={onMenuClick}
+        sx={{ gap: 1 }}
+      >
+        <Typography>{translate("Actions")}</Typography>
+      </Button>
 
       <Menu anchorEl={anchorEl} open={menuOpen} onClose={onMenuClose}>
         <MenuItem onClick={onEdit} sx={styles.menuItem}>
