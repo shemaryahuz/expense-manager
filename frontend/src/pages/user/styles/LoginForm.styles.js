@@ -1,5 +1,4 @@
 export const loginFormStyles = {
-    /** Dialog root (optional – mostly for backdrop tweaks) */
     container: {
         "& .MuiDialog-paper": {
             width: "90%",

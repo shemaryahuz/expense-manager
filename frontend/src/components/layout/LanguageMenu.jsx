@@ -1,10 +1,14 @@
 import { useDispatch, useSelector } from "react-redux";
 
 import { Menu, MenuItem } from "@mui/material";
+
 import {
   selectLanguage,
   setLanguage,
 } from "../../features/settings/settingsSlice";
+import { LANGUAGES } from "../../constants/features/settingsConstants";
+
+const { ENGLISH, HEBREW } = LANGUAGES;
 
 export default function LanguageMenu({ open, anchorEl, onClose }) {
   const dispatch = useDispatch();
@@ -12,16 +16,16 @@ export default function LanguageMenu({ open, anchorEl, onClose }) {
   const language = useSelector(selectLanguage);
 
   const setEnglish = () => {
-    if (language !== "en") {
+    if (language !== ENGLISH) {
       onClose();
-      dispatch(setLanguage("en"));
+      dispatch(setLanguage(ENGLISH));
     }
   };
 
   const setHebrew = () => {
-    if (language !== "he") {
+    if (language !== HEBREW) {
       onClose();
-      dispatch(setLanguage("he"));
+      dispatch(setLanguage(HEBREW));
     }
   };
 
@@ -35,7 +39,7 @@ export default function LanguageMenu({ open, anchorEl, onClose }) {
       <MenuItem selected={language === "en"} onClick={setEnglish}>
         English
       </MenuItem>
-      <MenuItem selected={language === "he"} onClick={setHebrew}>
+      <MenuItem selected={language === HEBREW} onClick={setHebrew}>
         עברית
       </MenuItem>
     </Menu>

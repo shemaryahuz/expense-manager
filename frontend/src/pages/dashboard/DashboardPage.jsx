@@ -14,7 +14,10 @@ import {
   selectCategoriesState,
 } from "../../features/categories/categoriesSelectors";
 
+import { STATUSES } from "../../constants/features/statusConstants";
+
 import { useTranslation } from "../../hooks/i18n";
+import { getCurrentMonth, dayjsToDate } from "../../utiles/monthUtils";
 
 import MonthHeader from "../../components/common/MonthHeader";
 import Loader from "../../components/common/Loader";
@@ -23,9 +26,6 @@ import AlertMessage from "../../components/common/AlertMessage";
 import MonthlyBudget from "./MonthlyBudget";
 import LastTransactionsCard from "./LastTransactionsCard";
 import TopCategoriesCard from "./TopCategoriesCard";
-
-import { STATUSES } from "../../constants/features/statusConstants";
-import { getCurrentMonth, dayjsToDate } from "../../utiles/monthUtils";
 
 import { dashboardStyles as styles } from "./styles/Dashboard.styles";
 

@@ -1,9 +1,9 @@
 import { Typography } from "@mui/material";
 
+import { useTranslation } from "../../hooks/i18n";
+
 import AlertMessage from "../../components/common/AlertMessage";
 import Feedback from "../../components/common/Feedback";
-
-import { useTranslation } from "../../hooks/i18n";
 
 export default function ProfileHeader({
   showError,

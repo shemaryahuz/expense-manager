@@ -8,6 +8,9 @@ import {
 } from "../../features/settings/settingsSlice";
 
 import { useTranslation } from "../../hooks/i18n";
+import { CURRENCIES } from "../../constants/features/settingsConstants";
+
+const { USD, ILS } = CURRENCIES;
 
 export default function SettingsMenu({ open, anchorEl, onClose }) {
   const dispatch = useDispatch();
@@ -17,13 +20,11 @@ export default function SettingsMenu({ open, anchorEl, onClose }) {
   const { currency } = useSelector(selectCurrency);
 
   const setUSD = () => {
-    if (currency !== "USD")
-      dispatch(setCurrency({ currency: "USD", symbol: "$" }));
+    if (currency !== USD) dispatch(setCurrency(USD));
   };
 
   const setILS = () => {
-    if (currency !== "ILS")
-      dispatch(setCurrency({ currency: "ILS", symbol: "₪" }));
+    if (currency !== ILS) dispatch(setCurrency(ILS));
   };
 
   return (
@@ -33,10 +34,10 @@ export default function SettingsMenu({ open, anchorEl, onClose }) {
       onClose={onClose}
       closeAfterTransition={false}
     >
-      <MenuItem selected={currency === "USD"} onClick={setUSD}>
-        <Typography>{translate("USD")} $</Typography>
+      <MenuItem selected={currency === USD} onClick={setUSD}>
+        <Typography>{translate(USD)} $</Typography>
       </MenuItem>
-      <MenuItem selected={currency === "ILS"} onClick={setILS}>
+      <MenuItem selected={currency === ILS} onClick={setILS}>
         <Typography>{translate("ILS")} ₪</Typography>
       </MenuItem>
     </Menu>

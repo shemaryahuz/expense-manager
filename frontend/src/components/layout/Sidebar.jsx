@@ -9,18 +9,21 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Drawer as MuiDrawer,
 } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 
 import { selectDirection } from "../../features/settings/settingsSlice.js";
 import { selectUser } from "../../features/user/userSlice.js";
-import { useTranslation } from "../../hooks/i18n.js";
 
 import { ROUTES } from "../../constants/app/routes.js";
+import { DIRECTIONS } from "../../constants/features/settingsConstants.js";
+import { useTranslation } from "../../hooks/i18n.js";
 
 import { Drawer, DrawerTop } from "./styles/Sidebar.styles.js";
-import { Drawer as MuiDrawer } from "@mui/material";
 import { drawerWidth } from "./styles/Layout.styles.js";
+
+const { RTL } = DIRECTIONS;
 
 export default function Sidebar({
   drawerOpen,
@@ -34,57 +37,30 @@ export default function Sidebar({
   const direction = useSelector(selectDirection);
   const user = useSelector(selectUser);
 
-  if (isMobile) {
-    return (
-      <MuiDrawer
-        variant="temporary"
-        open={drawerOpen}
-        onClose={handleDrawerToggle}
-        ModalProps={{
+  const DrawerComponent = isMobile ? MuiDrawer : Drawer;
+
+  return (
+    <DrawerComponent
+      variant={isMobile ? "temporary" : "permanent"}
+      open={drawerOpen}
+      onClose={handleDrawerToggle}
+      ModalProps={
+        isMobile && {
           keepMounted: true,
-        }}
-        sx={{
+        }
+      }
+      sx={
+        isMobile && {
           "& .MuiDrawer-paper": {
             width: drawerWidth,
             boxSizing: "border-box",
           },
-        }}
-      >
-        <DrawerTop>
-          <IconButton onClick={handleDrawerToggle} sx={{ color: "#fff" }}>
-            {direction === "rtl" ? <ChevronRight /> : <ChevronLeft />}
-          </IconButton>
-        </DrawerTop>
-
-        <Divider />
-
-        <List>
-          {ROUTES.map(({ path, name, Icon }) => (
-            <ListItem key={name} disablePadding>
-              <ListItemButton
-                disabled={!user}
-                component={Link}
-                to={path}
-                selected={location.pathname === path}
-                onClick={handleDrawerToggle}
-              >
-                <ListItemIcon>
-                  <Icon />
-                </ListItemIcon>
-                <ListItemText primary={translate(name)} />
-              </ListItemButton>
-            </ListItem>
-          ))}
-        </List>
-      </MuiDrawer>
-    );
-  }
-
-  return (
-    <Drawer variant="permanent" open={drawerOpen}>
+        }
+      }
+    >
       <DrawerTop>
         <IconButton onClick={handleDrawerToggle} sx={{ color: "#fff" }}>
-          {direction === "rtl" ? <ChevronRight /> : <ChevronLeft />}
+          {direction === RTL ? <ChevronRight /> : <ChevronLeft />}
         </IconButton>
       </DrawerTop>
 
@@ -98,6 +74,7 @@ export default function Sidebar({
               component={Link}
               to={path}
               selected={location.pathname === path}
+              onClick={isMobile && handleDrawerToggle}
             >
               <ListItemIcon>
                 <Icon />
@@ -107,6 +84,6 @@ export default function Sidebar({
           </ListItem>
         ))}
       </List>
-    </Drawer>
+    </DrawerComponent>
   );
 }

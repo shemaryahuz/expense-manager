@@ -2,8 +2,6 @@ import { Fragment } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
-import { useTranslation } from "../../hooks/i18n";
-
 import {
   Button,
   Card,
@@ -20,6 +18,7 @@ import { selectCurrency } from "../../features/settings/settingsSlice";
 import { INCOME } from "../../constants/features/transactionsConstants";
 import { ROUTE_PATHS } from "../../constants/app/routes";
 import { LAST_TRANSACTIONS_LIMIT } from "../../constants/ui/dashboardConstants";
+import { useTranslation } from "../../hooks/i18n";
 
 import { dashboardStyles as styles } from "./styles/Dashboard.styles";
 

@@ -32,11 +32,7 @@ export default function Layout() {
   return (
     <Box sx={styles.layout}>
       <CssBaseline />
-      <Header
-        drawerOpen={drawerOpen}
-        handleDrawerToggle={handleDrawerToggle}
-        isMobile={isMobile}
-      />
+      <Header drawerOpen={drawerOpen} handleDrawerToggle={handleDrawerToggle} />
       <Box>
         <Sidebar
           drawerOpen={drawerOpen}

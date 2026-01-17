@@ -11,9 +11,6 @@ import {
   Translate,
 } from "@mui/icons-material";
 
-import { AppBar } from "./styles/Header.styles.js";
-import AccountMenu from "../../pages/user/AccountMenu.jsx";
-
 import { selectUser } from "../../features/user/userSlice.js";
 import {
   selectThemeMode,
@@ -22,10 +19,13 @@ import {
 
 import { useTranslation } from "../../hooks/i18n.js";
 
+import AccountMenu from "../../pages/user/AccountMenu.jsx";
 import CurrencyMenu from "./CurrencyMenu.jsx";
 import LanguageMenu from "./LanguageMenu.jsx";
 
-export default function Header({ drawerOpen, handleDrawerToggle, isMobile = false }) {
+import { AppBar } from "./styles/Header.styles.js";
+
+export default function Header({ drawerOpen, handleDrawerToggle }) {
   const dispatch = useDispatch();
 
   const { translate } = useTranslation();
@@ -98,9 +98,9 @@ export default function Header({ drawerOpen, handleDrawerToggle, isMobile = fals
               alt="Logo"
               sx={{ height: 40 }}
             />
-            <Typography 
-              variant="h4" 
-              sx={{ display: { xs: 'none', sm: 'block' } }}
+            <Typography
+              variant="h4"
+              sx={{ display: { xs: "none", sm: "block" } }}
             >
               {translate("Expense Manager")}
             </Typography>

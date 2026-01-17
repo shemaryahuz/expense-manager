@@ -1,8 +1,8 @@
 import { Box, Button, TextField, Typography } from "@mui/material";
 
-import { profileSectionStyles as styles } from "./styles/ProfileSections.styles";
-
 import { useTranslation } from "../../hooks/i18n";
+
+import { profileSectionStyles as styles } from "./styles/ProfileSections.styles";
 
 export default function ProfileDetailsSection({
   profile,

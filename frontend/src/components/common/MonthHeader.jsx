@@ -10,7 +10,6 @@ import dayjs from "dayjs";
 
 import { INITIAL_DATE, MONTH, YEAR } from "../../constants/ui/dateConstants";
 import { dayjsToMonthStart } from "../../utiles/monthUtils";
-
 import { useTranslation } from "../../hooks/i18n.js";
 
 import { monthHeaderStyles as styles } from "./styles/MonthHeader.styles";

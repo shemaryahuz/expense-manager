@@ -1,4 +1,5 @@
 import { Link, Typography, Box } from "@mui/material";
+
 import { StyledFooter } from "./styles/Footer.styles.js";
 
 import { useTranslation } from "../../hooks/i18n.js";

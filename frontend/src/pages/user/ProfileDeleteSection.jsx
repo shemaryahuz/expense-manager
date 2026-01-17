@@ -1,8 +1,8 @@
 import { Box, Button, Divider, Typography } from "@mui/material";
 
-import { profileSectionStyles as styles } from "./styles/ProfileSections.styles";
-
 import { useTranslation } from "../../hooks/i18n";
+
+import { profileSectionStyles as styles } from "./styles/ProfileSections.styles";
 
 export default function ProfileDeleteSection({ isLoading, onOpenDialog }) {
   const { translate } = useTranslation();

@@ -14,6 +14,8 @@ import { ExpandMore } from "@mui/icons-material";
 import { selectTransactionsByCategoryId } from "../../features/transactions/transactionsSelectors";
 import { updateCategory } from "../../features/categories/categoriesThunks";
 import { deleteCategory } from "../../features/categories/categoriesThunks";
+
+import { useTranslation } from "../../hooks/i18n";
 import { getTotalAmount } from "../../utiles/transactionsUtils";
 
 import CategoryTransactions from "./CategoryTransactions";
@@ -21,8 +23,6 @@ import DeleteCategoryForm from "./DeleteCategoryForm";
 import CategoryHeader from "./CategoryHeader";
 import CategoryEditActions from "./CategoryEditActions";
 import CategoryMenu from "./CategoryMenu";
-
-import { useTranslation } from "../../hooks/i18n";
 
 import { CategoryCardStyles as styles } from "./styles/CategoryCard.styles";
 
