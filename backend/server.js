@@ -1,26 +1,15 @@
 import express from "express";
-import cors from "cors";
-import cookieParser from "cookie-parser";
 
-import authRouter from "./src/routes/authRouter.js";
-import usersRouter from "./src/routes/usersRouter.js";
-import transactionsRouter from "./src/routes/transactionsRouter.js";
-import categoriesRouter from "./src/routes/categoriesRouter.js";
+import routes from "./src/routes/routes.js";
+import middlewares from "./src/middlewares/middlewares.js";
 
-const CLIENT_URL = process.env.CLIENT_URL || "http://localhost:5173";
 const PORT = process.env.PORT || 3000;
 
 const app = express();
 
-app.use(cors({ credentials: true, origin: CLIENT_URL }));
-app.use(cookieParser());
-app.use(express.json());
+middlewares(app);
 
-app.use("/api/auth", authRouter);
-app.use("/api/users", usersRouter);
-app.use("/api/transactions", transactionsRouter);
-app.use("/api/categories", categoriesRouter);
-app.use("/", (req, res) => res.sendStatus(404));
+app.use("/api", routes);
 
 app.listen(PORT, () => {
     console.log(`server is running on port ${PORT}`);
