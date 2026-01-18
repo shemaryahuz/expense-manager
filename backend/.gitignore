@@ -28,7 +28,3 @@ logs/
 
 # Uploaded files
 uploads/
-
-# Test files
-*.spec.js
-*.test.js
