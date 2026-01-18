@@ -1,31 +1,22 @@
-# Expense Manager API (Backend)
+# Expense Manager Backend
 
-Express.js REST API server that provides authentication and CRUD operations for users, categories, and transactions. The service now uses **Supabase (PostgreSQL)** for persistence.
+Express REST API server providing authentication and CRUD operations for expense tracking. Uses Supabase (PostgreSQL) for data persistence with JWT cookie-based authentication.
 
 ## Tech Stack
 
 - **Node.js 18+** with ES modules
 - **Express 5** - Web framework
-- **jsonwebtoken** - JWT token generation and verification
+- **Supabase** - PostgreSQL database
+- **JWT** - Token-based authentication
 - **bcrypt** - Password hashing (10 rounds)
-- **cookie-parser** - HTTP-only cookie management
+- **cookie-parser** - Cookie management
 - **cors** - Cross-origin resource sharing
-- **Supabase (PostgreSQL)** - Managed database
 
 ## Prerequisites
 
-- Node.js 18 or newer
+- Node.js 18+
 - npm 9+
-- Supabase project (PostgreSQL)
-- `.env` file in the `backend/` directory with:
-  ```env
-  JWT_SECRET=your-strong-random-secret-key-here
-  PORT=3000
-  CLIENT_URL=http://localhost:5173
-  SUPABASE_URL=your-supabase-project-url
-  SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
-  ```
-  - `SUPABASE_SERVICE_ROLE_KEY` is required for server-side operations; keep it secret.
+- Supabase project
 
 ## Installation
 
@@ -34,121 +25,150 @@ cd backend
 npm install
 ```
 
+## Configuration
+
+Create `.env` file in the `backend/` directory:
+
+```env
+JWT_SECRET=your-strong-random-secret-key
+PORT=3000
+CLIENT_URL=http://localhost:5173
+SUPABASE_URL=your-supabase-project-url
+SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
+```
+
+**Security Notes:**
+
+- Generate `JWT_SECRET`: `node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"`
+- Keep `SUPABASE_SERVICE_ROLE_KEY` private - it grants full database access
+
+## Database Setup
+
+Run this SQL in your Supabase SQL editor:
+
+```sql
+-- Users table
+CREATE TABLE IF NOT EXISTS public.users (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name TEXT NOT NULL,
+  email TEXT NOT NULL UNIQUE,
+  password_hash TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- Categories table
+CREATE TABLE IF NOT EXISTS public.categories (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name TEXT NOT NULL,
+  user_id UUID REFERENCES public.users(id) ON DELETE CASCADE,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- Transactions table
+CREATE TABLE IF NOT EXISTS public.transactions (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+  category_id UUID NOT NULL REFERENCES public.categories(id) ON DELETE SET NULL,
+  title TEXT NOT NULL,
+  type TEXT NOT NULL CHECK (type IN ('income', 'expense')),
+  amount NUMERIC(12, 2) NOT NULL,
+  date TIMESTAMPTZ NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- Default system categories
+INSERT INTO public.categories (name, user_id)
+VALUES
+  ('Income', NULL),
+  ('Miscellaneous', NULL),
+  ('Fixed Expenses', NULL)
+ON CONFLICT DO NOTHING;
+```
+
 ## Running the Server
 
 ```bash
 npm start
 ```
 
-This runs `node --watch --env-file=.env server.js`, which:
+Server starts on `http://localhost:3000` with API at `/api`.
 
-- Watches for file changes and automatically restarts
-- Loads environment variables from `.env`
-- Starts the server on port 3000 (or the port specified in `.env`)
-- Connects to Supabase using the supplied credentials
-
-The server will be available at `http://localhost:3000` with the API under `/api`.
-
-## Supabase Setup (one-time)
-
-1. Create a Supabase project (PostgreSQL).
-2. In the Supabase SQL editor, run:
-
-   ```sql
-   create table if not exists public.users (
-     id uuid primary key default gen_random_uuid(),
-     name text not null,
-     email text not null unique,
-     password_hash text not null,
-     created_at timestamptz not null default now(),
-     updated_at timestamptz not null default now()
-   );
-
-   create table if not exists public.categories (
-     id uuid primary key default gen_random_uuid(),
-     name text not null,
-     user_id uuid references public.users(id) on delete cascade,
-     created_at timestamptz not null default now(),
-     updated_at timestamptz not null default now()
-   );
-
-   create table if not exists public.transactions (
-     id uuid primary key default gen_random_uuid(),
-     user_id uuid not null references public.users(id) on delete cascade,
-     category_id uuid not null references public.categories(id) on delete set null,
-     title text not null,
-     type text not null check (type in ('income','expense')),
-     amount numeric(12,2) not null,
-     date timestamptz not null,
-     created_at timestamptz not null default now(),
-     updated_at timestamptz not null default now()
-   );
-
-   insert into public.categories (id, name, user_id)
-   values
-     (gen_random_uuid(), 'Income', null),
-     (gen_random_uuid(), 'Miscellaneous', null),
-     (gen_random_uuid(), 'Fixed Expenses', null)
-   on conflict do nothing;
-   ```
-
-3. Set `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` in `backend/.env`.
+**Development mode** uses `node --watch` for automatic restarts on file changes.
 
 ## Project Structure
 
 ```
 backend/
 ├── src/
-│   ├── config/              # Supabase client setup
-│   ├── dal/                 # Data access layer (Supabase queries)
-│   ├── controllers/         # Business logic layer
-│   │   ├── authController.js      # Signup, login, logout
-│   │   ├── usersController.js     # User CRUD operations
-│   │   ├── categoriesController.js # Category management
-│   │   └── transactionsController.js # Transaction operations
+│   ├── config/
+│   │   └── supabase.js              # Supabase client setup
 │   │
-│   ├── middlewares/         # Request middleware
-│   │   └── authMiddleware.js      # JWT verification
+│   ├── controllers/
+│   │   ├── authController.js        # Signup, login, logout
+│   │   ├── categoriesController.js  # Category operations
+│   │   ├── transactionsController.js # Transaction operations
+│   │   └── usersController.js       # User management
 │   │
-│   └── routes/              # Express route definitions
-│       ├── authRouter.js          # /api/auth routes
-│       ├── usersRouter.js         # /api/users routes
-│       ├── categoriesRouter.js   # /api/categories routes
-│       └── transactionsRouter.js  # /api/transactions routes
+│   ├── dal/
+│   │   ├── categoriesDAL.js         # Category database queries
+│   │   ├── transactionsDAL.js       # Transaction database queries
+│   │   └── usersDAL.js              # User database queries
+│   │
+│   ├── middlewares/
+│   │   └── authMiddleware.js        # JWT verification
+│   │
+│   ├── routes/
+│   │   ├── authRouter.js            # /api/auth routes
+│   │   ├── categoriesRouter.js      # /api/categories routes
+│   │   ├── transactionsRouter.js    # /api/transactions routes
+│   │   └── usersRouter.js           # /api/users routes
+│   │
+│   └── utils/
+│       └── caseConvertor.js         # Snake/camel case conversion
 │
-├── server.js                # Application entry point
+├── server.js                        # Application entry point
 ├── package.json
-└── .env                     # Environment variables (create this)
+└── .env
 ```
 
-## Request Lifecycle
+## Architecture
 
-1. **Request arrives** at `server.js`
-2. **Middleware applied**:
-   - CORS (allows `CLIENT_URL`, default `http://localhost:5173`)
-   - Cookie parser (extracts `token` cookie)
+### Request Flow
+
+1. **Request** arrives at `server.js`
+2. **Middleware** applied:
+   - CORS (allows `CLIENT_URL`)
+   - Cookie parser (extracts JWT token)
    - JSON body parser
-3. **Route matching**: Request is routed to appropriate router (`/api/auth`, `/api/users`, etc.)
-4. **Authentication check**: Protected routes use `authMiddleware` to:
-   - Extract `token` from cookies
-   - Verify JWT signature using `JWT_SECRET`
-   - Decode payload and inject `req.userId`
-5. **Controller execution**: Business logic uses Supabase via the DAL
-6. **Response sent**: JSON response with appropriate status code
+3. **Routing** to appropriate router
+4. **Authentication** (protected routes):
+   - Extract token from cookies
+   - Verify JWT signature
+   - Inject `req.userId`
+5. **Controller** executes business logic
+6. **DAL** queries Supabase database
+7. **Response** sent with status code
+
+### Data Layer
+
+- **Controllers** contain business logic
+- **DAL** handles all database operations via Supabase client
+- **Utils** provide helper functions (e.g., case conversion)
 
 ## API Reference
 
-All endpoints are prefixed with `/api`. Base URL: `http://localhost:3000/api`
+Base URL: `http://localhost:3000/api`
 
-### Authentication Endpoints (`/api/auth`)
+### Authentication (`/api/auth`)
 
-These endpoints do not require authentication.
+#### POST `/auth/signup`
 
-#### `POST /signup`
+Create new user account.
 
-Create a new user account.
-
-**Request Body:**
+**Request:**
 
 ```json
 {
@@ -163,7 +183,7 @@ Create a new user account.
 ```json
 {
   "user": {
-    "id": "1234567890",
+    "id": "uuid",
     "name": "John Doe",
     "email": "john@example.com"
   },
@@ -171,23 +191,13 @@ Create a new user account.
 }
 ```
 
-**Errors:**
+**Errors:** `400` (validation), `409` (email exists), `500` (server error)
 
-- `400` - Missing required fields
-- `409` - Email already exists
-- `500` - Server error
+#### POST `/auth/login`
 
-**Notes:**
+Authenticate user.
 
-- Password is hashed with bcrypt (10 rounds)
-- JWT token is set as HTTP-only cookie (expires in 1 hour)
-- User ID is generated using `Date.now().toString()`
-
-#### `POST /login`
-
-Authenticate an existing user.
-
-**Request Body:**
+**Request:**
 
 ```json
 {
@@ -201,7 +211,7 @@ Authenticate an existing user.
 ```json
 {
   "user": {
-    "id": "1234567890",
+    "id": "uuid",
     "name": "John Doe",
     "email": "john@example.com"
   },
@@ -209,20 +219,11 @@ Authenticate an existing user.
 }
 ```
 
-**Errors:**
+**Errors:** `400` (validation), `401` (invalid credentials), `500`
 
-- `400` - Missing email or password
-- `401` - Invalid credentials
-- `500` - Server error
+#### POST `/auth/logout`
 
-**Notes:**
-
-- JWT token is set as HTTP-only cookie (expires in 1 hour)
-- Password hash is never returned in response
-
-#### `POST /logout`
-
-Clear the authentication cookie.
+Clear authentication cookie.
 
 **Response (200):**
 
@@ -232,87 +233,36 @@ Clear the authentication cookie.
 }
 ```
 
-### User Endpoints (`/api/users`)
+### Users (`/api/users`)
 
-All user endpoints require authentication (valid JWT cookie).
+_All endpoints require authentication_
 
-#### `GET /`
+#### GET `/users/me`
 
-Get all registered users.
-
-**Response (200):**
-
-```json
-[
-  {
-    "id": "1234567890",
-    "name": "John Doe",
-    "email": "john@example.com",
-    "passwordHash": "..."
-  }
-]
-```
-
-**Errors:**
-
-- `401` - Unauthorized (no valid token)
-- `404` - No users found
-- `500` - Server error
-
-#### `GET /me`
-
-Get the currently authenticated user.
+Get current user profile.
 
 **Response (200):**
 
 ```json
 {
   "user": {
-    "id": "1234567890",
+    "id": "uuid",
     "name": "John Doe",
     "email": "john@example.com"
   }
 }
 ```
 
-**Errors:**
+#### PUT `/users/me`
 
-- `401` - Unauthorized
-- `404` - User not found
-- `500` - Server error
+Update profile (name and email).
 
-**Notes:**
-
-- Password hash is excluded from response
-
-#### `DELETE /me`
-
-Delete the currently authenticated user account.
-
-**Response (200):**
+**Request:**
 
 ```json
 {
-  "message": "User deleted successfully"
-}
-```
-
-**Errors:**
-
-- `401` - Unauthorized
-- `404` - User not found
-- `500` - Server error
-
-#### `PUT /me`
-
-Update the currently authenticated user's profile (name and email).
-
-**Request Body:**
-
-```json
-{
-  "name": "Updated Name",
-  "email": "updated-email@example.com"
+  "name": "Jane Doe",
+  "email": "jane@example.com"
 }
 ```
 
@@ -321,27 +271,21 @@ Update the currently authenticated user's profile (name and email).
 ```json
 {
   "user": {
-    "id": "1234567890",
-    "name": "Updated Name",
-    "email": "updated-email@example.com"
+    "id": "uuid",
+    "name": "Jane Doe",
+    "email": "jane@example.com"
   },
   "message": "User updated successfully"
 }
 ```
 
-**Errors:**
+**Errors:** `400` (validation), `409` (email exists), `404`, `500`
 
-- `400` - Missing name or email
-- `401` - Unauthorized
-- `404` - User not found
-- `409` - Email already exists
-- `500` - Server error
+#### PUT `/users/me/password`
 
-#### `PUT /me/password`
+Change password.
 
-Update the currently authenticated user's password.
-
-**Request Body:**
+**Request:**
 
 ```json
 {
@@ -354,7 +298,7 @@ Update the currently authenticated user's password.
 ```json
 {
   "user": {
-    "id": "1234567890",
+    "id": "uuid",
     "name": "John Doe",
     "email": "john@example.com"
   },
@@ -362,59 +306,53 @@ Update the currently authenticated user's password.
 }
 ```
 
-**Errors:**
+#### DELETE `/users/me`
 
-- `400` - Missing password
-- `401` - Unauthorized
-- `404` - User not found
-- `500` - Server error
+Delete account.
 
-### Category Endpoints (`/api/categories`)
+**Response (200):**
 
-All category endpoints require authentication.
+```json
+{
+  "message": "User deleted successfully"
+}
+```
 
-#### `GET /`
+### Categories (`/api/categories`)
 
-Get all categories available to the authenticated user.
+_All endpoints require authentication_
+
+#### GET `/categories`
+
+Get all available categories (user's custom + system defaults).
 
 **Response (200):**
 
 ```json
 [
   {
-    "id": "c0",
+    "id": "uuid",
     "name": "Income",
     "userId": null
   },
   {
-    "id": "c1",
-    "name": "Miscellaneous",
-    "userId": null
-  },
-  {
-    "id": "1234567890",
+    "id": "uuid",
     "name": "Groceries",
-    "userId": "1234567890"
+    "userId": "user-uuid"
   }
 ]
 ```
 
-**Errors:**
-
-- `401` - Unauthorized
-- `404` - No categories found
-- `500` - Server error
-
 **Notes:**
 
-- Returns user's custom categories plus default categories (`userId === null`)
-- Default categories: "Income" (id: `c0`) and "Miscellaneous" (id: `c1`)
+- System categories have `userId: null`
+- Returns both user's categories and defaults
 
-#### `POST /`
+#### POST `/categories`
 
-Create a new category for the authenticated user.
+Create new category.
 
-**Request Body:**
+**Request:**
 
 ```json
 {
@@ -427,29 +365,23 @@ Create a new category for the authenticated user.
 ```json
 {
   "category": {
-    "id": "1234567890",
+    "id": "uuid",
     "name": "Entertainment",
-    "userId": "1234567890"
+    "userId": "user-uuid"
   },
   "message": "Category added successfully"
 }
 ```
 
-**Errors:**
+#### PUT `/categories/:id`
 
-- `400` - Missing category name
-- `401` - Unauthorized
-- `500` - Server error
+Update category name.
 
-#### `PUT /:id`
-
-Update a category's name.
-
-**Request Body:**
+**Request:**
 
 ```json
 {
-  "name": "Updated Category Name"
+  "name": "Updated Name"
 }
 ```
 
@@ -458,62 +390,48 @@ Update a category's name.
 ```json
 {
   "category": {
-    "id": "1234567890",
-    "name": "Updated Category Name",
-    "userId": "1234567890"
+    "id": "uuid",
+    "name": "Updated Name",
+    "userId": "user-uuid"
   },
   "message": "Category updated successfully"
 }
 ```
 
-**Errors:**
+#### DELETE `/categories/:id`
 
-- `400` - Missing category name
-- `401` - Unauthorized
-- `404` - Category not found
-- `500` - Server error
-
-#### `DELETE /:id`
-
-Delete a user-owned category.
+Delete user category.
 
 **Response (200):**
 
 ```json
 {
-  "id": "1234567890",
+  "id": "uuid",
   "message": "Category deleted successfully"
 }
 ```
 
-**Errors:**
-
-- `400` - Cannot delete default categories
-- `401` - Unauthorized
-- `404` - Category not found
-- `500` - Server error
-
 **Notes:**
 
-- Default categories (`userId === null`) cannot be deleted
-- Transactions referencing the deleted category are automatically reassigned to "Miscellaneous" (id: `c1`)
+- Cannot delete system categories (`userId: null`)
+- Transactions are reassigned to "Miscellaneous"
 
-### Transaction Endpoints (`/api/transactions`)
+### Transactions (`/api/transactions`)
 
-All transaction endpoints require authentication.
+_All endpoints require authentication_
 
-#### `GET /`
+#### GET `/transactions`
 
-Get all transactions for the authenticated user, sorted by date (newest first).
+Get all user transactions (sorted by date, newest first).
 
 **Response (200):**
 
 ```json
 [
   {
-    "id": "1234567890",
-    "userId": "1234567890",
-    "categoryId": "c1",
+    "id": "uuid",
+    "userId": "user-uuid",
+    "categoryId": "category-uuid",
     "title": "Coffee",
     "type": "expense",
     "amount": 5.5,
@@ -522,55 +440,31 @@ Get all transactions for the authenticated user, sorted by date (newest first).
 ]
 ```
 
-**Errors:**
+#### GET `/transactions/month/:year/:month`
 
-- `401` - Unauthorized
-- `500` - Server error
+Get transactions for specific month.
 
-#### `GET /month/:year/:month`
+**Example:** `GET /transactions/month/2024/1`
 
-Get transactions for a specific calendar month.
+**Response:** Same as GET `/transactions`
 
-**Parameters:**
-
-- `year` - Four-digit year (e.g., `2024`)
-- `month` - Month number (1-12)
-
-**Example:** `GET /api/transactions/month/2024/1`
-
-**Response (200):** Same format as `GET /`
-
-**Errors:**
-
-- `401` - Unauthorized
-- `500` - Server error
-
-#### `GET /search?title=<term>`
+#### GET `/transactions/search?title=term`
 
 Search transactions by title (case-insensitive).
 
-**Query Parameters:**
+**Example:** `GET /transactions/search?title=coffee`
 
-- `title` - Search term
+**Response:** Same as GET `/transactions`
 
-**Example:** `GET /api/transactions/search?title=coffee`
+#### POST `/transactions`
 
-**Response (200):** Same format as `GET /`
+Create transaction.
 
-**Errors:**
-
-- `401` - Unauthorized
-- `500` - Server error
-
-#### `POST /`
-
-Create a new transaction.
-
-**Request Body:**
+**Request:**
 
 ```json
 {
-  "categoryId": "c1",
+  "categoryId": "uuid",
   "title": "Grocery Shopping",
   "type": "expense",
   "amount": 125.75,
@@ -583,9 +477,9 @@ Create a new transaction.
 ```json
 {
   "transaction": {
-    "id": "1234567890",
-    "userId": "1234567890",
-    "categoryId": "c1",
+    "id": "uuid",
+    "userId": "user-uuid",
+    "categoryId": "uuid",
     "title": "Grocery Shopping",
     "type": "expense",
     "amount": 125.75,
@@ -595,166 +489,112 @@ Create a new transaction.
 }
 ```
 
-**Errors:**
-
-- `400` - Missing required fields
-- `401` - Unauthorized
-- `500` - Server error
-
 **Notes:**
 
-- Transaction ID is generated using `Date.now().toString()`
-- `type` should be either `"income"` or `"expense"`
-- `date` should be an ISO 8601 string
+- `type` must be `"income"` or `"expense"`
+- `date` must be ISO 8601 string
 
-#### `PUT /:id`
+#### PUT `/transactions/:id`
 
-Update an existing transaction.
+Update transaction.
 
-**Request Body:**
-
-```json
-{
-  "categoryId": "c1",
-  "title": "Updated Title",
-  "type": "expense",
-  "amount": 150.0,
-  "date": "2024-01-15T10:30:00.000Z"
-}
-```
+**Request:** Same as POST
 
 **Response (200):**
 
 ```json
 {
-  "transaction": {
-    "id": "1234567890",
-    "userId": "1234567890",
-    "categoryId": "c1",
-    "title": "Updated Title",
-    "type": "expense",
-    "amount": 150.0,
-    "date": "2024-01-15T10:30:00.000Z"
-  },
+  "transaction": { ... },
   "message": "Transaction updated successfully"
 }
 ```
 
-**Errors:**
+#### DELETE `/transactions/:id`
 
-- `400` - Missing required fields
-- `401` - Unauthorized
-- `500` - Server error
-
-#### `DELETE /:id`
-
-Delete a transaction.
+Delete transaction.
 
 **Response (200):**
 
 ```json
 {
-  "id": "1234567890",
+  "id": "uuid",
   "message": "Transaction deleted successfully"
 }
 ```
 
-**Errors:**
+## Data Models
 
-- `401` - Unauthorized
-- `404` - Transaction not found
-- `500` - Server error
+### User
 
-## Data Models (Supabase Tables)
-
-### User (`users`)
-
-```json
+```typescript
 {
-  "id": "uuid",
-  "name": "string",
-  "email": "string",
-  "password_hash": "string",
-  "created_at": "timestamp",
-  "updated_at": "timestamp"
+  id: UUID;
+  name: string;
+  email: string;
+  password_hash: string;
+  created_at: timestamp;
+  updated_at: timestamp;
 }
 ```
 
-### Category (`categories`)
+### Category
 
-```json
+```typescript
 {
-  "id": "uuid",
-  "name": "string",
-  "user_id": "uuid | null",
-  "created_at": "timestamp",
-  "updated_at": "timestamp"
+  id: UUID;
+  name: string;
+  user_id: UUID | null; // null = system category
+  created_at: timestamp;
+  updated_at: timestamp;
 }
 ```
 
-- `user_id: null` indicates a default system category (e.g., Income, Miscellaneous)
+### Transaction
 
-### Transaction (`transactions`)
-
-```json
+```typescript
 {
-  "id": "uuid",
-  "user_id": "uuid",
-  "category_id": "uuid",
-  "title": "string",
-  "type": "income" | "expense",
-  "amount": "number",
-  "date": "string (ISO 8601)",
-  "created_at": "timestamp",
-  "updated_at": "timestamp"
+  id: UUID;
+  user_id: UUID;
+  category_id: UUID;
+  title: string;
+  type: "income" | "expense";
+  amount: number;
+  date: timestamp;
+  created_at: timestamp;
+  updated_at: timestamp;
 }
 ```
 
 ## Authentication
 
-Authentication uses JWT (JSON Web Tokens) stored in HTTP-only cookies:
+JWT tokens stored in HTTP-only cookies:
 
-- **Token name**: `token`
-- **Expiration**: 1 hour
-- **Cookie settings**:
-  - `httpOnly: true` - Prevents JavaScript access
-  - `secure: false` - Set to `true` in production with HTTPS
+- **Cookie name:** `token`
+- **Expiration:** 1 hour
+- **Settings:**
+  - `httpOnly: true` - Prevents XSS
+  - `secure: false` - Set `true` for HTTPS
   - `sameSite: "lax"` - CSRF protection
-  - `maxAge: 3600000` - 1 hour in milliseconds
+  - `maxAge: 3600000` - 1 hour
 
-### Using the API with curl
+### Example with curl
 
 ```bash
-# Sign up (cookie saved to cookie.txt)
-curl -i -c cookie.txt -H "Content-Type: application/json" \
+# Signup
+curl -c cookies.txt -H "Content-Type: application/json" \
   -d '{"name":"Alice","email":"alice@example.com","password":"secret"}' \
   http://localhost:3000/api/auth/signup
 
-# Fetch categories (using saved cookie)
-curl -b cookie.txt http://localhost:3000/api/categories
+# Get profile
+curl -b cookies.txt http://localhost:3000/api/users/me
 
 # Logout
-curl -b cookie.txt -X POST http://localhost:3000/api/auth/logout
+curl -b cookies.txt -X POST http://localhost:3000/api/auth/logout
 ```
-
-## Data Storage
-
-The application uses Supabase (PostgreSQL) tables:
-
-- **`users`** - User accounts with hashed passwords
-- **`categories`** - Transaction categories (includes defaults with `user_id: null`)
-- **`transactions`** - All transaction records
-
-### Default Categories
-
-Ensure default categories exist in `categories` with `user_id: null`, including at minimum:
-
-- Income
-- Miscellaneous
 
 ## Error Handling
 
-All errors follow a consistent format:
+All errors return JSON:
 
 ```json
 {
@@ -762,78 +602,90 @@ All errors follow a consistent format:
 }
 ```
 
-Common HTTP status codes:
+**Status codes:**
 
 - `200` - Success
 - `201` - Created
-- `400` - Bad Request (validation errors)
-- `401` - Unauthorized (authentication required)
-- `404` - Not Found
-- `409` - Conflict (e.g., email already exists)
-- `500` - Internal Server Error
+- `400` - Bad request (validation)
+- `401` - Unauthorized
+- `404` - Not found
+- `409` - Conflict (duplicate email)
+- `500` - Server error
 
 ## CORS Configuration
 
-CORS is configured to allow requests from `http://localhost:5173` (default Vite dev server):
+Configured to allow `CLIENT_URL` (default: `http://localhost:5173`):
 
 ```javascript
-app.use(cors({ credentials: true, origin: "http://localhost:5173" }));
+app.use(
+  cors({
+    credentials: true,
+    origin: process.env.CLIENT_URL,
+  }),
+);
 ```
 
-To change the allowed origin, update `server.js`.
+## Production Considerations
+
+⚠️ **For production deployment:**
+
+1. **Security**
+   - Enable HTTPS
+   - Set `secure: true` for cookies
+   - Implement rate limiting
+   - Add input validation/sanitization
+   - Use secrets manager for environment variables
+   - Enable Supabase Row-Level Security (RLS)
+
+2. **Performance**
+   - Use connection pooling
+   - Add caching layer
+   - Create database indexes
+   - Implement query optimization
+
+3. **Reliability**
+   - Add database transactions
+   - Implement comprehensive logging
+   - Set up error monitoring (e.g., Sentry)
+   - Add health check endpoints
+
+4. **Scalability**
+   - Use reverse proxy (nginx)
+   - Implement horizontal scaling
+   - Consider load balancing
 
 ## Troubleshooting
 
 ### Port Already in Use
 
 ```bash
-# Find process using port 3000
-lsof -i :3000  # macOS/Linux
+# Find process
+lsof -i :3000          # macOS/Linux
 netstat -ano | findstr :3000  # Windows
 
-# Kill the process or change PORT in .env
+# Change port in .env or kill process
 ```
 
 ### JWT Verification Fails
 
-- Ensure `JWT_SECRET` is set in `.env`
-- Verify the secret hasn't changed between server restarts
-- Check that cookies are being sent with requests (`withCredentials: true`)
+- Verify `JWT_SECRET` is set and unchanged
+- Check cookies are sent with requests (`withCredentials: true`)
+- Ensure token hasn't expired
 
 ### Supabase Connection Issues
 
-- Verify `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY` in `.env`
-- Ensure the service role key has insert/update/delete permissions for your tables
-- Confirm the Supabase project is reachable from your network
-
-## Limitations & Production Considerations
-
-⚠️ **This is a development/demo application. For production:**
-
-1. **Database**: Supabase is used for persistence; harden roles, RLS, and backups for production
-2. **Security**:
-   - Use HTTPS
-   - Enable `secure: true` for cookies
-   - Implement rate limiting
-   - Add input validation and sanitization
-   - Use environment-specific secrets management
-3. **Performance**:
-   - Implement connection pooling
-   - Add caching where appropriate
-   - Use database indexes
-4. **Reliability**:
-   - Add database transactions
-   - Implement proper error handling and logging
-   - Set up monitoring and alerts
-5. **Scalability**:
-   - Use a reverse proxy (nginx)
-   - Implement horizontal scaling
-   - Consider microservices architecture
+- Verify `SUPABASE_URL` and `SUPABASE_SERVICE_ROLE_KEY`
+- Check network connectivity to Supabase
+- Confirm service role key has proper permissions
 
 ## Development Tips
 
-- Use `node --watch` for automatic restarts during development
-- Check server console for error messages
-- Verify Supabase table data if results seem incorrect
-- Test API endpoints with tools like Postman or curl
-- Use Redux DevTools to inspect frontend state
+- Use `node --watch` for automatic restarts
+- Check console for detailed error messages
+- Verify Supabase data in the Table Editor
+- Test endpoints with Postman or curl
+- Use environment variables for all configuration
+
+## Support
+
+For issues or questions, please refer to the [main documentation](../README.md) or open an issue on GitHub.
