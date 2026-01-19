@@ -32,7 +32,7 @@ export const login = asyncHandler(async (req, res) => {
     };
 
     res.cookie("token", token, cookieOptions);
-
+    console.log(res.cookies)
     user.passwordHash = undefined;
     res.send({ user, message: "You are logged in successfully" });
 });
@@ -74,7 +74,7 @@ export const signup = asyncHandler(async (req, res) => {
     };
 
     res.cookie("token", token, cookieOptions);
-
+    console.log(res.cookies)
     newUser.passwordHash = undefined;
     res.send({ user: newUser, message: "You are signed up successfully" });
 });
@@ -86,5 +86,6 @@ export const logout = asyncHandler(async (req, res) => {
         sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
         path: "/",
     });
+    console.log(res.cookies)
     res.send({ message: "You are logged out successfully" });
 });
