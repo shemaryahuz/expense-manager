@@ -1,0 +1,109 @@
+import bcrypt from "bcrypt";
+
+import {
+    deleteUserById,
+    findUserByEmail,
+    findUserById,
+    findUsers,
+    updateUserPassword,
+    updateUserProfile
+} from "../dal/usersDAL.js";
+import { deleteUserCategories } from "../dal/categoriesDAL.js";
+import { deleteUserTransactions } from "../dal/transactionsDAL.js";
+
+import { asyncHandler } from "../utils/asyncHandler.js";
+
+export const getUsers = asyncHandler(async (req, res) => {
+    const users = await findUsers();
+    res.send(users);
+});
+
+export const getUser = asyncHandler(async (req, res) => {
+    const id = req.userId;
+    const user = await findUserById(id);
+    if (!user) {
+        return res.status(404).send({ message: "User not found" });
+    }
+    res.send({ user });
+});
+
+export const updateUser = asyncHandler(async (req, res) => {
+    const id = req.userId;
+    const { name, email } = req.body;
+
+    if (!name || !email) {
+        return res.status(400).send({ message: "Name and email are required" });
+    }
+
+    const currentUser = await findUserById(id);
+
+    if (!currentUser) {
+        return res.status(404).send({ message: "User not found" });
+    }
+
+    if (currentUser.email !== email) {
+        const existingUser = await findUserByEmail(email);
+        if (existingUser) {
+            return res.status(409).send({ message: "Email already exists" });
+        }
+    }
+
+    const updatedUser = await updateUserProfile(id, { name, email });
+
+    if (!updatedUser) {
+        return res.status(500).send({ message: "Something went wrong" });
+    }
+
+    res.send({ user: updatedUser, message: "User updated successfully" });
+});
+
+export const updatePassword = asyncHandler(async (req, res) => {
+    const id = req.userId;
+    const { password } = req.body;
+
+    if (!password) {
+        return res.status(400).send({ message: "Password is required" });
+    }
+
+    const currentUser = await findUserById(id);
+
+    if (!currentUser) {
+        return res.status(404).send({ message: "User not found" });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const updatedUser = await updateUserPassword(id, { passwordHash: hashedPassword });
+
+    if (!updatedUser) {
+        return res.status(500).send({ message: "Something went wrong" });
+    }
+
+    res.send({ user: updatedUser, message: "Password updated successfully" });
+});
+
+export const deleteUser = asyncHandler(async (req, res) => {
+    const id = req.userId;
+
+    const deleted = await deleteUserById(id);
+
+    if (!deleted) {
+        return res.status(500).send({ message: "Something went wrong" });
+    }
+
+    // delete user categories
+    const categoriesDeleted = await deleteUserCategories(id);
+
+    if (!categoriesDeleted) {
+        return res.status(500).send({ message: "Something went wrong" });
+    }
+
+    // delete user transactions
+    const transactionsDeleted = await deleteUserTransactions(id);
+
+    if (!transactionsDeleted) {
+        return res.status(500).send({ message: "Something went wrong" });
+    }
+
+    res.send({ message: "User deleted successfully" });
+});

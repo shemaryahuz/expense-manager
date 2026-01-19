@@ -1,0 +1,232 @@
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
+
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { MobileDatePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
+
+import {
+  addTransaction,
+  editTransaction,
+} from "../../features/transactions/transactionsThunks";
+import { selectTransactionsState } from "../../features/transactions/transactionsSelectors";
+import { clearMessage } from "../../features/transactions/transactionsSlice";
+import { selectExpenseCategories } from "../../features/categories/categoriesSelectors";
+import {
+  selectLanguage,
+  selectCurrency,
+} from "../../features/settings/settingsSlice";
+
+import { useTranslation } from "../../hooks/i18n";
+
+import {
+  INCOME_ID,
+  MISCELLANEOUS_ID,
+} from "../../constants/features/categoriesConstants";
+import {
+  INCOME,
+  EXPENSE,
+} from "../../constants/features/transactionsConstants";
+import { STATUSES } from "../../constants/features/statusConstants";
+
+import AlertMessage from "../../components/common/AlertMessage";
+
+const { LOADING, FAILED, SUCCEEDED } = STATUSES;
+
+export default function TransactionForm({
+  open,
+  onClose,
+  isEditMode,
+  existingTransaction = {
+    title: "",
+    amount: 0,
+    type: "",
+    categoryId: "",
+    date: null,
+  },
+}) {
+  const dispatch = useDispatch();
+
+  const { translate } = useTranslation();
+
+  const [transaction, setTransaction] = useState(existingTransaction);
+  const { title, amount, type, categoryId } = transaction;
+
+  const { status, message } = useSelector(selectTransactionsState);
+  const expenseCategories = useSelector(selectExpenseCategories);
+
+  const language = useSelector(selectLanguage);
+  const { currency } = useSelector(selectCurrency);
+
+  const date = transaction.date ? dayjs(transaction.date) : null;
+
+  useEffect(() => {
+    if (status === SUCCEEDED && message) {
+      setTransaction(existingTransaction);
+      onClose();
+    }
+  }, [status, message]);
+
+  const handleChange = ({ target: { name, value } }) => {
+    dispatch(clearMessage());
+    setTransaction({ ...transaction, [name]: value });
+  };
+
+  const handleDateChange = (newValue) => {
+    dispatch(clearMessage());
+    setTransaction({ ...transaction, date: newValue });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+
+    const categoryIdToSend =
+      type === INCOME ? INCOME_ID : categoryId || MISCELLANEOUS_ID;
+
+    const transactionToSend = {
+      ...transaction,
+      categoryId: categoryIdToSend,
+      amount: Number(amount),
+      date: date.toISOString(),
+    };
+
+    isEditMode
+      ? dispatch(editTransaction(transactionToSend))
+      : dispatch(addTransaction(transactionToSend));
+  };
+
+  const handleClose = () => {
+    dispatch(clearMessage());
+    setTransaction(existingTransaction);
+    onClose();
+  };
+
+  return (
+    <Dialog
+      component="form"
+      onSubmit={handleSubmit}
+      open={open}
+      onClose={handleClose}
+      sx={{ padding: 2 }}
+      closeAfterTransition={false}
+    >
+      <DialogTitle>
+        {isEditMode
+          ? translate("Edit Transaction")
+          : translate("Add Transaction")}
+      </DialogTitle>
+      <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        <TextField
+          sx={{ mt: 1 }}
+          required
+          name="title"
+          label={translate("Title")}
+          value={title}
+          onChange={handleChange}
+        />
+        <TextField
+          required
+          name="amount"
+          label={`${translate("Amount")} (${translate(currency)})`}
+          type="number"
+          value={amount}
+          slotProps={{ htmlInput: { min: 0.1, step: 0.01 } }}
+          onChange={handleChange}
+        />
+        <FormControl fullWidth required>
+          <InputLabel id="type-select-label">{translate("Type")}</InputLabel>
+          <Select
+            name="type"
+            label={translate("Type")}
+            labelId="type-select-label"
+            id="type-select"
+            value={type}
+            onChange={handleChange}
+          >
+            <MenuItem value={INCOME}>{translate("Income")}</MenuItem>
+            <MenuItem value={EXPENSE}>{translate("Expense")}</MenuItem>
+          </Select>
+        </FormControl>
+        {type === EXPENSE && (
+          <FormControl fullWidth required>
+            <InputLabel id="category-select-label">
+              {translate("Category")}
+            </InputLabel>
+            <Select
+              name="categoryId"
+              label={translate("Category")}
+              labelId="category-select-label"
+              id="category-select"
+              value={categoryId}
+              onChange={handleChange}
+            >
+              {expenseCategories.map(({ id, name }) => (
+                <MenuItem key={id} value={id}>
+                  {translate(name)}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        )}
+        <LocalizationProvider
+          dateAdapter={AdapterDayjs}
+          adapterLocale={language}
+          localeText={{
+            datePickerToolbarTitle: translate("Select date"),
+            cancelButtonLabel: translate("Cancel"),
+            okButtonLabel: translate("OK"),
+          }}
+        >
+          <DemoContainer components={["DatePicker"]}>
+            <MobileDatePicker
+              slotProps={{
+                textField: {
+                  required: true,
+                },
+              }}
+              disableFuture
+              name="date"
+              label={translate("Date")}
+              value={date}
+              onChange={handleDateChange}
+            />
+          </DemoContainer>
+        </LocalizationProvider>
+      </DialogContent>
+      {status === FAILED && message && (
+        <AlertMessage severity="error" message={message} />
+      )}
+      <DialogActions>
+        <Button onClick={handleClose} disabled={status === LOADING}>
+          {translate("Cancel")}
+        </Button>
+        <Button
+          type="submit"
+          disabled={status === LOADING}
+          sx={{ color: "success.dark" }}
+        >
+          {status === LOADING
+            ? translate("Saving...")
+            : isEditMode
+            ? translate("Update")
+            : translate("Save")}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
