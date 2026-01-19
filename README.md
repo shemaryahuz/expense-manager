@@ -146,12 +146,14 @@ The application will be available at `http://localhost:5173`.
 expense-manager/
 ├── backend/
 │   ├── src/
+│   │   ├── __tests__/      # Test files
 │   │   ├── config/         # Supabase client configuration
 │   │   ├── controllers/    # Business logic
 │   │   ├── dal/            # Data access layer
 │   │   ├── middlewares/    # Authentication middleware
 │   │   ├── routes/         # Express routes
 │   │   └── utils/          # Helper functions
+│   ├── jest.config.js      # Jest configuration
 │   ├── server.js           # Entry point
 │   ├── package.json
 │   └── .env
@@ -161,18 +163,24 @@ expense-manager/
 │   │   ├── api/            # Axios configuration
 │   │   ├── app/            # Redux store
 │   │   ├── components/     # Reusable components
+│   │   │   └── common/
+│   │   │       └── __tests__/  # Component tests
 │   │   ├── constants/      # App constants
 │   │   ├── features/       # Redux slices and thunks
 │   │   ├── hooks/          # Custom hooks
 │   │   ├── pages/          # Page components
 │   │   ├── providers/      # Context providers
 │   │   ├── routes/         # Route guards
+│   │   ├── test/           # Test configuration
 │   │   ├── theme/          # MUI theme and RTL cache
 │   │   └── utils/          # Utility functions
+│   │       └── __tests__/  # Utility tests
 │   ├── public/
+│   ├── vite.config.js
 │   ├── package.json
 │   └── .env
 │
+├── LICENSE
 └── README.md
 ```
 
@@ -209,14 +217,62 @@ All endpoints are prefixed with `/api`.
 - `PUT /transactions/:id` - Update transaction
 - `DELETE /transactions/:id` - Delete transaction
 
+## Testing
+
+### Backend Tests
+
+```bash
+cd backend
+npm test                # Run tests once
+npm run test:watch      # Watch mode
+npm run test:coverage   # With coverage report
+```
+
+### Frontend Tests
+
+```bash
+cd frontend
+npm test                # Run tests once
+npm run test:watch      # Watch mode
+npm run test:coverage   # With coverage report
+```
+
+## Deployment
+
+### Live Application
+
+- **Frontend**: [https://your-app.vercel.app](https://your-app.vercel.app)
+- **Backend API**: [https://your-backend.onrender.com](https://your-backend.onrender.com)
+
+### Deploy Your Own Instance
+
+#### Backend (Render)
+
+1. Fork this repository
+2. Sign up at [render.com](https://render.com)
+3. Create new Web Service
+4. Connect your repository, select `backend` directory
+5. Set environment variables (see `.env.production` template)
+6. Deploy
+
+#### Frontend (Vercel)
+
+1. Sign up at [vercel.com](https://vercel.com)
+2. Import your repository
+3. Set root directory to `frontend`
+4. Add `VITE_API_URL` environment variable
+5. Deploy
+
+See detailed deployment guide in [DEPLOYMENT.md](DEPLOYMENT.md)
+
 ## Building for Production
 
 ### Backend
 
 ```bash
 cd backend
-# Use process manager like PM2
-pm2 start server.js
+npm install --production
+npm start
 ```
 
 ### Frontend

@@ -104,6 +104,11 @@ Server starts on `http://localhost:3000` with API at `/api`.
 ```
 backend/
 ├── src/
+│   ├── __tests__/                   # Test files
+│   │   ├── auth.test.js             # Authentication tests
+│   │   ├── categories.test.js       # Category tests
+│   │   └── transactions.test.js     # Transaction tests
+│   │
 │   ├── config/
 │   │   └── supabase.js              # Supabase client configuration
 │   │
@@ -134,6 +139,7 @@ backend/
 │       ├── asyncHandler.js          # Async error wrapper
 │       └── caseConvertor.js         # Snake/camel case conversion
 │
+├── jest.config.js                   # Jest configuration
 ├── server.js                        # Application entry point
 ├── package.json
 └── .env
@@ -741,4 +747,4 @@ netstat -ano | findstr :3000  # Windows
 
 ## Support
 
-For issues or questions, refer to the [main documentation](../README.md) or open an issue on GitHub
+For issues or questions, refer to the [main documentation](../README.md) or open an issue on GitHub.
