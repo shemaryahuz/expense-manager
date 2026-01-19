@@ -23,7 +23,14 @@ export const login = asyncHandler(async (req, res) => {
     const payload = { id: user.id };
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-    res.cookie("token", token, { httpOnly: true, secure: false, sameSite: "lax", maxAge: 1000 * 60 * 60 });
+    const cookieOptions = {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        maxAge: 1000 * 60 * 60
+    };
+
+    res.cookie("token", token, cookieOptions);
 
     user.passwordHash = undefined;
     res.send({ user, message: "You are logged in successfully" });
@@ -57,7 +64,14 @@ export const signup = asyncHandler(async (req, res) => {
     const payload = { id: newUser.id };
     const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
 
-    res.cookie("token", token, { httpOnly: true, secure: false, sameSite: "lax", maxAge: 1000 * 60 * 60 });
+    const cookieOptions = {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        maxAge: 1000 * 60 * 60
+    };
+
+    res.cookie("token", token, cookieOptions);
 
     newUser.passwordHash = undefined;
     res.send({ user: newUser, message: "You are signed up successfully" });
