@@ -52,12 +52,158 @@ npm run dev
 
 Application available at `http://localhost:5173` with hot module replacement (HMR).
 
-## Available Scripts
+## Testing
+
+The frontend includes unit tests for components and utility functions using Vitest and React Testing Library.
+
+### Test Setup
+
+Tests use:
+
+- **Vitest** - Fast unit test framework for Vite
+- **@testing-library/react** - React component testing utilities
+- **@testing-library/jest-dom** - Custom Jest matchers for DOM
+- **jsdom** - DOM implementation for Node.js
+
+### Running Tests
+
+```bash
+npm test                # Run all tests once
+npm run test:watch      # Run in watch mode with UI
+```
+
+### Test Coverage
+
+The test suite includes **16 tests** across **5 test files**:
+
+**Component Tests**
+
+- `Loader.test.jsx` (2 tests) - Tests loader rendering and visibility
+- `AlertMessage.test.jsx` (3 tests) - Tests alert message display and types
+
+**Utility Tests**
+
+- `transactionsUtils.test.js` (4 tests) - Transaction calculations (income, expense, balance)
+- `categoriesUtils.test.js` (2 tests) - Category filtering and operations
+- `settingsUtils.test.js` (5 tests) - Currency symbols, RTL detection, formatting
+
+### Test Structure
+
+```
+frontend/
+├── src/
+│   ├── components/
+│   │   └── common/
+│   │       └── __tests__/
+│   │           ├── Loader.test.jsx
+│   │           └── AlertMessage.test.jsx
+│   │
+│   ├── utils/
+│   │   └── __tests__/
+│   │       ├── transactionsUtils.test.js
+│   │       ├── categoriesUtils.test.js
+│   │       └── settingsUtils.test.js
+│   │
+│   └── test/
+│       ├── setup.js              # Test configuration
+│       ├── TestProvider.jsx      # Test providers (MUI Theme)
+```
+
+### Test Configuration
+
+**`vitest.config.js`:**
+
+```javascript
+import { defineConfig } from "vitest/config";
+import react from "@vitejs/plugin-react";
+
+export default defineConfig({
+  plugins: [react()],
+  test: {
+    environment: "jsdom",
+    globals: true,
+    setupFiles: "./src/test/setup.js",
+  },
+});
+```
+
+**Test Setup (`src/test/setup.js`):**
+
+```javascript
+import { expect, afterEach, vi } from "vitest";
+import { cleanup } from "@testing-library/react";
+import "@testing-library/jest-dom";
+
+// Mock useTranslation hook
+vi.mock("../hooks/i18n.js", () => ({
+  useTranslation: () => ({
+    translate: (key) => key,
+  }),
+}));
+
+afterEach(() => {
+  cleanup();
+});
+```
+
+**Test Provider (`src/test/TestProvider.jsx`):**
+
+```javascript
+import { ThemeProvider, createTheme } from "@mui/material/styles";
+
+const theme = createTheme({ palette: { mode: "light" } });
+
+export const TestProvider = ({ children }) => {
+  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+};
+```
+
+### Writing New Tests
+
+**Component Test Example:**
+
+```javascript
+import { describe, it, expect } from "vitest";
+import { render, screen } from "@testing-library/react";
+import { TestProvider } from "../../../test/TestProvider";
+import MyComponent from "../MyComponent";
+
+describe("MyComponent", () => {
+  it("should render correctly", () => {
+    render(
+      <TestProvider>
+        <MyComponent />
+      </TestProvider>,
+    );
+
+    const element = screen.getByText("Expected Text");
+    expect(element).toBeInTheDocument();
+  });
+});
+```
+
+**Utility Test Example:**
+
+```javascript
+import { describe, it, expect } from "vitest";
+import { myUtilFunction } from "../myUtils";
+
+describe("myUtilFunction", () => {
+  it("should return expected result", () => {
+    const result = myUtilFunction(input);
+    expect(result).toBe(expectedOutput);
+  });
+});
+```
+
+### Available Scripts
 
 - `npm run dev` - Start Vite development server
 - `npm run build` - Create production build (`dist/`)
 - `npm run preview` - Preview production build locally
 - `npm run lint` - Run ESLint code quality checks
+- `npm test` - Run all tests once
+- `npm run test:watch` - Run tests in watch mode
 
 ## Project Structure
 
@@ -73,6 +219,9 @@ frontend/
 │   │
 │   ├── components/
 │   │   ├── common/                   # Shared UI components
+│   │   │   ├── __tests__/
+│   │   │   │   ├── AlertMessage.test.jsx
+│   │   │   │   └── Loader.test.jsx
 │   │   │   ├── AlertMessage.jsx
 │   │   │   ├── Feedback.jsx
 │   │   │   ├── Loader.jsx
@@ -128,11 +277,20 @@ frontend/
 │   │   ├── ProtectedRoute.jsx        # Auth-required guard
 │   │   └── PublicRoute.jsx           # Public-only guard
 │   │
+│   ├── test/                         # Test configuration
+│   │   ├── setup.js                  # Vitest setup
+│   │   └── TestProvider.jsx          # Test providers
+│   │
+│   │
 │   ├── theme/
 │   │   ├── rtlCache.js               # RTL emotion cache
 │   │   └── theme.js                  # MUI theme config
 │   │
 │   ├── utils/
+│   │   ├── __tests__/
+│   │   │   ├── categoriesUtils.test.js
+│   │   │   ├── settingsUtils.test.js
+│   │   │   └── transactionsUtils.test.js
 │   │   ├── categoriesUtils.js
 │   │   ├── monthUtils.js
 │   │   ├── settingsUtils.js
@@ -147,6 +305,8 @@ frontend/
 │
 ├── index.html
 ├── package.json
+├── vite.config.js
+├── vitest.config.js
 └── .env
 ```
 
