@@ -27,7 +27,8 @@ export const login = asyncHandler(async (req, res) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-        maxAge: 1000 * 60 * 60
+        maxAge: 1000 * 60 * 60,
+        path: "/",
     };
 
     res.cookie("token", token, cookieOptions);
@@ -68,7 +69,8 @@ export const signup = asyncHandler(async (req, res) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
-        maxAge: 1000 * 60 * 60
+        maxAge: 1000 * 60 * 60,
+        path: "/",
     };
 
     res.cookie("token", token, cookieOptions);
@@ -78,6 +80,11 @@ export const signup = asyncHandler(async (req, res) => {
 });
 
 export const logout = asyncHandler(async (req, res) => {
-    res.clearCookie("token");
+    res.clearCookie("token", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+        path: "/",
+    });
     res.send({ message: "You are logged out successfully" });
 });
