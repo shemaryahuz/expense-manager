@@ -244,6 +244,8 @@ npm run test:coverage   # With coverage report
 - **Frontend**: [https://expense-manager-phi-self.vercel.app](https://expense-manager-phi-self.vercel.app)
 - **Backend API**: [https://expense-manager-hzlq.onrender.com](https://expense-manager-hzlq.onrender.com)
 
+> ⚠️ Known issue on iOS: the live app may not work correctly on iPhone/iPad when "Prevent Cross-Site Tracking" is enabled in the browser settings. Because this app relies on cookie-based authentication, users may experience login or session problems until this setting is disabled. If the app is not loading or staying authenticated on iOS, turn off "Prevent Cross-Site Tracking" in the device/browser settings or use a browser without that restriction.
+
 ### Deploy Your Own Instance
 
 #### Backend (Render)
