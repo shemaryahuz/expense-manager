@@ -241,8 +241,8 @@ npm run test:coverage   # With coverage report
 
 ### Live Application
 
-- **Frontend**: [https://your-app.vercel.app](https://your-app.vercel.app)
-- **Backend API**: [https://your-backend.onrender.com](https://your-backend.onrender.com)
+- **Frontend**: [https://expense-manager-phi-self.vercel.app](https://expense-manager-phi-self.vercel.app)
+- **Backend API**: [https://expense-manager-hzlq.onrender.com](https://expense-manager-hzlq.onrender.com)
 
 ### Deploy Your Own Instance
 
@@ -345,3 +345,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Support
 
 For issues or questions, please open an issue on GitHub.
+[Live Application](https://expense-manager-phi-self.vercel.app/)
