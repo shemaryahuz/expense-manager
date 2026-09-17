@@ -8,6 +8,7 @@ import {
 } from "../../features/settings/settingsSlice";
 
 import { useTranslation } from "../../hooks/i18n";
+import { getCurrencySymbol } from "../../utiles/settingsUtils";
 import { CURRENCIES } from "../../constants/features/settingsConstants";
 
 const { USD, ILS } = CURRENCIES;
@@ -34,11 +35,15 @@ export default function SettingsMenu({ open, anchorEl, onClose }) {
       onClose={onClose}
       closeAfterTransition={false}
     >
-      <MenuItem selected={currency === USD} onClick={setUSD}>
-        <Typography>{translate(USD)} $</Typography>
-      </MenuItem>
       <MenuItem selected={currency === ILS} onClick={setILS}>
-        <Typography>{translate("ILS")} ₪</Typography>
+        <Typography>
+          {translate(ILS)} {getCurrencySymbol(ILS)}
+        </Typography>
+      </MenuItem>
+      <MenuItem selected={currency === USD} onClick={setUSD}>
+        <Typography>
+          {translate(USD)} {getCurrencySymbol(USD)}
+        </Typography>
       </MenuItem>
     </Menu>
   );

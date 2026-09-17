@@ -12,10 +12,16 @@ import {
   Typography,
 } from "@mui/material";
 
+import { useExchangeRate } from "../../hooks/useExchangeRate";
+
 import { INCOME } from "../../constants/features/transactionsConstants";
+import { CURRENCIES } from "../../constants/features/settingsConstants";
+
+const { ILS } = CURRENCIES;
 
 export default function CategoryTransactions({ transactions }) {
-  const { symbol } = useSelector(selectCurrency);
+  const { currency, symbol } = useSelector(selectCurrency);
+  const rate = useExchangeRate(ILS, currency);
 
   return (
     <List dense>
@@ -33,7 +39,9 @@ export default function CategoryTransactions({ transactions }) {
               <Typography variant="body1">
                 {type === INCOME ? "+ " : "- "}
                 {symbol}
-                {amount}
+                {currency === ILS
+                  ? Number(amount).toFixed(2)
+                  : (Number(amount) * rate).toFixed(2)}
               </Typography>
             </Box>
           </ListItem>

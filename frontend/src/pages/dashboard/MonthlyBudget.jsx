@@ -10,8 +10,13 @@ import { selectCurrency } from "../../features/settings/settingsSlice";
 
 import { getTotalAmount } from "../../utiles/transactionsUtils";
 import { useTranslation } from "../../hooks/i18n";
+import { useExchangeRate } from "../../hooks/useExchangeRate";
+
+import { CURRENCIES } from "../../constants/features/settingsConstants";
 
 import { monthlyBudgetStyles as styles } from "./styles/MonthlyBudget.styles";
+
+const { ILS } = CURRENCIES;
 
 export default function MonthlyBudget() {
   const { translate } = useTranslation();
@@ -19,11 +24,16 @@ export default function MonthlyBudget() {
   const incomeTransactions = useSelector(selectIncomeTransactions);
   const expenseTransactions = useSelector(selectExpenseTransactions);
 
-  const { symbol } = useSelector(selectCurrency);
+  const { currency, symbol } = useSelector(selectCurrency);
 
-  const totalIncome = getTotalAmount(incomeTransactions).toFixed(2);
-  const totalExpenses = getTotalAmount(expenseTransactions).toFixed(2);
-  const balance = (totalIncome - totalExpenses).toFixed(2);
+  const baseTotalIncome = getTotalAmount(incomeTransactions);
+  const baseTotalExpenses = getTotalAmount(expenseTransactions);
+
+  const rate = useExchangeRate(ILS, currency);
+
+  const totalIncome = (baseTotalIncome * rate).toFixed(2);
+  const totalExpenses = (baseTotalExpenses * rate).toFixed(2);
+  const balance = ((baseTotalIncome - baseTotalExpenses) * rate).toFixed(2);
 
   return (
     <Grid container spacing={2} sx={styles.container}>

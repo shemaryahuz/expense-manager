@@ -103,6 +103,7 @@ export const translations = {
 
   // transactions ui
   "Title": "שם העסקה",
+  "Currency": "מטבע",
   "Amount": "סכום",
   "Type": "סוג",
   "Category": "קטגוריה",

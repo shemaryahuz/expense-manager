@@ -10,12 +10,16 @@ import { selectCategories } from "../../features/categories/categoriesSelectors"
 import { selectCurrency } from "../../features/settings/settingsSlice";
 
 import { useTranslation } from "../../hooks/i18n";
+import { useExchangeRate } from "../../hooks/useExchangeRate";
 import { getCategoryName } from "../../utiles/categoriesUtils";
 
 import { INCOME } from "../../constants/features/transactionsConstants";
+import { CURRENCIES } from "../../constants/features/settingsConstants";
 
 import DeleteTransactionDialog from "./DeleteTransactionDialog";
 import TransactionForm from "./TransactionForm";
+
+const { ILS } = CURRENCIES;
 
 export default function TransactionRow({ transaction }) {
   const dispatch = useDispatch();
@@ -27,7 +31,9 @@ export default function TransactionRow({ transaction }) {
 
   const categories = useSelector(selectCategories);
 
-  const { symbol } = useSelector(selectCurrency);
+  const { symbol, currency } = useSelector(selectCurrency);
+
+  const rate = useExchangeRate(ILS, currency);
 
   const { id, date, title, amount, type, categoryId } = transaction;
   const categoryName = getCategoryName(categories, categoryId) || "None";
@@ -66,7 +72,9 @@ export default function TransactionRow({ transaction }) {
         >
           {type === INCOME ? "+ " : "- "}
           {symbol}
-          {amount}
+          {currency === ILS
+            ? Number(amount).toFixed(2)
+            : (Number(amount) * rate).toFixed(2)}
         </Box>
       </TableCell>
 

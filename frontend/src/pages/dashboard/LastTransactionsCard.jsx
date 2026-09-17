@@ -15,21 +15,27 @@ import {
 
 import { selectCurrency } from "../../features/settings/settingsSlice";
 
+import { useTranslation } from "../../hooks/i18n";
+import { useExchangeRate } from "../../hooks/useExchangeRate";
+
 import { INCOME } from "../../constants/features/transactionsConstants";
 import { ROUTE_PATHS } from "../../constants/app/routes";
 import { LAST_TRANSACTIONS_LIMIT } from "../../constants/ui/dashboardConstants";
-import { useTranslation } from "../../hooks/i18n";
+import { CURRENCIES } from "../../constants/features/settingsConstants";
 
 import { dashboardStyles as styles } from "./styles/Dashboard.styles";
 
 const { TRANSACTIONS } = ROUTE_PATHS;
+const { ILS } = CURRENCIES;
 
 export default function LastTransactionsCard({ transactions }) {
   const navigate = useNavigate();
 
   const { translate } = useTranslation();
 
-  const { symbol } = useSelector(selectCurrency);
+  const { currency, symbol } = useSelector(selectCurrency);
+
+  const rate = useExchangeRate(ILS, currency);
 
   const lastTransactions = transactions.slice(0, LAST_TRANSACTIONS_LIMIT);
 
@@ -56,7 +62,9 @@ export default function LastTransactionsCard({ transactions }) {
                   <Typography variant="body1">
                     {type === INCOME ? "+ " : "- "}
                     {symbol}
-                    {amount}
+                    {currency === ILS
+                      ? Number(amount).toFixed(2)
+                      : (Number(amount) * rate).toFixed(2)}
                   </Typography>
                 </Box>
               </ListItem>

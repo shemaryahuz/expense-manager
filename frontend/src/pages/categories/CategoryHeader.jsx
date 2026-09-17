@@ -4,9 +4,14 @@ import { useSelector } from "react-redux";
 import { selectCurrency } from "../../features/settings/settingsSlice";
 
 import { useTranslation } from "../../hooks/i18n";
+import { useExchangeRate } from "../../hooks/useExchangeRate";
+
 import { INCOME_ID } from "../../constants/features/categoriesConstants";
+import { CURRENCIES } from "../../constants/features/settingsConstants";
 
 import { CategoryCardStyles as styles } from "./styles/CategoryCard.styles";
+
+const { ILS } = CURRENCIES;
 
 export default function CategoryHeader({
   isEditing,
@@ -18,7 +23,9 @@ export default function CategoryHeader({
 }) {
   const { translate } = useTranslation();
 
-  const { symbol } = useSelector(selectCurrency);
+  const { currency, symbol } = useSelector(selectCurrency);
+
+  const rate = useExchangeRate(ILS, currency);
 
   return (
     <Box sx={styles.categoryHeader}>
@@ -57,7 +64,9 @@ export default function CategoryHeader({
             >
               {id === INCOME_ID ? "+ " : "- "}
               {symbol}
-              {amount}
+              {currency === ILS
+                ? Number(amount).toFixed(2)
+                : (Number(amount) * rate).toFixed(2)}
             </Typography>
           )}
         </Box>
