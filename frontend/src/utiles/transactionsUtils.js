@@ -1,6 +1,6 @@
 import { MISCELLANEOUS_ID } from "../constants/features/categoriesConstants";
 
-export const convertDatesToLocale = (transactions, locale = "he-IL") =>
+export const convertDatesToLocale = (transactions, locale = "en-US") =>
     transactions.map((transaction) => {
         const date = new Date(transaction.date);
         return {
@@ -9,7 +9,7 @@ export const convertDatesToLocale = (transactions, locale = "he-IL") =>
         };
     });
 
-export const updateTransaction = (transactions, updatedTransaction, locale = "he-IL") => {
+export const updateTransaction = (transactions, updatedTransaction, locale = "en-US") => {
     updatedTransaction.date = new Date(updatedTransaction.date).toLocaleDateString(locale);
     return transactions.map((transaction) =>
         transaction.id === updatedTransaction.id ? updatedTransaction : transaction);
