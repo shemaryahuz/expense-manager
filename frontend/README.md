@@ -349,7 +349,13 @@ Light and dark mode toggle with persistence.
 
 ### Currency Support
 
-USD ($) and ILS (₪) with symbol display across all monetary values.
+The application supports USD ($) and ILS (₪) and uses a clear storage/display policy:
+
+- **Backend storage:** All transaction amounts are stored in ILS in the backend database.
+- **Transaction form:** Users can enter an amount in either USD or ILS. The form provides a small currency selector. If the user enters a USD amount it is converted to ILS before being sent to the backend.
+- **Display logic:** The frontend `settings` currency controls what users see:
+  - If `ILS` is selected the app shows the stored ILS value and the ILS symbol.
+  - If `USD` is selected the app converts the stored ILS value to USD using a live exchange rate (fetched from Frankfurter) and displays the USD symbol and converted value. This conversion is display-only - stored values remain ILS.
 
 **Storage:** `localStorage.currency` (`"USD"` or `"ILS"`)
 
@@ -357,21 +363,54 @@ USD ($) and ILS (₪) with symbol display across all monetary values.
 
 - Currency menu in header (visible when authenticated)
 - Managed by Redux settings slice
-- Symbol used in transaction forms, lists, and dashboard
+- A small `useExchangeRate` hook fetches the USD↔ILS rate and is used for on-the-fly conversions for display and for converting USD input to ILS when saving.
 
-**Usage:**
+### Exchange Rate API
+
+The frontend uses a lightweight external API to fetch live USD ↔ ILS exchange rates. Key points:
+
+- **Default provider:** Frankfurter (api.frankfurter.dev) - free, no API key required.
+- **Endpoint used:** `https://api.frankfurter.dev/v2/rate/{base}/{quote}` - for example `https://api.frankfurter.dev/v2/rate/usd/ils` returns the USD→ILS rate in a `{ "rate": <number> }` JSON object.
+- **Hook:** `useExchangeRate(base, target)` fetches the rate and returns a numeric value. The project includes `frontend/src/api/exchangeRate.js` which calls the provider and `frontend/src/hooks/useExchangeRate.js` which caches and refreshes the value.
+- **Caching & refresh:** The hook refreshes the rate periodically (12 hours by default) and keeps the value in memory for the session to avoid excessive network requests.
+- **Fallback behavior:** If the fetch fails, the hook returns `1` as a safe fallback so the UI remains usable. The app handles a zero or invalid rate defensively.
+- **Conversion logic used by the app:**
+  - Stored amounts are ILS in the backend.
+  - To display USD when the app currency is `USD`, the app divides the stored ILS amount by the USD → ILS rate (ILS → USD).
+  - When the user enters amounts in USD, the form multiplies USD × (USD→ILS rate) to store ILS in the backend.
+- **Privacy / data:** Only public exchange-rate queries are made - no user or transaction data is sent to the provider beyond the numeric query parameters.
+- **Override / replacement:** If you prefer another provider, modify `frontend/src/api/exchangeRate.js` to call a different endpoint (or add an environment variable such as `VITE_EXCHANGE_RATE_URL` and wire it into the API util). If a provider requires an API key, keep the key in env (`.env`) and do not commit it to source control.
+
+**Example curl request (same as the app uses):**
+
+```bash
+curl "https://api.frankfurter.dev/v2/rate/usd/ils"
+```
+
+Response example:
+
+```json
+{
+  "rate": 3.68
+}
+```
+
+If you change providers or add an API key, update `frontend/.env` and `frontend/src/api/exchangeRate.js` accordingly.
+
+**Quick usage (display example):**
 
 ```javascript
 import { useSelector } from "react-redux";
 import { selectCurrency } from "../features/settings/settingsSlice";
 
-function TransactionAmount() {
-  const { symbol } = useSelector(selectCurrency);
-
+function TransactionAmount({ storedIlsAmount }) {
+  const { currency, symbol } = useSelector(selectCurrency);
+  // useExchangeRate hook is available to convert ILS -> USD for display when needed
+  // Stored amounts are always ILS; convert only for display when currency === 'USD'.
   return (
     <span>
       {symbol}
-      {amount}
+      {currency === "ILS" ? storedIlsAmount : /* converted USD value */ "..."}
     </span>
   );
 }

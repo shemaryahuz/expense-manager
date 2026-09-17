@@ -7,26 +7,31 @@ import { Card, Typography, Button, Box, Divider } from "@mui/material";
 import { selectCurrency } from "../../features/settings/settingsSlice";
 
 import { useTranslation } from "../../hooks/i18n";
+import { useExchangeRate } from "../../hooks/useExchangeRate";
 import { getTopCategories } from "../../utiles/categoriesUtils";
 
 import { ROUTE_PATHS } from "../../constants/app/routes";
 import { TOP_CATEGORIES_LIMIT } from "../../constants/ui/dashboardConstants";
+import { CURRENCIES } from "../../constants/features/settingsConstants";
 
 import { dashboardStyles as styles } from "./styles/Dashboard.styles";
 
 const { CATEGORIES } = ROUTE_PATHS;
+const { ILS } = CURRENCIES;
 
 export default function TopCategoriesCard({ transactions, categories }) {
   const navigate = useNavigate();
 
   const { translate } = useTranslation();
 
-  const { symbol } = useSelector(selectCurrency);
+  const { currency, symbol } = useSelector(selectCurrency);
+
+  const rate = useExchangeRate(ILS, currency);
 
   const topCategories = getTopCategories(
     categories,
     transactions,
-    TOP_CATEGORIES_LIMIT
+    TOP_CATEGORIES_LIMIT,
   );
 
   const handleNavigate = () => navigate(CATEGORIES);
@@ -44,7 +49,7 @@ export default function TopCategoriesCard({ transactions, categories }) {
                 <Typography variant="body1">{translate(name)}</Typography>
                 <Typography variant="body1" sx={styles.categoryAmount}>
                   - {symbol}
-                  {amount.toFixed(2)}
+                  {(amount * rate).toFixed(2)}
                 </Typography>
               </Box>
               {index !== topCategories.length - 1 && <Divider />}

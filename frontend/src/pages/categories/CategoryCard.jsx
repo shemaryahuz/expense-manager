@@ -39,12 +39,12 @@ export default function CategoryCard({ category }) {
   const [deleteOpen, setDeleteOpen] = useState(false);
 
   const transactions = useSelector((state) =>
-    selectTransactionsByCategoryId(state, id)
+    selectTransactionsByCategoryId(state, id),
   );
 
   const menuOpen = Boolean(anchorEl);
 
-  const amount = getTotalAmount(transactions).toFixed(2);
+  const amount = getTotalAmount(transactions);
 
   const handleMenuClick = (event) => {
     event.stopPropagation();

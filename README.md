@@ -11,7 +11,8 @@ A full-stack expense tracking application with cookie-based authentication, buil
 - **Dashboard** - Monthly budget overview, top spending categories, and recent transactions
 - **Search & Filter** - Search by title and filter by month
 - **Multi-language Support** - English and Hebrew (עברית) with RTL layout
-- **Multi-currency** - USD ($) and ILS (₪) with symbol display
+- **Multi-currency** - USD ($) and ILS (₪) with symbol display. Stored amounts in the backend are saved in ILS. The frontend allows entering amounts in either USD or ILS; amounts entered in USD are converted to ILS before being saved. The UI displays values according to the selected settings currency: when `ILS` is selected it shows the stored ILS value, when `USD` is selected it converts the stored ILS value to USD using the latest exchange rate for display only.
+  The frontend fetches live exchange rates from an external service (Frankfurter at `api.frankfurter.dev` by default) via a small `useExchangeRate` hook. Rates are cached in memory and refreshed periodically; if fetching fails the app falls back to a safe default rate to avoid breaking the UI. See `frontend/README.md` for details and customization notes.
 - **Theme Toggle** - Light and dark modes
 - **Responsive Design** - Mobile-friendly Material UI interface
 

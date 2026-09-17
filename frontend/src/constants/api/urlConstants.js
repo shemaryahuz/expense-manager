@@ -6,3 +6,5 @@ export const AUTH_URL = `${BASE_URL}/auth`;
 
 export const TRANSACTION_URL = `${BASE_URL}/transactions`;
 export const CATEGORY_URL = `${BASE_URL}/categories`;
+
+export const EXHANGE_RATE_URL = "https://api.frankfurter.dev/v2/rate";
