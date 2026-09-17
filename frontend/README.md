@@ -211,7 +211,8 @@ describe("myUtilFunction", () => {
 frontend/
 ├── src/
 │   ├── api/
-│   │   └── axios.js                  # Axios configuration
+│   │   ├── axios.js                  # Axios configuration
+│   │   └── exchangeRate.js           # External exchange-rate API
 │   │
 │   ├── app/
 │   │   ├── rootReducer.js            # Combined reducers
@@ -261,7 +262,8 @@ frontend/
 │   │       └── userThunks.js
 │   │
 │   ├── hooks/
-│   │   └── i18n.js                   # Translation hook
+│   │   ├── i18n.js                   # Translation hook
+│   │   └── useExchangeRate.js        # Hook for USD↔ILS rate
 │   │
 │   ├── pages/
 │   │   ├── categories/               # Category management

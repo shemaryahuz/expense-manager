@@ -161,7 +161,7 @@ expense-manager/
 │
 ├── frontend/
 │   ├── src/
-│   │   ├── api/            # Axios configuration
+│   │   ├── api/            # Axios configuration and External API's
 │   │   ├── app/            # Redux store
 │   │   ├── components/     # Reusable components
 │   │   │   └── common/
