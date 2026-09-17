@@ -18,18 +18,18 @@ const { USD, ILS } = CURRENCIES;
 describe("settingsUtils", () => {
     it("getStoredValue", () => {
         expect(getStoredValue(THEME_MODE, LIGHT)).toBe(LIGHT);
-        expect(getStoredValue(LANGUAGE, ENGLISH)).toBe(ENGLISH);
-        expect(getStoredValue(CURRENCY, USD)).toBe(USD);
+        expect(getStoredValue(LANGUAGE, HEBREW)).toBe(HEBREW);
+        expect(getStoredValue(CURRENCY, ILS)).toBe(ILS);
     });
 
     it("setStoredValue", () => {
         setStoredValue(THEME_MODE, DARK);
-        setStoredValue(LANGUAGE, HEBREW);
-        setStoredValue(CURRENCY, ILS);
+        setStoredValue(LANGUAGE, ENGLISH);
+        setStoredValue(CURRENCY, USD);
 
         expect(getStoredValue(THEME_MODE, LIGHT)).toBe(DARK);
-        expect(getStoredValue(LANGUAGE, ENGLISH)).toBe(HEBREW);
-        expect(getStoredValue(CURRENCY, USD)).toBe(ILS);
+        expect(getStoredValue(LANGUAGE, HEBREW)).toBe(ENGLISH);
+        expect(getStoredValue(CURRENCY, ILS)).toBe(USD);
 
         localStorage.removeItem(THEME_MODE);
         localStorage.removeItem(LANGUAGE);
@@ -41,10 +41,10 @@ describe("settingsUtils", () => {
     });
 
     it("getInitialLanguage", () => {
-        expect(getInitialLanguage()).toBe(ENGLISH);
+        expect(getInitialLanguage()).toBe(HEBREW);
     });
 
     it("getInitialCurrency", () => {
-        expect(getInitialCurrency()).toBe(USD);
+        expect(getInitialCurrency()).toBe(ILS);
     });
 });
