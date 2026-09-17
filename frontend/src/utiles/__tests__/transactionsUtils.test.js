@@ -12,9 +12,9 @@ describe("transactions utils", () => {
     describe("convertDatesToLocale", () => {
         it("should convert dates to locale string", () => {
             const convertedTransactions = convertDatesToLocale(transactions);
-            expect(convertedTransactions[0].date).toBe("1/1/2026");
-            expect(convertedTransactions[1].date).toBe("2/1/2026");
-            expect(convertedTransactions[2].date).toBe("3/1/2026");
+            expect(convertedTransactions[0].date).toBe("1.1.2026");
+            expect(convertedTransactions[1].date).toBe("1.2.2026");
+            expect(convertedTransactions[2].date).toBe("1.3.2026");
         });
     });
 
@@ -24,7 +24,7 @@ describe("transactions utils", () => {
             const updatedTransactions = updateTransaction(transactions, updatedTransaction);
             expect(updatedTransactions[0].title).toBe("Updated Transaction");
             expect(updatedTransactions[0].amount).toBe(500);
-            expect(updatedTransactions[0].date).toBe("4/1/2026");
+            expect(updatedTransactions[0].date).toBe("1.4.2026");
         });
     });
 

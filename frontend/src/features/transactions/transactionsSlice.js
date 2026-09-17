@@ -10,7 +10,7 @@ import {
 } from "./transactionsThunks";
 import { deleteCategory } from "../categories/categoriesThunks";
 
-import { updateTransaction, sortTransactionsByDate, updateTransactionsOnCategoryDelete } from "../../utiles/transactionsUtils";
+import { convertDatesToLocale, updateTransaction, sortTransactionsByDate, updateTransactionsOnCategoryDelete } from "../../utiles/transactionsUtils";
 
 import { STATUSES } from "../../constants/features/statusConstants";
 
@@ -83,8 +83,8 @@ export const transactionsSlice = createSlice({
             .addCase(addTransaction.fulfilled, (state, action) => {
                 const { message, transaction: newTransaction } = action.payload;
 
-                const date = new Date(newTransaction.date);
-                newTransaction.date = date.toLocaleDateString();
+                const [converted] = convertDatesToLocale([newTransaction]);
+                newTransaction.date = converted.date;
 
                 state.status = SUCCEEDED;
                 state.message = message;
