@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createSelector } from "@reduxjs/toolkit";
 
 import {
     getInitialCurrency,
@@ -53,10 +53,10 @@ export const settingsSlice = createSlice({
 export const selectThemeMode = (state) => state.settings.themeMode;
 export const selectLanguage = (state) => state.settings.language;
 export const selectDirection = (state) => state.settings.direction;
-export const selectCurrency = (state) => ({
-    currency: state.settings.currency,
-    symbol: getCurrencySymbol(state.settings.currency)
-});
+export const selectCurrency = createSelector(
+    [(state) => state.settings.currency],
+    (currency) => ({ currency, symbol: getCurrencySymbol(currency) })
+);
 
 export const { toggleThemeMode, setLanguage, setCurrency } = settingsSlice.actions;
 
