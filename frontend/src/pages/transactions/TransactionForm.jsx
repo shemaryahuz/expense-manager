@@ -33,7 +33,9 @@ import {
 } from "../../features/settings/settingsSlice";
 
 import { useTranslation } from "../../hooks/i18n";
+import { useExchangeRate } from "../../hooks/useExchangeRate";
 
+import { getCurrencySymbol } from "../../utiles/settingsUtils";
 import {
   INCOME_ID,
   MISCELLANEOUS_ID,
@@ -42,10 +44,12 @@ import {
   INCOME,
   EXPENSE,
 } from "../../constants/features/transactionsConstants";
+import { CURRENCIES } from "../../constants/features/settingsConstants";
 import { STATUSES } from "../../constants/features/statusConstants";
 
 import AlertMessage from "../../components/common/AlertMessage";
 
+const { USD, ILS } = CURRENCIES;
 const { LOADING, FAILED, SUCCEEDED } = STATUSES;
 
 export default function TransactionForm({
@@ -65,6 +69,7 @@ export default function TransactionForm({
   const { translate } = useTranslation();
 
   const [transaction, setTransaction] = useState(existingTransaction);
+  const [inputCurrency, setInputCurrency] = useState(ILS);
   const { title, amount, type, categoryId } = transaction;
 
   const { status, message } = useSelector(selectTransactionsState);
@@ -75,6 +80,8 @@ export default function TransactionForm({
 
   const date = transaction.date ? dayjs(transaction.date) : null;
 
+  const rate = useExchangeRate(ILS, inputCurrency);
+
   useEffect(() => {
     if (status === SUCCEEDED && message) {
       setTransaction(existingTransaction);
@@ -82,9 +89,17 @@ export default function TransactionForm({
     }
   }, [status, message]);
 
+  useEffect(() => {
+    setInputCurrency(currency || ILS);
+  }, [currency]);
+
   const handleChange = ({ target: { name, value } }) => {
     dispatch(clearMessage());
     setTransaction({ ...transaction, [name]: value });
+  };
+
+  const handleCurrencyChange = ({ target: { value } }) => {
+    setInputCurrency(value);
   };
 
   const handleDateChange = (newValue) => {
@@ -98,10 +113,15 @@ export default function TransactionForm({
     const categoryIdToSend =
       type === INCOME ? INCOME_ID : categoryId || MISCELLANEOUS_ID;
 
+    let amountToSend = Number(amount);
+    if (inputCurrency !== ILS && rate !== 0) {
+      amountToSend = Number(amount) / rate;
+    }
+
     const transactionToSend = {
       ...transaction,
       categoryId: categoryIdToSend,
-      amount: Number(amount),
+      amount: amountToSend,
       date: date.toISOString(),
     };
 
@@ -113,6 +133,7 @@ export default function TransactionForm({
   const handleClose = () => {
     dispatch(clearMessage());
     setTransaction(existingTransaction);
+    setInputCurrency(currency || ILS);
     onClose();
   };
 
@@ -139,10 +160,31 @@ export default function TransactionForm({
           value={title}
           onChange={handleChange}
         />
+        <FormControl fullWidth required>
+          <InputLabel id="currency-select-label">
+            {translate("Currency")}
+          </InputLabel>
+          <Select
+            name="currency"
+            label={translate("Currency")}
+            labelId="currency-select-label"
+            id="currency-select"
+            value={isEditMode ? ILS : inputCurrency}
+            disabled={isEditMode}
+            onChange={handleCurrencyChange}
+          >
+            <MenuItem
+              value={ILS}
+            >{`${translate(ILS)} ${getCurrencySymbol(ILS)}`}</MenuItem>
+            <MenuItem
+              value={USD}
+            >{`${translate(USD)} ${getCurrencySymbol(USD)}`}</MenuItem>
+          </Select>
+        </FormControl>
         <TextField
           required
           name="amount"
-          label={`${translate("Amount")} (${translate(currency)})`}
+          label={`${translate("Amount")}`}
           type="number"
           value={amount}
           slotProps={{ htmlInput: { min: 0.1, step: 0.01 } }}
@@ -223,8 +265,8 @@ export default function TransactionForm({
           {status === LOADING
             ? translate("Saving...")
             : isEditMode
-            ? translate("Update")
-            : translate("Save")}
+              ? translate("Update")
+              : translate("Save")}
         </Button>
       </DialogActions>
     </Dialog>
